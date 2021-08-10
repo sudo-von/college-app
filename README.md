@@ -29,3 +29,7 @@ I used figma to design this prototype which will be implemented in react native.
 ## Account Configuration
 
 ![Account Configuration](assets/AccountConfiguration.png)
+
+## Panic Button Configuration
+
+![Panic Button Configuration](assets/PanicButtonConfiguration.png)
