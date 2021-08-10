@@ -41,3 +41,7 @@ I used figma to design this prototype which will be implemented in react native.
 ## Consultancies
 
 ![Consultancies](assets/Consultancies.png)
+
+## Add Consultancies
+
+![Add Consultancies](assets/AddConsultancies.png)
