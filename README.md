@@ -21,3 +21,7 @@ I used figma to design this prototype which will be implemented in react native.
 ## Navside
 
 ![Navside](assets/Navside.png)
+
+## Configuration
+
+![Configuration](assets/Configuration.png)
