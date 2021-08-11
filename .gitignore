@@ -1,0 +1,5 @@
+# Volumes.
+mongo/volume/*
+# Environment variables.
+.env.dev
+.env.prod
