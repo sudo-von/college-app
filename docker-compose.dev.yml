@@ -31,8 +31,9 @@ services:
       context: go/.
     environment:
       MONGO_URL: ${MONGO_URL}
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_DATABASE: ${MONGO_DATABASE}
+      MONGO_USERNAME: ${MONGO_USERNAME}
+      MONGO_PASSWORD: ${MONGO_PASSWORD}
       ENVIRONMENT: ${ENVIRONMENT}
     depends_on:
      - database
