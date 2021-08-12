@@ -3,19 +3,19 @@ package entity
 import "time"
 
 type UserMood struct {
-	ID           string
-	UserID       string
-	Mood         int
-	CreationDate time.Time
+	ID       string
+	UserID   string
+	Mood     int
+	MoodDate time.Time
 }
 
 type UserMoodPayload struct {
-	ID           string
-	UserID       string
-	Mood         int
-	CreationDate time.Time
+	ID       string
+	UserID   string
+	Mood     int
+	MoodDate time.Time
 }
 
 type UserMoodFilters struct {
-	Date *time.Time
+	MoodDate *time.Time
 }
