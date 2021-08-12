@@ -1,6 +1,7 @@
 package main
 
 import (
+	"freelancer/college-app/go/api"
 	"freelancer/college-app/go/config"
 	"freelancer/college-app/go/infrastructure/repository/mongo"
 	"log"
@@ -16,5 +17,11 @@ func main() {
 		return
 	}
 	log.Println("[main]: MongoDB connection established")
+
+	// Repositories.
+	// Services.
+	var services api.Services
+	// Start http server.
+	api.ListenAndServe(services)
 
 }
