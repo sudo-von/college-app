@@ -1,6 +1,7 @@
 package presenter
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/go-chi/render"
@@ -70,4 +71,14 @@ func ErrForbidden(err error) render.Renderer {
 		ErrorCode:      403,
 		Message:        err.Error(),
 	}
+}
+
+func mergeErrors(e1, e2 error) error {
+	if e1 != nil && e2 != nil {
+		return errors.New(e1.Error() + "; " + e2.Error())
+	}
+	if e1 != nil {
+		return e1
+	}
+	return e2
 }
