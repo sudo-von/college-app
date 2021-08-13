@@ -10,19 +10,21 @@ const (
 
 type TinyUser struct {
 	ID                 string
-	RegistrationNumber string
 	Name               string
+	BirthDate          time.Time
 	Email              string
+	RegistrationNumber string
 }
 
 type User struct {
 	ID                 string
-	RegistrationNumber string
 	Name               string
+	BirthDate          time.Time
 	Email              string
 	Password           string
-	University         University
+	RegistrationNumber string
 	Status             string
+	University         University
 	CreationDate       time.Time
 }
 
