@@ -2,7 +2,7 @@ version: '3.1'
 services:
   database:
     container_name: dev_college_app_database
-    image: mongo
+    image: mongo:3.4.2
     restart: always
     volumes:
       - ./mongo/volume:/data/db
@@ -11,11 +11,11 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
     ports:
-     - 4002:27017
+      - 4002:27017
   database_manager:
     container_name: dev_college_app_database_manager
     image: mongo-express
-    restart: on-failure:15
+    restart: always
     environment:
       ME_CONFIG_MONGODB_SERVER: ${MONGO_URL}
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USERNAME}
@@ -26,7 +26,7 @@ services:
       - 4001:8081
   backend:
     container_name: dev_college_app_backend
-    restart: on-failure:15
+    restart: always
     build: 
       context: go/.
     environment:
@@ -36,8 +36,8 @@ services:
       MONGO_PASSWORD: ${MONGO_PASSWORD}
       ENVIRONMENT: ${ENVIRONMENT}
     depends_on:
-     - database
+      - database
     links:
-     - database
+      - database
     ports:
-     - 4000:4000
+      - 4000:4000
