@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/badoux/checkmail v1.2.1 // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/go-chi/chi v1.5.4 // indirect
 	github.com/go-chi/cors v1.2.0 // indirect
 	github.com/go-chi/render v1.0.1 // indirect
