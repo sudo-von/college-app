@@ -4,6 +4,7 @@ import (
 	"freelancer/college-app/go/api"
 	"freelancer/college-app/go/config"
 	"freelancer/college-app/go/infrastructure/repository/mongo"
+	"freelancer/college-app/go/usecase/jwt"
 	"freelancer/college-app/go/usecase/university"
 	"freelancer/college-app/go/usecase/user"
 	"log"
@@ -23,14 +24,17 @@ func main() {
 	// Repositories.
 	userRepository := mongo.NewUserRepository(db)
 	universityRepository := mongo.NewUniversityRepository(db)
+	jwtRepository := mongo.NewJWTRepository(db)
 
 	// Services.
 	userService := user.NewService(userRepository, universityRepository)
 	universityService := university.NewService(universityRepository)
+	jwtService := jwt.NewService(jwtRepository, userRepository)
 
 	services := api.Services{
 		UserService:       *userService,
 		UniversityService: *universityService,
+		JWTService:        *jwtService,
 	}
 
 	// Start http server.

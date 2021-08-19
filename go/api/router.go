@@ -3,6 +3,7 @@ package api
 import (
 	"freelancer/college-app/go/api/handler"
 	"freelancer/college-app/go/api/middleware"
+	"freelancer/college-app/go/usecase/jwt"
 	"freelancer/college-app/go/usecase/university"
 	"freelancer/college-app/go/usecase/user"
 	"log"
@@ -17,6 +18,7 @@ import (
 type Services struct {
 	UserService       user.Service
 	UniversityService university.Service
+	JWTService        jwt.Service
 }
 
 func ListenAndServe(services Services) {
@@ -33,6 +35,7 @@ func ListenAndServe(services Services) {
 
 	// Http hanlders.
 	r.Mount("/users", handler.NewUserController(services.UserService).Routes())
+	r.Mount("/jwt", handler.NewJWTController(services.JWTService).Routes())
 
 	// Start http server.
 	if err := http.ListenAndServe(":4000", r); err != nil {
