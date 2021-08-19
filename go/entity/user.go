@@ -2,12 +2,6 @@ package entity
 
 import "time"
 
-const (
-	ActiveStatus   = "active"
-	InactiveStatus = "inactive"
-	BannedStatus   = "banned"
-)
-
 type TinyUser struct {
 	ID                 string
 	Name               string
