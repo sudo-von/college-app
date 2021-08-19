@@ -5,9 +5,10 @@ import (
 )
 
 type Reader interface {
-	GetUserByID(userID string) (*entity.TinyUser, error)
-	GetUserByEmail(email string) (*entity.TinyUser, error)
-	GetUserByRegistrationNumber(registrationNumber string) (*entity.TinyUser, error)
+	GetTinyUserByID(userID string) (*entity.TinyUser, error)
+	GetTinyUserByEmail(email string) (*entity.TinyUser, error)
+	GetTinyUserByRegistrationNumber(registrationNumber string) (*entity.TinyUser, error)
+	GetUserByEmail(email string) (*entity.User, error)
 }
 
 type Writer interface {

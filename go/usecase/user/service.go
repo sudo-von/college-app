@@ -30,7 +30,7 @@ func (s *Service) CreateUser(newUser entity.UserPayload) error {
 		return errors.New("invalid email")
 	}
 	// Check if email is already in use.
-	_, err = s.userRepository.GetUserByEmail(newUser.Email)
+	_, err = s.userRepository.GetTinyUserByEmail(newUser.Email)
 	if err == nil {
 		return errors.New("email already in use")
 	}
@@ -39,7 +39,7 @@ func (s *Service) CreateUser(newUser entity.UserPayload) error {
 		return errors.New("invalid registration_number")
 	}
 	// Check if registration number is already in use.
-	_, err = s.userRepository.GetUserByRegistrationNumber(newUser.RegistrationNumber)
+	_, err = s.userRepository.GetTinyUserByRegistrationNumber(newUser.RegistrationNumber)
 	if err == nil {
 		return errors.New("registration number already in use")
 	}

@@ -10,6 +10,16 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+type UserModel struct {
+	ID                 bson.ObjectId   `bson:"_id"`
+	Name               string          `bson:"name"`
+	BirthDate          time.Time       `bson:"birth_date"`
+	RegistrationNumber string          `bson:"registration_number"`
+	Email              string          `bson:"email"`
+	Password           string          `bson:"password"`
+	university         UniversityModel `bson:"university"`
+}
+
 type TinyUserModel struct {
 	ID                 bson.ObjectId `bson:"_id"`
 	Name               string        `bson:"name"`
@@ -62,6 +72,25 @@ func toEntityTinyUser(user TinyUserModel) entity.TinyUser {
 	}
 }
 
+func toEntityUser(user UserModel) entity.User {
+
+	university := entity.University{
+		ID:             user.university.ID.Hex(),
+		Name:           user.university.Name,
+		ProfilePicture: user.university.ProfilePicture,
+	}
+
+	return entity.User{
+		ID:                 user.ID.Hex(),
+		Name:               user.Name,
+		BirthDate:          user.BirthDate,
+		Email:              user.Email,
+		Password:           user.Password,
+		RegistrationNumber: user.RegistrationNumber,
+		University:         university,
+	}
+}
+
 type UserRepository struct {
 	Session      *mgo.Session
 	DatabaseName string
@@ -74,7 +103,7 @@ func NewUserRepository(repository *Repository) *UserRepository {
 	}
 }
 
-func (r *UserRepository) GetUserByID(userID string) (*entity.TinyUser, error) {
+func (r *UserRepository) GetTinyUserByID(userID string) (*entity.TinyUser, error) {
 
 	if !bson.IsObjectIdHex(userID) {
 		return nil, errors.New("given user_id is not a valid hex")
@@ -98,7 +127,7 @@ func (r *UserRepository) GetUserByID(userID string) (*entity.TinyUser, error) {
 	return &userApi, nil
 }
 
-func (r *UserRepository) GetUserByEmail(email string) (*entity.TinyUser, error) {
+func (r *UserRepository) GetTinyUserByEmail(email string) (*entity.TinyUser, error) {
 
 	session := r.Session.Copy()
 	defer session.Close()
@@ -118,7 +147,7 @@ func (r *UserRepository) GetUserByEmail(email string) (*entity.TinyUser, error) 
 	return &userApi, nil
 }
 
-func (r *UserRepository) GetUserByRegistrationNumber(registrationNumber string) (*entity.TinyUser, error) {
+func (r *UserRepository) GetTinyUserByRegistrationNumber(registrationNumber string) (*entity.TinyUser, error) {
 
 	session := r.Session.Copy()
 	defer session.Close()
@@ -136,6 +165,26 @@ func (r *UserRepository) GetUserByRegistrationNumber(registrationNumber string) 
 
 	userApi := toEntityTinyUser(tinyUserM)
 	return &userApi, nil
+}
+
+func (r *UserRepository) GetUserByEmail(email string) (*entity.User, error) {
+
+	session := r.Session.Copy()
+	defer session.Close()
+	com := session.DB(r.DatabaseName).C("users")
+	searchQuery := bson.M{
+		"email":  email,
+		"status": entity.ActiveStatus,
+	}
+
+	var userM UserModel
+	err := com.Find(searchQuery).One(&userM)
+	if err != nil {
+		return nil, err
+	}
+
+	user := toEntityUser(userM)
+	return &user, nil
 }
 
 func (r *UserRepository) CreateUser(newUser entity.UserPayload) error {
