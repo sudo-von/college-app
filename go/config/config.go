@@ -8,4 +8,5 @@ var (
 	DB_USER     = os.Getenv("MONGO_USERNAME")
 	DB_PASSWORD = os.Getenv("MONGO_PASSWORD")
 	ENVIRONMENT = os.Getenv("ENVIRONMENT")
+	SECRET_KEY  = os.Getenv("SECRET_KEY")
 )
