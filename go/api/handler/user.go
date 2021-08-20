@@ -41,13 +41,6 @@ func (c *UserController) Routes() chi.Router {
 // Create stores a new user.
 func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
 
-	token, ok := r.Context().Value(middleware.ContextKeyPayload).(*token.Payload)
-	if !ok {
-		CheckError(errors.New("user not in context"), w, r)
-		return
-	}
-	fmt.Println(*token)
-
 	var data presenter.UserPayload
 	if err := render.Bind(r, &data); err != nil {
 		render.Render(w, r, presenter.ErrInvalidRequest(err))
