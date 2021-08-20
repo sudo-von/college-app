@@ -61,3 +61,18 @@ func (s *Service) CreateUser(newUser entity.UserPayload) error {
 	}
 	return nil
 }
+
+func (s *Service) AuthenticateUser(email, password string) (*entity.User, error) {
+
+	user, err := s.userRepository.GetUserByEmail(email)
+	if err != nil {
+		return nil, err
+	}
+	// Compares passwords.
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	if err != nil {
+		return nil, errors.New("invalid credentials")
+	}
+
+	return user, nil
+}

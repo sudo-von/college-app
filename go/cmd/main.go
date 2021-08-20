@@ -1,10 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"freelancer/college-app/go/api"
 	"freelancer/college-app/go/config"
 	"freelancer/college-app/go/infrastructure/repository/mongo"
-	"freelancer/college-app/go/usecase/jwt"
+	"freelancer/college-app/go/token"
 	"freelancer/college-app/go/usecase/university"
 	"freelancer/college-app/go/usecase/user"
 	"log"
@@ -21,20 +22,24 @@ func main() {
 	}
 	log.Println("[main]: MongoDB connection established")
 
+	// Token service.
+	tokenService, err := token.NewJWTMaker(config.SECRET_KEY)
+	if err != nil {
+		log.Panic(fmt.Errorf("cannot create token: %w", err))
+	}
+
 	// Repositories.
 	userRepository := mongo.NewUserRepository(db)
 	universityRepository := mongo.NewUniversityRepository(db)
-	jwtRepository := mongo.NewJWTRepository(db)
 
 	// Services.
 	userService := user.NewService(userRepository, universityRepository)
 	universityService := university.NewService(universityRepository)
-	jwtService := jwt.NewService(jwtRepository, userRepository)
 
 	services := api.Services{
 		UserService:       *userService,
 		UniversityService: *universityService,
-		JWTService:        *jwtService,
+		TokenService:      tokenService,
 	}
 
 	// Start http server.

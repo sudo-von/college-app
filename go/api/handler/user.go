@@ -1,11 +1,14 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
+	"freelancer/college-app/go/api/middleware"
 	"freelancer/college-app/go/api/presenter"
 	"freelancer/college-app/go/entity"
+	"freelancer/college-app/go/token"
 	"freelancer/college-app/go/usecase/user"
 
 	"github.com/go-chi/chi"
@@ -13,18 +16,24 @@ import (
 )
 
 type UserController struct {
-	UserService user.Service
+	UserService  user.Service
+	TokenService token.Service
 }
 
-func NewUserController(user user.Service) *UserController {
+func NewUserController(user user.Service, token token.Service) *UserController {
 	return &UserController{
-		UserService: user,
+		UserService:  user,
+		TokenService: token,
 	}
 }
 
 func (c *UserController) Routes() chi.Router {
 	r := chi.NewRouter()
 	r.Post("/", c.Create)
+	r.Group(func(r chi.Router) {
+		r.Use(middleware.BasicAuth(&c.UserService))
+		r.Post("/login", c.Login)
+	})
 	return r
 }
 
@@ -67,5 +76,24 @@ func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+	render.Status(r, http.StatusOK)
+}
+
+func (c *UserController) Login(w http.ResponseWriter, r *http.Request) {
+
+	user, ok := r.Context().Value(middleware.ContextKeyUser).(*entity.User)
+	if !ok {
+		render.Status(r, 500)
+		return
+	}
+
+	signedToken, err := c.TokenService.CreateToken(user.ID, user.Name, 1500)
+	if err != nil {
+		render.Status(r, 500)
+		return
+	}
+
+	w.Header().Set("Authorization", fmt.Sprintf("Bearer %s", signedToken))
+	w.Header().Set("Access-Control-Allow-Headers", "Authorization")
 	render.Status(r, http.StatusOK)
 }

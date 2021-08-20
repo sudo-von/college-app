@@ -3,7 +3,7 @@ package api
 import (
 	"freelancer/college-app/go/api/handler"
 	"freelancer/college-app/go/api/middleware"
-	"freelancer/college-app/go/usecase/jwt"
+	"freelancer/college-app/go/token"
 	"freelancer/college-app/go/usecase/university"
 	"freelancer/college-app/go/usecase/user"
 	"log"
@@ -18,7 +18,7 @@ import (
 type Services struct {
 	UserService       user.Service
 	UniversityService university.Service
-	JWTService        jwt.Service
+	TokenService      token.Service
 }
 
 func ListenAndServe(services Services) {
@@ -32,10 +32,10 @@ func ListenAndServe(services Services) {
 	// CORS configuration.
 	cors := middleware.Cors()
 	r.Use(cors.Handler)
+	// Token.
 
 	// Http hanlders.
-	r.Mount("/users", handler.NewUserController(services.UserService).Routes())
-	r.Mount("/jwt", handler.NewJWTController(services.JWTService).Routes())
+	r.Mount("/users", handler.NewUserController(services.UserService, services.TokenService).Routes())
 
 	// Start http server.
 	if err := http.ListenAndServe(":4000", r); err != nil {

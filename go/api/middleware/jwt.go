@@ -2,7 +2,8 @@ package middleware
 
 import (
 	"context"
-	"freelancer/college-app/go/usecase/jwt"
+	"freelancer/college-app/go/usecase/user"
+
 	"net/http"
 )
 
@@ -18,17 +19,13 @@ var (
 	ContextKeyUser = &ContextKey{"User"}
 )
 
-func BasicAuth(uses *jwt.Service) func(http.Handler) http.Handler {
+func BasicAuth(uses *user.Service) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			email, password, ok := r.BasicAuth()
 			if ok {
 				user, err := uses.AuthenticateUser(email, password)
 				if err != nil {
-					if err.Error() == "not found" {
-						http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-						return
-					}
 					http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 					return
 				}
