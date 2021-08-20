@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -39,6 +40,13 @@ func (c *UserController) Routes() chi.Router {
 
 // Create stores a new user.
 func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
+
+	token, ok := r.Context().Value(middleware.ContextKeyPayload).(*token.Payload)
+	if !ok {
+		CheckError(errors.New("user not in context"), w, r)
+		return
+	}
+	fmt.Println(*token)
 
 	var data presenter.UserPayload
 	if err := render.Bind(r, &data); err != nil {
@@ -83,13 +91,13 @@ func (c *UserController) Login(w http.ResponseWriter, r *http.Request) {
 
 	user, ok := r.Context().Value(middleware.ContextKeyUser).(*entity.User)
 	if !ok {
-		render.Status(r, 500)
+		CheckError(errors.New("user not in context"), w, r)
 		return
 	}
 
-	signedToken, err := c.TokenService.CreateToken(user.ID, user.Name, 1500)
+	signedToken, err := c.TokenService.CreateToken(user.ID, user.Name, 15)
 	if err != nil {
-		render.Status(r, 500)
+		CheckError(err, w, r)
 		return
 	}
 
