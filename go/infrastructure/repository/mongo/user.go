@@ -14,10 +14,12 @@ type UserModel struct {
 	ID                 bson.ObjectId   `bson:"_id"`
 	Name               string          `bson:"name"`
 	BirthDate          time.Time       `bson:"birth_date"`
-	RegistrationNumber string          `bson:"registration_number"`
 	Email              string          `bson:"email"`
 	Password           string          `bson:"password"`
-	university         UniversityModel `bson:"university"`
+	RegistrationNumber string          `bson:"registration_number"`
+	Status             string          `bson:"status"`
+	University         UniversityModel `bson:"university"`
+	CreationDate       time.Time       `bson:"creation_date"`
 }
 
 type TinyUserModel struct {
@@ -75,9 +77,9 @@ func toEntityTinyUser(user TinyUserModel) entity.TinyUser {
 func toEntityUser(user UserModel) entity.User {
 
 	university := entity.University{
-		ID:             user.university.ID.Hex(),
-		Name:           user.university.Name,
-		ProfilePicture: user.university.ProfilePicture,
+		ID:             user.University.ID.Hex(),
+		Name:           user.University.Name,
+		ProfilePicture: user.University.ProfilePicture,
 	}
 
 	return entity.User{
@@ -87,7 +89,9 @@ func toEntityUser(user UserModel) entity.User {
 		Email:              user.Email,
 		Password:           user.Password,
 		RegistrationNumber: user.RegistrationNumber,
+		Status:             user.Status,
 		University:         university,
+		CreationDate:       user.CreationDate,
 	}
 }
 
@@ -167,6 +171,30 @@ func (r *UserRepository) GetTinyUserByRegistrationNumber(registrationNumber stri
 	return &userApi, nil
 }
 
+func (r *UserRepository) GetUserByID(userID string) (*entity.User, error) {
+
+	if !bson.IsObjectIdHex(userID) {
+		return nil, errors.New("given user_id is not a valid hex")
+	}
+
+	session := r.Session.Copy()
+	defer session.Close()
+	com := session.DB(r.DatabaseName).C("users")
+	searchQuery := bson.M{
+		"_id":    bson.ObjectIdHex(userID),
+		"status": entity.ActiveStatus,
+	}
+
+	var userM UserModel
+	err := com.Find(searchQuery).One(&userM)
+	if err != nil {
+		return nil, err
+	}
+
+	user := toEntityUser(userM)
+	return &user, nil
+}
+
 func (r *UserRepository) GetUserByEmail(email string) (*entity.User, error) {
 
 	session := r.Session.Copy()
@@ -195,6 +223,29 @@ func (r *UserRepository) CreateUser(newUser entity.UserPayload) error {
 
 	userM := toUserPayloadModel(newUser)
 	err := com.Insert(&userM)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *UserRepository) UpdateUser(updatedUser entity.UserPayload) error {
+
+	if !bson.IsObjectIdHex(updatedUser.ID) {
+		return errors.New("given user_id is not a valid hex")
+	}
+
+	session := r.Session.Copy()
+	defer session.Close()
+	com := session.DB(r.DatabaseName).C("users")
+	searchQuery := bson.M{
+		"_id":    bson.ObjectIdHex(updatedUser.ID),
+		"status": entity.ActiveStatus,
+	}
+
+	userM := toUserPayloadModel(updatedUser)
+	err := com.Update(searchQuery, &userM)
 	if err != nil {
 		return err
 	}

@@ -33,3 +33,10 @@ type UserPayload struct {
 	Status             string
 	CreationDate       time.Time
 }
+
+type UpdateUserPayload struct {
+	Name               string
+	BirthDate          time.Time
+	Email              string
+	RegistrationNumber string
+}

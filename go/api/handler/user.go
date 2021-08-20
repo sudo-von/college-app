@@ -38,11 +38,12 @@ func (c *UserController) Routes() chi.Router {
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.IsAuthorized(c.TokenService))
 		r.Get("/", c.GetTinyUser)
+		r.Patch("/", c.UpdateTinyUser)
 	})
 	return r
 }
 
-// Show returns a user given its id.
+// Show returns a user given its id from the context.
 func (c *UserController) GetTinyUser(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
@@ -77,7 +78,7 @@ func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	birthDate, err := time.Parse("2006-01-02", data.BirthDate)
+	birthDate, err := time.ParseInLocation("2006-01-02", data.BirthDate, loc)
 	if err != nil {
 		CheckError(err, w, r)
 		return
@@ -104,6 +105,7 @@ func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
 	render.Status(r, http.StatusOK)
 }
 
+//Authenticate a user if credentials are right.
 func (c *UserController) Login(w http.ResponseWriter, r *http.Request) {
 
 	user, ok := r.Context().Value(middleware.ContextKeyUser).(*entity.User)
@@ -120,5 +122,43 @@ func (c *UserController) Login(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Authorization", fmt.Sprintf("Bearer %s", signedToken))
 	w.Header().Set("Access-Control-Allow-Headers", "Authorization")
+	render.Status(r, http.StatusOK)
+}
+
+// UpdateTinyUser updates a user given its id from the context.
+func (c *UserController) UpdateTinyUser(w http.ResponseWriter, r *http.Request) {
+
+	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	if !ok {
+		CheckError(errors.New("user not in context"), w, r)
+		return
+	}
+
+	var data presenter.UpdateUserPayload
+	if err := render.Bind(r, &data); err != nil {
+		render.Render(w, r, presenter.ErrInvalidRequest(err))
+		return
+	}
+
+	birthDate, err := time.Parse("2006-01-02", data.BirthDate)
+	if err != nil {
+		CheckError(err, w, r)
+		return
+	}
+
+	newUser := entity.UpdateUserPayload{
+		Name:               data.Name,
+		BirthDate:          birthDate,
+		Email:              data.Email,
+		RegistrationNumber: data.RegistrationNumber,
+	}
+
+	err = c.UserService.UpdateTinyUser(userID, newUser)
+	if err != nil {
+		CheckError(err, w, r)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
 	render.Status(r, http.StatusOK)
 }

@@ -39,14 +39,14 @@ func (s *Service) CreateUser(newUser entity.UserPayload) error {
 	if err != nil {
 		return errors.New("invalid email")
 	}
+	// Check if the registration number is valid.
+	if len(strings.Replace(newUser.RegistrationNumber, " ", "", -1)) != 8 {
+		return errors.New("invalid registration_number")
+	}
 	// Check if email is already in use.
 	_, err = s.userRepository.GetTinyUserByEmail(newUser.Email)
 	if err == nil {
 		return errors.New("email already in use")
-	}
-	// Check if the registration number is valid.
-	if len(strings.Replace(newUser.RegistrationNumber, " ", "", -1)) != 8 {
-		return errors.New("invalid registration_number")
 	}
 	// Check if registration number is already in use.
 	_, err = s.userRepository.GetTinyUserByRegistrationNumber(newUser.RegistrationNumber)
@@ -69,6 +69,56 @@ func (s *Service) CreateUser(newUser entity.UserPayload) error {
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func (s *Service) UpdateTinyUser(userID string, newUser entity.UpdateUserPayload) error {
+
+	// Checks if the new email is valid.
+	err := checkmail.ValidateFormat(newUser.Email)
+	if err != nil {
+		return errors.New("invalid email")
+	}
+	// Check if the new registration number is valid.
+	if len(strings.Replace(newUser.RegistrationNumber, " ", "", -1)) != 8 {
+		return errors.New("invalid registration_number")
+	}
+	// Gets old user.
+	oldUser, err := s.userRepository.GetUserByID(userID)
+	if err != nil {
+		return err
+	}
+	// If both emails are different, checks if the new email is already in use.
+	if oldUser.Email != newUser.Email {
+		_, err = s.userRepository.GetTinyUserByEmail(newUser.Email)
+		if err == nil {
+			return errors.New("email already in use")
+		}
+	}
+	// If both registration numbers are different, checks if the new registration number is already in use.
+	if oldUser.RegistrationNumber != newUser.RegistrationNumber {
+		_, err = s.userRepository.GetTinyUserByRegistrationNumber(newUser.RegistrationNumber)
+		if err == nil {
+			return errors.New("registration number already in use")
+		}
+	}
+	// Creates a new user payload and then replaces the old one.
+	updatedUser := entity.UserPayload{
+		ID:                 oldUser.ID,
+		Name:               newUser.Name,
+		BirthDate:          newUser.BirthDate,
+		Email:              newUser.Email,
+		RegistrationNumber: newUser.RegistrationNumber,
+		Password:           oldUser.Password,
+		UniversityID:       oldUser.University.ID,
+		Status:             oldUser.Status,
+		CreationDate:       oldUser.CreationDate,
+	}
+	err = s.userRepository.UpdateUser(updatedUser)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

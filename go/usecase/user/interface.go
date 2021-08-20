@@ -8,11 +8,13 @@ type Reader interface {
 	GetTinyUserByID(userID string) (*entity.TinyUser, error)
 	GetTinyUserByEmail(email string) (*entity.TinyUser, error)
 	GetTinyUserByRegistrationNumber(registrationNumber string) (*entity.TinyUser, error)
+	GetUserByID(userID string) (*entity.User, error)
 	GetUserByEmail(email string) (*entity.User, error)
 }
 
 type Writer interface {
 	CreateUser(newUser entity.UserPayload) error
+	UpdateUser(newUser entity.UserPayload) error
 }
 
 type UserRepository interface {
@@ -23,4 +25,5 @@ type UserRepository interface {
 type UseCase interface {
 	CreateUser(newUser entity.UserPayload) error
 	GetTinyUserByID(userID string) (*entity.TinyUser, error)
+	UpdateTinyUser(userID string, newUser entity.UpdateUserPayload) error
 }

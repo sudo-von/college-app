@@ -70,3 +70,33 @@ func (up *UserPayload) Bind(r *http.Request) error {
 	}
 	return nil
 }
+
+type UpdateUserPayload struct {
+	Name               string `json:"name"`
+	BirthDate          string `json:"birth_date"`
+	Email              string `json:"email"`
+	RegistrationNumber string `json:"registration_number"`
+}
+
+func (uup *UpdateUserPayload) validate() (err error) {
+	if len(strings.TrimSpace(uup.Name)) == 0 {
+		err = mergeErrors(err, errors.New("missing field name"))
+	}
+	if len(strings.TrimSpace(uup.BirthDate)) == 0 {
+		err = mergeErrors(err, errors.New("missing field birth_date"))
+	}
+	if len(strings.TrimSpace(uup.Email)) == 0 {
+		err = mergeErrors(err, errors.New("missing field email"))
+	}
+	if len(strings.TrimSpace(uup.RegistrationNumber)) == 0 {
+		err = mergeErrors(err, errors.New("missing field registration_number"))
+	}
+	return
+}
+
+func (uup *UpdateUserPayload) Bind(r *http.Request) error {
+	if err := uup.validate(); err != nil {
+		return err
+	}
+	return nil
+}
