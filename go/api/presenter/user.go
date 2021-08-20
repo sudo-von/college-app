@@ -20,7 +20,7 @@ func (ur *TinyUserResponse) Render(w http.ResponseWriter, r *http.Request) error
 	return nil
 }
 
-func ToPresenterUser(user entity.TinyUser) TinyUserResponse {
+func ToTinyPresenterUser(user entity.TinyUser) TinyUserResponse {
 	return TinyUserResponse{
 		ID:                 user.ID,
 		Name:               user.Name,
