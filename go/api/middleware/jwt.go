@@ -23,8 +23,8 @@ func (k *ContextKey) String() string {
 }
 
 var (
-	ContextKeyUser    = &ContextKey{"User"}
-	ContextKeyPayload = &ContextKey{"Payload"}
+	ContextKeyUser   = &ContextKey{"User"}
+	ContextKeyUserID = &ContextKey{"UserID"}
 )
 
 func BasicAuth(uses *user.Service) func(http.Handler) http.Handler {
@@ -79,7 +79,7 @@ func IsAuthorized(uses token.Service) func(http.Handler) http.Handler {
 				return
 			}
 
-			ctx := context.WithValue(r.Context(), ContextKeyPayload, payload)
+			ctx := context.WithValue(r.Context(), ContextKeyUserID, payload.UserID)
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	}
