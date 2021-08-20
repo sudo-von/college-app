@@ -35,7 +35,31 @@ func (c *UserController) Routes() chi.Router {
 		r.Use(middleware.BasicAuth(&c.UserService))
 		r.Post("/login", c.Login)
 	})
+	r.Group(func(r chi.Router) {
+		r.Use(middleware.IsAuthorized(c.TokenService))
+		r.Get("/", c.GetTinyUser)
+	})
 	return r
+}
+
+// Show returns a user given its id.
+func (c *UserController) GetTinyUser(w http.ResponseWriter, r *http.Request) {
+
+	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	if !ok {
+		CheckError(errors.New("user not in context"), w, r)
+		return
+	}
+
+	user, err := c.UserService.GetTinyUserByID(userID)
+	if err != nil {
+		CheckError(err, w, r)
+		return
+	}
+
+	response := presenter.ToTinyPresenterUser(*user)
+	render.Status(r, http.StatusOK)
+	render.Render(w, r, &response)
 }
 
 // Create stores a new user.
