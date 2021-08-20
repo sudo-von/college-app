@@ -22,6 +22,16 @@ func NewService(userRepository UserRepository, universityRepository university.U
 	}
 }
 
+func (s *Service) GetTinyUserByID(userID string) (*entity.TinyUser, error) {
+
+	user, err := s.userRepository.GetTinyUserByID(userID)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+
+}
+
 func (s *Service) CreateUser(newUser entity.UserPayload) error {
 
 	// Check if the email is valid.
