@@ -22,4 +22,5 @@ type UserRepository interface {
 
 type UseCase interface {
 	CreateUser(newUser entity.UserPayload) error
+	GetTinyUserByID(userID string) (*entity.TinyUser, error)
 }
