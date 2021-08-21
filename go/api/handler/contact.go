@@ -32,6 +32,7 @@ func (c *ContactController) Routes() chi.Router {
 	r.Use(middleware.IsAuthorized(c.TokenService))
 	r.Get("/", c.Show)
 	r.Post("/", c.Create)
+	r.Patch("/", c.Update)
 	return r
 }
 
@@ -85,6 +86,37 @@ func (c *ContactController) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = c.ContactService.CreateContact(newContact)
+	if err != nil {
+		CheckError(err, w, r)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	render.Status(r, http.StatusOK)
+}
+
+// Update updates a contact given the user id from the context.
+func (c *ContactController) Update(w http.ResponseWriter, r *http.Request) {
+
+	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	if !ok {
+		CheckError(errors.New("user not in context"), w, r)
+		return
+	}
+
+	var data presenter.UpdateContactPayload
+	if err := render.Bind(r, &data); err != nil {
+		render.Render(w, r, presenter.ErrInvalidRequest(err))
+		return
+	}
+
+	newContact := entity.UpdateContactPayload{
+		ContactName:   data.ContactName,
+		ContactNumber: data.ContactNumber,
+		Message:       data.Message,
+	}
+
+	err := c.ContactService.UpdateContactByUserID(userID, newContact)
 	if err != nil {
 		CheckError(err, w, r)
 		return
