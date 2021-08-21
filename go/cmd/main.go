@@ -6,6 +6,7 @@ import (
 	"freelancer/college-app/go/config"
 	"freelancer/college-app/go/infrastructure/repository/mongo"
 	"freelancer/college-app/go/token"
+	"freelancer/college-app/go/usecase/contact"
 	"freelancer/college-app/go/usecase/suggestion"
 	"freelancer/college-app/go/usecase/university"
 	"freelancer/college-app/go/usecase/user"
@@ -33,16 +34,19 @@ func main() {
 	userRepository := mongo.NewUserRepository(db)
 	universityRepository := mongo.NewUniversityRepository(db)
 	suggestionRepository := mongo.NewSuggestionRepository(db)
+	contactRepository := mongo.NewContactRepository(db)
 
 	// Services.
 	userService := user.NewService(userRepository, universityRepository)
 	universityService := university.NewService(universityRepository)
 	suggestionService := suggestion.NewService(suggestionRepository)
+	contactService := contact.NewService(contactRepository)
 
 	services := api.Services{
 		UserService:       *userService,
 		UniversityService: *universityService,
 		SuggestionService: *suggestionService,
+		ContactService:    *contactService,
 		TokenService:      tokenService,
 	}
 
