@@ -2,18 +2,32 @@ package presenter
 
 import (
 	"errors"
+	"freelancer/college-app/go/entity"
 	"net/http"
 	"strings"
 	"time"
 )
 
 type ContactResponse struct {
-	ID            string    `json:"id"`
-	UserID        string    `json:"user_id"`
-	ContactName   string    `json:"contact_name"`
-	ContactNumber string    `json:"contact_number"`
-	Message       string    `json:"message"`
-	CreationDate  time.Time `json:"creation_date"`
+	ID            string `json:"id"`
+	UserID        string `json:"user_id"`
+	ContactName   string `json:"contact_name"`
+	ContactNumber string `json:"contact_number"`
+	Message       string `json:"message"`
+}
+
+func (ur *ContactResponse) Render(w http.ResponseWriter, r *http.Request) error {
+	return nil
+}
+
+func ToContactPresenter(contact entity.Contact) ContactResponse {
+	return ContactResponse{
+		ID:            contact.ID,
+		UserID:        contact.UserID,
+		ContactName:   contact.ContactName,
+		ContactNumber: contact.ContactNumber,
+		Message:       contact.Message,
+	}
 }
 
 type ContactPayload struct {
