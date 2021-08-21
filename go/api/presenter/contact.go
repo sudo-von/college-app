@@ -58,3 +58,29 @@ func (cp *ContactPayload) Bind(r *http.Request) error {
 	}
 	return nil
 }
+
+type UpdateContactPayload struct {
+	ContactName   string `json:"contact_name"`
+	ContactNumber string `json:"contact_number"`
+	Message       string `json:"message"`
+}
+
+func (ucp *UpdateContactPayload) validate() (err error) {
+	if len(strings.TrimSpace(ucp.ContactName)) == 0 {
+		err = mergeErrors(err, errors.New("missing field contact_name"))
+	}
+	if len(strings.TrimSpace(ucp.ContactNumber)) == 0 {
+		err = mergeErrors(err, errors.New("missing field contact_number"))
+	}
+	if len(strings.TrimSpace(ucp.Message)) == 0 {
+		err = mergeErrors(err, errors.New("missing field message"))
+	}
+	return
+}
+
+func (ucp *UpdateContactPayload) Bind(r *http.Request) error {
+	if err := ucp.validate(); err != nil {
+		return err
+	}
+	return nil
+}
