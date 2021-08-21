@@ -86,7 +86,7 @@ func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
 
 	newUser := entity.UserPayload{
 		Name:               data.Name,
-		BirthDate:          birthDate,
+		BirthDate:          birthDate.In(loc),
 		Email:              data.Email,
 		RegistrationNumber: data.RegistrationNumber,
 		Password:           data.Password,

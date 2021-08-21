@@ -24,7 +24,7 @@ func ToTinyPresenterUser(user entity.TinyUser) TinyUserResponse {
 	return TinyUserResponse{
 		ID:                 user.ID,
 		Name:               user.Name,
-		BirthDate:          user.BirthDate.Format("2006-01-02"),
+		BirthDate:          user.BirthDate.UTC().Format("2006-01-02"),
 		Email:              user.Email,
 		RegistrationNumber: user.RegistrationNumber,
 	}
