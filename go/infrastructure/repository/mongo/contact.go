@@ -91,7 +91,7 @@ func (r *ContactRepository) CreateContact(newContact entity.ContactPayload) erro
 	return nil
 }
 
-func (r *UserRepository) GetContactByUserID(userID string) (*entity.Contact, error) {
+func (r *ContactRepository) GetContactByUserID(userID string) (*entity.Contact, error) {
 
 	if !bson.IsObjectIdHex(userID) {
 		return nil, errors.New("given user_id is not a valid hex")
