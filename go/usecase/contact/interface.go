@@ -18,5 +18,6 @@ type ContactRepository interface {
 }
 
 type UseCase interface {
+	GetContactByUserID(userID string) (*entity.Contact, error)
 	CreateContact(newContact entity.ContactPayload) error
 }
