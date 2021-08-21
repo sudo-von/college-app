@@ -113,3 +113,25 @@ func (r *ContactRepository) GetContactByUserID(userID string) (*entity.Contact, 
 	contact := toEntityContact(contactM)
 	return &contact, nil
 }
+
+func (r *ContactRepository) UpdateContactByUserID(updatedContact entity.ContactPayload) error {
+
+	if !bson.IsObjectIdHex(updatedContact.ID) {
+		return errors.New("given user_id is not a valid hex")
+	}
+
+	session := r.Session.Copy()
+	defer session.Close()
+	com := session.DB(r.DatabaseName).C("contacts")
+	searchQuery := bson.M{
+		"user_id": bson.ObjectIdHex(updatedContact.UserID),
+	}
+
+	contactM := toContactPayloadModel(updatedContact)
+	err := com.Update(searchQuery, &contactM)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
