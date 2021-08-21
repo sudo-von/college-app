@@ -30,8 +30,29 @@ func NewContactController(contact contact.Service, token token.Service) *Contact
 func (c *ContactController) Routes() chi.Router {
 	r := chi.NewRouter()
 	r.Use(middleware.IsAuthorized(c.TokenService))
+	r.Get("/", c.Show)
 	r.Post("/", c.Create)
 	return r
+}
+
+// Show returns a contact given the user id from the context.
+func (c *ContactController) Show(w http.ResponseWriter, r *http.Request) {
+
+	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	if !ok {
+		CheckError(errors.New("user not in context"), w, r)
+		return
+	}
+
+	contact, err := c.ContactService.GetContactByUserID(userID)
+	if err != nil {
+		CheckError(err, w, r)
+		return
+	}
+
+	response := presenter.ToContactPresenter(*contact)
+	render.Status(r, http.StatusOK)
+	render.Render(w, r, &response)
 }
 
 // Create stores a new user.
