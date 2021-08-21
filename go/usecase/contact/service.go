@@ -16,6 +16,14 @@ func NewService(contactRepository ContactRepository) *Service {
 	}
 }
 
+func (s *Service) GetContactByUserID(userID string) (*entity.Contact, error) {
+	contact, err := s.contactRepository.GetContactByUserID(userID)
+	if err != nil {
+		return nil, err
+	}
+	return contact, nil
+}
+
 func (s *Service) CreateContact(newContact entity.ContactPayload) error {
 
 	// Regex to verify if there are only numbers.
