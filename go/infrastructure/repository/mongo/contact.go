@@ -1,12 +1,33 @@
 package mongo
 
 import (
+	"errors"
 	"freelancer/college-app/go/entity"
 	"time"
 
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
+
+type ContactModel struct {
+	ID            bson.ObjectId `bson:"_id"`
+	UserID        bson.ObjectId `bson:"user_id"`
+	ContactName   string        `bson:"contact_name"`
+	ContactNumber string        `bson:"contact_number"`
+	Message       string        `bson:"message"`
+	CreationDate  time.Time     `bson:"creation_date"`
+}
+
+func toEntityContact(contact ContactModel) entity.Contact {
+	return entity.Contact{
+		ID:            contact.ID.Hex(),
+		UserID:        contact.UserID.Hex(),
+		ContactName:   contact.ContactName,
+		ContactNumber: contact.ContactNumber,
+		Message:       contact.Message,
+		CreationDate:  contact.CreationDate,
+	}
+}
 
 type ContactPayloadModel struct {
 	ID            bson.ObjectId `bson:"_id"`
@@ -59,7 +80,7 @@ func (r *ContactRepository) CreateContact(newContact entity.ContactPayload) erro
 
 	session := r.Session.Copy()
 	defer session.Close()
-	com := session.DB(r.DatabaseName).C("users")
+	com := session.DB(r.DatabaseName).C("contacts")
 
 	contactM := toContactPayloadModel(newContact)
 	err := com.Insert(&contactM)
@@ -68,4 +89,27 @@ func (r *ContactRepository) CreateContact(newContact entity.ContactPayload) erro
 	}
 
 	return nil
+}
+
+func (r *UserRepository) GetContactByUserID(userID string) (*entity.Contact, error) {
+
+	if !bson.IsObjectIdHex(userID) {
+		return nil, errors.New("given user_id is not a valid hex")
+	}
+
+	session := r.Session.Copy()
+	defer session.Close()
+	com := session.DB(r.DatabaseName).C("contacts")
+	searchQuery := bson.M{
+		"user_id": bson.ObjectIdHex(userID),
+	}
+
+	var contactM ContactModel
+	err := com.Find(searchQuery).One(&contactM)
+	if err != nil {
+		return nil, err
+	}
+
+	contact := toEntityContact(contactM)
+	return &contact, nil
 }
