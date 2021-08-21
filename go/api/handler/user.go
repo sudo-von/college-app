@@ -140,6 +140,12 @@ func (c *UserController) UpdateTinyUser(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
+	loc, err := time.LoadLocation("America/Mexico_City")
+	if err != nil {
+		CheckError(err, w, r)
+		return
+	}
+
 	birthDate, err := time.Parse("2006-01-02", data.BirthDate)
 	if err != nil {
 		CheckError(err, w, r)
@@ -148,7 +154,7 @@ func (c *UserController) UpdateTinyUser(w http.ResponseWriter, r *http.Request) 
 
 	newUser := entity.UpdateUserPayload{
 		Name:               data.Name,
-		BirthDate:          birthDate,
+		BirthDate:          birthDate.In(loc),
 		Email:              data.Email,
 		RegistrationNumber: data.RegistrationNumber,
 	}
