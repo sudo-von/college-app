@@ -19,3 +19,9 @@ type ContactPayload struct {
 	Message       string
 	CreationDate  time.Time
 }
+
+type UpdateContactPayload struct {
+	ContactName   string
+	ContactNumber string
+	Message       string
+}
