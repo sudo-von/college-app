@@ -8,6 +8,7 @@ import (
 	"freelancer/college-app/go/usecase/suggestion"
 	"freelancer/college-app/go/usecase/university"
 	"freelancer/college-app/go/usecase/user"
+	"freelancer/college-app/go/usecase/user_mood"
 	"log"
 	"net/http"
 
@@ -22,6 +23,7 @@ type Services struct {
 	UniversityService university.Service
 	SuggestionService suggestion.Service
 	ContactService    contact.Service
+	UserMoodService   user_mood.Service
 	TokenService      token.Service
 }
 
@@ -42,6 +44,7 @@ func ListenAndServe(services Services) {
 	r.Mount("/users", handler.NewUserController(services.UserService, services.TokenService).Routes())
 	r.Mount("/suggestions", handler.NewSuggestionController(services.SuggestionService, services.TokenService).Routes())
 	r.Mount("/contacts", handler.NewContactController(services.ContactService, services.TokenService).Routes())
+	r.Mount("/users-mood", handler.NewUserMoodController(services.UserMoodService, services.TokenService).Routes())
 
 	// Start http server.
 	if err := http.ListenAndServe(":4000", r); err != nil {
