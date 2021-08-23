@@ -21,6 +21,6 @@ func ToUserMoodPresenter(um entity.UserMood) UserMoodResponse {
 		ID:           um.ID,
 		UserID:       um.UserID,
 		Mood:         um.Mood,
-		CreationDate: um.CreationDate.UTC().Format("2006-01-02"),
+		CreationDate: um.CreationDate.Local().Format("2006-01-02"),
 	}
 }
