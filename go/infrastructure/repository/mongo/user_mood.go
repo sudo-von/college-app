@@ -17,12 +17,43 @@ type UserMoodModel struct {
 	CreationDate time.Time     `bson:"creation_date"`
 }
 
+type UserMoodPayload struct {
+	ID           bson.ObjectId `bson:"_id"`
+	UserID       bson.ObjectId `bson:"user_id"`
+	Mood         int           `bson:"mood"`
+	CreationDate time.Time     `bson:"creation_date"`
+}
+
 func toEntityUserMood(userMood UserMoodModel) entity.UserMood {
 	return entity.UserMood{
 		ID:           userMood.ID.Hex(),
 		UserID:       userMood.UserID.Hex(),
 		Mood:         userMood.Mood,
 		CreationDate: userMood.CreationDate,
+	}
+}
+
+func toUserMoodPayloadModel(userMoodPayload entity.UserMoodPayload) UserMoodPayload {
+
+	var userMoodPayloadID bson.ObjectId
+	if userMoodPayload.ID != "" {
+		userMoodPayloadID = bson.ObjectIdHex(userMoodPayload.ID)
+	} else {
+		userMoodPayloadID = bson.NewObjectId()
+	}
+
+	var userID bson.ObjectId
+	if userMoodPayload.UserID != "" {
+		userID = bson.ObjectIdHex(userMoodPayload.UserID)
+	} else {
+		userID = bson.NewObjectId()
+	}
+
+	return UserMoodPayload{
+		ID:           userMoodPayloadID,
+		UserID:       userID,
+		Mood:         userMoodPayload.Mood,
+		CreationDate: userMoodPayload.CreationDate,
 	}
 }
 
@@ -70,4 +101,19 @@ func (r *UserMoodRepository) GetUserMoodByUserID(userID string, userMoodFilters 
 
 	userMood := toEntityUserMood(userMoodM)
 	return &userMood, nil
+}
+
+func (r *UserMoodRepository) CreateUserMood(newUserMood entity.UserMoodPayload) error {
+
+	session := r.Session.Copy()
+	defer session.Close()
+	com := session.DB(r.DatabaseName).C("users_mood")
+
+	userMoodM := toUserMoodPayloadModel(newUserMood)
+	err := com.Insert(&userMoodM)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
