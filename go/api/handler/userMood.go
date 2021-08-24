@@ -3,6 +3,7 @@ package handler
 import (
 	"errors"
 	"net/http"
+	"time"
 
 	"freelancer/college-app/go/api/middleware"
 	"freelancer/college-app/go/api/presenter"
@@ -30,6 +31,7 @@ func (c *UserMoodController) Routes() chi.Router {
 	r := chi.NewRouter()
 	r.Use(middleware.IsAuthorized(c.TokenService))
 	r.Get("/", c.Show)
+	r.Post("/", c.Create)
 	return r
 }
 
@@ -55,4 +57,35 @@ func (c *UserMoodController) Show(w http.ResponseWriter, r *http.Request) {
 	response := presenter.ToUserMoodPresenter(*userMood)
 	render.Status(r, http.StatusOK)
 	render.Render(w, r, &response)
+}
+
+// Create stores a new user mood.
+func (c *UserMoodController) Create(w http.ResponseWriter, r *http.Request) {
+
+	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	if !ok {
+		CheckError(errors.New("user not in context"), w, r)
+		return
+	}
+
+	var data presenter.UserMoodPayload
+	if err := render.Bind(r, &data); err != nil {
+		render.Render(w, r, presenter.ErrInvalidRequest(err))
+		return
+	}
+
+	newUserMood := entity.UserMoodPayload{
+		UserID:       userID,
+		Mood:         data.Mood,
+		CreationDate: time.Now().In(time.Local),
+	}
+
+	err := c.UserMoodService.CreateUserMood(newUserMood)
+	if err != nil {
+		CheckError(err, w, r)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	render.Status(r, http.StatusOK)
 }
