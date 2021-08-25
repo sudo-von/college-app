@@ -158,8 +158,16 @@ func (r *AdviceRepository) GetAdvices(universityID string, adviceFilters entity.
 	if err != nil {
 		return nil, nil, err
 	}
-
 	total := len(advicesM)
+
+	pipes = append(pipes, bson.M{"$limit": 5})
+	pipes = append(pipes, bson.M{"$skip": 0})
+	pipe = com.Pipe(pipes)
+	err = pipe.All(&advicesM)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	consultancies := make([]entity.Advice, 0)
 	for _, advice := range advicesM {
 		consultancies = append(consultancies, toEntityAdvice(advice))
