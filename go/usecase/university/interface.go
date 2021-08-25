@@ -5,6 +5,7 @@ import (
 )
 
 type Reader interface {
+	GetTinyUniversities() ([]entity.TinyUniversity, *int, error)
 	GetUniversityByID(universityID string) (*entity.University, error)
 }
 
@@ -13,5 +14,6 @@ type UniversityRepository interface {
 }
 
 type UseCase interface {
+	GetTinyUniversities() ([]entity.TinyUniversity, *int, error)
 	GetUniversityByID(universityID string) (*entity.University, error)
 }

@@ -2,7 +2,6 @@ package mongo
 
 import (
 	"errors"
-	"fmt"
 
 	"freelancer/college-app/go/entity"
 
@@ -16,22 +15,11 @@ type TinyUniversityModel struct {
 	ProfilePicture string        `bson:"profile_picture"`
 }
 
-func toTinyUniversityEntity(university UniversityModel) entity.University {
-
-	classrooms := make([]entity.Classroom, len(university.Classrooms))
-	for _, c := range university.Classrooms {
-		classrooms = append(classrooms, entity.Classroom{
-			ID:   c.ID.Hex(),
-			Name: c.Name,
-		})
-	}
-
-	fmt.Println(classrooms)
-	return entity.University{
+func toTinyUniversityEntity(university TinyUniversityModel) entity.TinyUniversity {
+	return entity.TinyUniversity{
 		ID:             university.ID.Hex(),
 		Name:           university.Name,
 		ProfilePicture: university.ProfilePicture,
-		Classrooms:     classrooms,
 	}
 }
 
@@ -76,6 +64,31 @@ func NewUniversityRepository(repository *Repository) *UniversityRepository {
 		Session:      repository.Session,
 		DatabaseName: repository.DatabaseName,
 	}
+}
+
+func (r *UniversityRepository) GetTinyUniversities() ([]entity.TinyUniversity, *int, error) {
+
+	session := r.Session.Copy()
+	defer session.Close()
+	com := session.DB(r.DatabaseName).C("universities")
+
+	var universitiesM []TinyUniversityModel
+	err := com.Find(bson.M{}).All(&universitiesM)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	total, err := com.Find(bson.M{}).Count()
+	if err != nil {
+		return nil, nil, err
+	}
+
+	universities := make([]entity.TinyUniversity, 0)
+	for _, university := range universitiesM {
+		universities = append(universities, toTinyUniversityEntity(university))
+	}
+
+	return universities, &total, nil
 }
 
 func (r *UniversityRepository) GetUniversityByID(universityID string) (*entity.University, error) {

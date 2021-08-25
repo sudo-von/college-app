@@ -14,6 +14,14 @@ func NewService(universityRepository UniversityRepository) *Service {
 	}
 }
 
+func (s Service) GetTinyUniversities() ([]entity.TinyUniversity, *int, error) {
+	universities, total, err := s.universityRepository.GetTinyUniversities()
+	if err != nil {
+		return nil, nil, err
+	}
+	return universities, total, nil
+}
+
 func (s Service) GetUniversityByID(universityID string) (*entity.University, error) {
 	university, err := s.universityRepository.GetUniversityByID(universityID)
 	if err != nil {

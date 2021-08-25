@@ -6,6 +6,15 @@ import (
 	"net/http"
 )
 
+type TinyUniversityList struct {
+	Total            int                      `json:"total"`
+	TinyUniversities []TinyUniversityResponse `json:"results"`
+}
+
+func (tul *TinyUniversityList) Render(w http.ResponseWriter, r *http.Request) error {
+	return nil
+}
+
 type TinyUniversityResponse struct {
 	ID             string `json:"id"`
 	Name           string `json:"name"`
