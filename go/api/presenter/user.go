@@ -9,11 +9,12 @@ import (
 )
 
 type TinyUserResponse struct {
-	ID                 string `json:"id"`
-	Name               string `json:"name"`
-	BirthDate          string `json:"birth_date"`
-	Email              string `json:"email"`
-	RegistrationNumber string `json:"registration_number"`
+	ID                 string             `json:"id"`
+	Name               string             `json:"name"`
+	BirthDate          string             `json:"birth_date"`
+	Email              string             `json:"email"`
+	RegistrationNumber string             `json:"registration_number"`
+	University         UniversityResponse `json:"university"`
 }
 
 func (ur *TinyUserResponse) Render(w http.ResponseWriter, r *http.Request) error {
@@ -21,12 +22,20 @@ func (ur *TinyUserResponse) Render(w http.ResponseWriter, r *http.Request) error
 }
 
 func ToTinyPresenterUser(user entity.TinyUser) TinyUserResponse {
+
+	university := UniversityResponse{
+		ID:             user.University.ID,
+		Name:           user.University.Name,
+		ProfilePicture: user.University.ProfilePicture,
+	}
+
 	return TinyUserResponse{
 		ID:                 user.ID,
 		Name:               user.Name,
 		BirthDate:          user.BirthDate.UTC().Format("2006-01-02"),
 		Email:              user.Email,
 		RegistrationNumber: user.RegistrationNumber,
+		University:         university,
 	}
 }
 
