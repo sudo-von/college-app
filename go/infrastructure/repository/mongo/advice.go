@@ -1,7 +1,6 @@
 package mongo
 
 import (
-	"fmt"
 	"time"
 
 	"freelancer/college-app/go/entity"
@@ -44,6 +43,54 @@ func toEntityAdvice(advice AdviceModel) entity.Advice {
 	}
 }
 
+type AdvicePayloadModel struct {
+	ID             bson.ObjectId `bson:"_id"`
+	UserID         bson.ObjectId `bson:"user_id"`
+	UniversityID   bson.ObjectId `bson:"university_id"`
+	Subject        string        `bson:"subject"`
+	AdviceDate     time.Time     `bson:"advice_date"`
+	Classroom      int           `bson:"classroom"`
+	StudentsNumber int           `bson:"students_number"`
+	Status         string        `bson:"status"`
+	CreationDate   time.Time     `bson:"creation_date"`
+}
+
+func toAdvicePayloadModel(advice entity.AdvicePayload) AdvicePayloadModel {
+
+	var adviceID bson.ObjectId
+	if advice.ID != "" {
+		adviceID = bson.ObjectIdHex(advice.ID)
+	} else {
+		adviceID = bson.NewObjectId()
+	}
+
+	var userID bson.ObjectId
+	if advice.UserID != "" {
+		userID = bson.ObjectIdHex(advice.UserID)
+	} else {
+		userID = bson.NewObjectId()
+	}
+
+	var universityID bson.ObjectId
+	if advice.UniversityID != "" {
+		universityID = bson.ObjectIdHex(advice.UniversityID)
+	} else {
+		universityID = bson.NewObjectId()
+	}
+
+	return AdvicePayloadModel{
+		ID:             adviceID,
+		UserID:         userID,
+		UniversityID:   universityID,
+		Subject:        advice.Subject,
+		AdviceDate:     advice.AdviceDate,
+		Classroom:      advice.Classroom,
+		StudentsNumber: advice.StudentsNumber,
+		Status:         advice.Status,
+		CreationDate:   advice.CreationDate,
+	}
+}
+
 type AdviceRepository struct {
 	Session      *mgo.Session
 	DatabaseName string
@@ -58,16 +105,14 @@ func NewAdviceRepository(repository *Repository) *AdviceRepository {
 
 func (r *AdviceRepository) GetAdvices(universityID string, adviceFilters entity.AdviceFilters) ([]entity.Advice, *int, error) {
 
-	fmt.Println(universityID, adviceFilters)
-
 	session := r.Session.Copy()
 	defer session.Close()
 	com := session.DB(r.DatabaseName).C("advices")
 
 	searchQuery := bson.M{
-		"status":              entity.ActiveStatus,
-		"user.status":         entity.ActiveStatus,
-		"user.university._id": bson.ObjectIdHex(universityID),
+		"status":        entity.ActiveStatus,
+		"user.status":   entity.ActiveStatus,
+		"university_id": bson.ObjectIdHex(universityID),
 		"advice_date": bson.M{
 			"$gte": adviceFilters.AdviceDate.In(time.Local),
 		},
@@ -83,15 +128,6 @@ func (r *AdviceRepository) GetAdvices(universityID string, adviceFilters entity.
 			},
 		},
 		{"$unwind": "$user"},
-		{
-			"$lookup": bson.M{
-				"from":         "universities",
-				"localField":   "user.university_id",
-				"foreignField": "_id",
-				"as":           "user.university",
-			},
-		},
-		{"$unwind": "$user.university"},
 		{"$match": searchQuery},
 	}
 
@@ -109,4 +145,19 @@ func (r *AdviceRepository) GetAdvices(universityID string, adviceFilters entity.
 	}
 
 	return consultancies, &total, nil
+}
+
+func (r *AdviceRepository) CreateAdvice(newAdvice entity.AdvicePayload) error {
+
+	session := r.Session.Copy()
+	defer session.Close()
+	com := session.DB(r.DatabaseName).C("advices")
+
+	adviceM := toAdvicePayloadModel(newAdvice)
+	err := com.Insert(&adviceM)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
