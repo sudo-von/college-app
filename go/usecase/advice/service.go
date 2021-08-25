@@ -3,19 +3,22 @@ package advice
 import (
 	"errors"
 	"freelancer/college-app/go/entity"
+	"freelancer/college-app/go/usecase/university"
 	"freelancer/college-app/go/usecase/user"
 	"time"
 )
 
 type Service struct {
-	adviceRepository AdviceRepository
-	userRepository   user.UserRepository
+	adviceRepository     AdviceRepository
+	userRepository       user.UserRepository
+	universityRepository university.UniversityRepository
 }
 
-func NewService(adviceRepository AdviceRepository, userRepository user.UserRepository) *Service {
+func NewService(adviceRepository AdviceRepository, userRepository user.UserRepository, universityRepository university.UniversityRepository) *Service {
 	return &Service{
 		adviceRepository,
 		userRepository,
+		universityRepository,
 	}
 }
 
@@ -45,11 +48,15 @@ func (s *Service) CreateAdvice(newAdvice entity.AdvicePayload) error {
 	if !validDate {
 		return errors.New("advice_date can not be before the current date")
 	}
+
+	// Gets university id from the user.
 	user, err := s.userRepository.GetUserByID(newAdvice.UserID)
 	if err != nil {
 		return err
 	}
 	newAdvice.UniversityID = user.University.ID
+
+	// Checks if classroom is a valid classroom for the given university.
 
 	// Stores new advice.
 	err = s.adviceRepository.CreateAdvice(newAdvice)

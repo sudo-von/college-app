@@ -1,6 +1,7 @@
 package mongo
 
 import (
+	"fmt"
 	"time"
 
 	"freelancer/college-app/go/entity"
@@ -10,11 +11,13 @@ import (
 )
 
 type AdviceModel struct {
-	ID         bson.ObjectId `bson:"_id"`
-	User       TinyUserModel `bson:"user"`
-	Subject    string        `bson:"subject"`
-	Classroom  int           `bson:"classroom"`
-	AdviceDate time.Time     `bson:"advice_date"`
+	ID             bson.ObjectId   `bson:"_id"`
+	Subject        string          `bson:"subject"`
+	AdviceDate     time.Time       `bson:"advice_date"`
+	ClassroomID    bson.ObjectId   `bson:"classroom_id"`
+	University     UniversityModel `bson:"university"`
+	StudentsNumber int             `bson:"students_number"`
+	User           TinyUserModel   `bson:"user"`
 }
 
 func toEntityAdvice(advice AdviceModel) entity.Advice {
@@ -27,11 +30,20 @@ func toEntityAdvice(advice AdviceModel) entity.Advice {
 		RegistrationNumber: advice.User.RegistrationNumber,
 	}
 
+	fmt.Println(advice)
+	var classroom entity.Classroom
+	for _, a := range advice.University.Classrooms {
+		if a.ID.Hex() == advice.ClassroomID.Hex() {
+			classroom.ID = a.ID.Hex()
+			classroom.Name = a.Name
+		}
+	}
+
 	return entity.Advice{
 		ID:         advice.ID.Hex(),
 		User:       user,
 		Subject:    advice.Subject,
-		Classroom:  advice.Classroom,
+		Classroom:  classroom,
 		AdviceDate: advice.AdviceDate,
 	}
 }
@@ -40,9 +52,9 @@ type AdvicePayloadModel struct {
 	ID             bson.ObjectId `bson:"_id"`
 	UserID         bson.ObjectId `bson:"user_id"`
 	UniversityID   bson.ObjectId `bson:"university_id"`
+	ClassroomID    bson.ObjectId `bson:"classroom_id"`
 	Subject        string        `bson:"subject"`
 	AdviceDate     time.Time     `bson:"advice_date"`
-	Classroom      int           `bson:"classroom"`
 	StudentsNumber int           `bson:"students_number"`
 	Status         string        `bson:"status"`
 	CreationDate   time.Time     `bson:"creation_date"`
@@ -71,13 +83,20 @@ func toAdvicePayloadModel(advice entity.AdvicePayload) AdvicePayloadModel {
 		universityID = bson.NewObjectId()
 	}
 
+	var classroomID bson.ObjectId
+	if advice.ClassroomID != "" {
+		classroomID = bson.ObjectIdHex(advice.ClassroomID)
+	} else {
+		classroomID = bson.NewObjectId()
+	}
+
 	return AdvicePayloadModel{
 		ID:             adviceID,
 		UserID:         userID,
 		UniversityID:   universityID,
+		ClassroomID:    classroomID,
 		Subject:        advice.Subject,
 		AdviceDate:     advice.AdviceDate,
-		Classroom:      advice.Classroom,
 		StudentsNumber: advice.StudentsNumber,
 		Status:         advice.Status,
 		CreationDate:   advice.CreationDate,
@@ -121,6 +140,15 @@ func (r *AdviceRepository) GetAdvices(universityID string, adviceFilters entity.
 			},
 		},
 		{"$unwind": "$user"},
+		{
+			"$lookup": bson.M{
+				"from":         "universities",
+				"localField":   "university_id",
+				"foreignField": "_id",
+				"as":           "university",
+			},
+		},
+		{"$unwind": "$university"},
 		{"$match": searchQuery},
 	}
 

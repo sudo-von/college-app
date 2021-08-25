@@ -5,9 +5,9 @@ import "time"
 type Advice struct {
 	ID             string
 	User           TinyUser
+	Classroom      Classroom
 	Subject        string
 	AdviceDate     time.Time
-	Classroom      int
 	StudentsNumber int
 	Status         string
 	CreationDate   time.Time
@@ -16,10 +16,10 @@ type Advice struct {
 type AdvicePayload struct {
 	ID             string
 	UserID         string
+	ClassroomID    string
 	UniversityID   string
 	Subject        string
 	AdviceDate     time.Time
-	Classroom      int
 	StudentsNumber int
 	Status         string
 	CreationDate   time.Time

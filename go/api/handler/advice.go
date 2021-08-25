@@ -93,7 +93,7 @@ func (c *AdviceController) Create(w http.ResponseWriter, r *http.Request) {
 		UserID:       userID,
 		Subject:      data.Subject,
 		AdviceDate:   adviceDate,
-		Classroom:    data.Classroom,
+		ClassroomID:  data.ClassroomID,
 		Status:       entity.ActiveStatus,
 		CreationDate: time.Now().In(time.Local),
 	}
