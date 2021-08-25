@@ -1,8 +1,10 @@
 package presenter
 
 import (
+	"errors"
 	"freelancer/college-app/go/entity"
 	"net/http"
+	"strings"
 )
 
 type AdviceList struct {
@@ -52,4 +54,27 @@ func ToAdvicePresenter(advice entity.Advice) AdviceResponse {
 		Classroom:      advice.Classroom,
 		StudentsNumber: advice.StudentsNumber,
 	}
+}
+
+type AdvicePayload struct {
+	Subject    string `json:"subject"`
+	AdviceDate string `json:"advice_date"`
+	Classroom  int    `json:"classroom"`
+}
+
+func (ap *AdvicePayload) validate() (err error) {
+	if len(strings.TrimSpace(ap.Subject)) == 0 {
+		err = mergeErrors(err, errors.New("missing field subject"))
+	}
+	if len(strings.TrimSpace(ap.AdviceDate)) == 0 {
+		err = mergeErrors(err, errors.New("missing field advice_date"))
+	}
+	return
+}
+
+func (ap *AdvicePayload) Bind(r *http.Request) error {
+	if err := ap.validate(); err != nil {
+		return err
+	}
+	return nil
 }
