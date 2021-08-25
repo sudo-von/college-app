@@ -37,8 +37,8 @@ func (c *UserController) Routes() chi.Router {
 	})
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.IsAuthorized(c.TokenService))
-		r.Get("/", c.GetTinyUser)
-		r.Patch("/", c.UpdateTinyUser)
+		r.Get("/{id}", c.GetTinyUser)
+		r.Patch("/{id}", c.UpdateTinyUser)
 	})
 	return r
 }
@@ -51,8 +51,9 @@ func (c *UserController) GetTinyUser(w http.ResponseWriter, r *http.Request) {
 		CheckError(errors.New("user not in context"), w, r)
 		return
 	}
+	requestedUserID := chi.URLParam(r, "id")
 
-	user, err := c.UserService.GetTinyUserByID(userID)
+	user, err := c.UserService.GetTinyUserByID(userID, requestedUserID)
 	if err != nil {
 		CheckError(err, w, r)
 		return
@@ -133,6 +134,7 @@ func (c *UserController) UpdateTinyUser(w http.ResponseWriter, r *http.Request) 
 		CheckError(errors.New("user not in context"), w, r)
 		return
 	}
+	requestedUserID := chi.URLParam(r, "id")
 
 	var data presenter.UpdateUserPayload
 	if err := render.Bind(r, &data); err != nil {
@@ -140,13 +142,7 @@ func (c *UserController) UpdateTinyUser(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	loc, err := time.LoadLocation("America/Mexico_City")
-	if err != nil {
-		CheckError(err, w, r)
-		return
-	}
-
-	birthDate, err := time.Parse("2006-01-02", data.BirthDate)
+	birthDate, err := time.ParseInLocation("2006-01-02", data.BirthDate, time.Local)
 	if err != nil {
 		CheckError(err, w, r)
 		return
@@ -154,12 +150,12 @@ func (c *UserController) UpdateTinyUser(w http.ResponseWriter, r *http.Request) 
 
 	newUser := entity.UpdateUserPayload{
 		Name:               data.Name,
-		BirthDate:          birthDate.In(loc),
+		BirthDate:          birthDate,
 		Email:              data.Email,
 		RegistrationNumber: data.RegistrationNumber,
 	}
 
-	err = c.UserService.UpdateTinyUser(userID, newUser)
+	err = c.UserService.UpdateTinyUser(userID, requestedUserID, newUser)
 	if err != nil {
 		CheckError(err, w, r)
 		return

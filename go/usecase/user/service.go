@@ -22,7 +22,16 @@ func NewService(userRepository UserRepository, universityRepository university.U
 	}
 }
 
-func (s *Service) GetTinyUserByID(userID string) (*entity.TinyUser, error) {
+func (s *Service) GetTinyUserByID(userID, requestedUserID string) (*entity.TinyUser, error) {
+
+	// Checks permissions.
+	hasPermission := false
+	if userID == requestedUserID {
+		hasPermission = true
+	}
+	if !hasPermission {
+		return nil, errors.New("user has no permission to see this user")
+	}
 
 	user, err := s.userRepository.GetTinyUserByID(userID)
 	if err != nil {
@@ -72,7 +81,16 @@ func (s *Service) CreateUser(newUser entity.UserPayload) error {
 	return nil
 }
 
-func (s *Service) UpdateTinyUser(userID string, newUser entity.UpdateUserPayload) error {
+func (s *Service) UpdateTinyUser(userID, requestedUserID string, newUser entity.UpdateUserPayload) error {
+
+	// Checks permissions.
+	hasPermission := false
+	if userID == requestedUserID {
+		hasPermission = true
+	}
+	if !hasPermission {
+		return errors.New("user has no permission to update this user")
+	}
 
 	// Checks if the new email is valid.
 	err := checkmail.ValidateFormat(newUser.Email)

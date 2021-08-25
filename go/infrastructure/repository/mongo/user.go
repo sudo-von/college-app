@@ -159,8 +159,7 @@ func (r *UserRepository) GetTinyUserByEmail(email string) (*entity.TinyUser, err
 	defer session.Close()
 	com := session.DB(r.DatabaseName).C("users")
 	searchQuery := bson.M{
-		"email":  email,
-		"status": entity.ActiveStatus,
+		"email": email,
 	}
 
 	pipes := []bson.M{
@@ -193,7 +192,6 @@ func (r *UserRepository) GetTinyUserByRegistrationNumber(registrationNumber stri
 	com := session.DB(r.DatabaseName).C("users")
 	searchQuery := bson.M{
 		"registration_number": registrationNumber,
-		"status":              entity.ActiveStatus,
 	}
 
 	pipes := []bson.M{
