@@ -5,7 +5,6 @@ import "time"
 type Advice struct {
 	ID             string
 	User           TinyUser
-	University     University
 	Subject        string
 	AdviceDate     time.Time
 	Classroom      int
