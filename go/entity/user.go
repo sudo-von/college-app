@@ -8,7 +8,6 @@ type TinyUser struct {
 	BirthDate          time.Time
 	Email              string
 	RegistrationNumber string
-	University         University
 }
 
 type User struct {

@@ -74,19 +74,12 @@ func toUserPayloadModel(userPayload entity.UserPayload) UserPayloadModel {
 
 func toEntityTinyUser(user TinyUserModel) entity.TinyUser {
 
-	university := entity.University{
-		ID:             user.University.ID.Hex(),
-		Name:           user.University.Name,
-		ProfilePicture: user.University.ProfilePicture,
-	}
-
 	return entity.TinyUser{
 		ID:                 user.ID.Hex(),
 		Name:               user.Name,
 		BirthDate:          user.BirthDate,
 		Email:              user.Email,
 		RegistrationNumber: user.RegistrationNumber,
-		University:         university,
 	}
 }
 
@@ -236,7 +229,7 @@ func (r *UserRepository) GetUserByID(userID string) (*entity.User, error) {
 	defer session.Close()
 	com := session.DB(r.DatabaseName).C("users")
 	searchQuery := bson.M{
-		"_id":    bson.ObjectId(userID),
+		"_id":    bson.ObjectIdHex(userID),
 		"status": entity.ActiveStatus,
 	}
 

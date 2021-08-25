@@ -21,7 +21,7 @@ func NewService(adviceRepository AdviceRepository, userRepository user.UserRepos
 
 func (s *Service) GetAdvices(userID string, adviceFilters entity.AdviceFilters) ([]entity.Advice, *int, error) {
 
-	user, err := s.userRepository.GetTinyUserByID(userID)
+	user, err := s.userRepository.GetUserByID(userID)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -45,8 +45,7 @@ func (s *Service) CreateAdvice(newAdvice entity.AdvicePayload) error {
 	if !validDate {
 		return errors.New("advice_date can not be before the current date")
 	}
-
-	user, err := s.userRepository.GetTinyUserByID(newAdvice.UserID)
+	user, err := s.userRepository.GetUserByID(newAdvice.UserID)
 	if err != nil {
 		return err
 	}

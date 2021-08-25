@@ -19,19 +19,12 @@ type AdviceModel struct {
 
 func toEntityAdvice(advice AdviceModel) entity.Advice {
 
-	university := entity.University{
-		ID:             advice.User.University.ID.Hex(),
-		Name:           advice.User.University.Name,
-		ProfilePicture: advice.User.University.ProfilePicture,
-	}
-
 	user := entity.TinyUser{
 		ID:                 advice.User.ID.Hex(),
 		Name:               advice.User.Name,
 		BirthDate:          advice.User.BirthDate,
 		Email:              advice.User.Email,
 		RegistrationNumber: advice.User.RegistrationNumber,
-		University:         university,
 	}
 
 	return entity.Advice{

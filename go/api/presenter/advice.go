@@ -31,26 +31,19 @@ func (ar *AdviceResponse) Render(w http.ResponseWriter, r *http.Request) error {
 
 func ToAdvicePresenter(advice entity.Advice) AdviceResponse {
 
-	university := UniversityResponse{
-		ID:             advice.User.University.ID,
-		Name:           advice.User.University.Name,
-		ProfilePicture: advice.User.University.ProfilePicture,
-	}
-
 	user := TinyUserResponse{
 		ID:                 advice.User.ID,
 		Name:               advice.User.Name,
 		BirthDate:          advice.User.BirthDate.UTC().Format("2006-01-02"),
 		Email:              advice.User.Email,
 		RegistrationNumber: advice.User.RegistrationNumber,
-		University:         university,
 	}
 
 	return AdviceResponse{
 		ID:             advice.ID,
 		User:           user,
 		Subject:        advice.Subject,
-		AdviceDate:     advice.AdviceDate.Local().Format("2006-01-02"),
+		AdviceDate:     advice.AdviceDate.Local().Format("2006-01-02 15:04"),
 		Classroom:      advice.Classroom,
 		StudentsNumber: advice.StudentsNumber,
 	}
