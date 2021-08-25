@@ -23,11 +23,12 @@ type UserModel struct {
 }
 
 type TinyUserModel struct {
-	ID                 bson.ObjectId `bson:"_id"`
-	Name               string        `bson:"name"`
-	BirthDate          time.Time     `bson:"birth_date"`
-	Email              string        `bson:"email"`
-	RegistrationNumber string        `bson:"registration_number"`
+	ID                 bson.ObjectId   `bson:"_id"`
+	Name               string          `bson:"name"`
+	BirthDate          time.Time       `bson:"birth_date"`
+	Email              string          `bson:"email"`
+	RegistrationNumber string          `bson:"registration_number"`
+	University         UniversityModel `bson:"university"`
 }
 
 type UserPayloadModel struct {
@@ -38,7 +39,7 @@ type UserPayloadModel struct {
 	RegistrationNumber string        `bson:"registration_number"`
 	Password           string        `bson:"password"`
 	Status             string        `bson:"status"`
-	UniversityID       string        `bson:"university_id"`
+	UniversityID       bson.ObjectId `bson:"university_id"`
 	CreationDate       time.Time     `bson:"creation_date"`
 }
 
@@ -51,6 +52,13 @@ func toUserPayloadModel(userPayload entity.UserPayload) UserPayloadModel {
 		userID = bson.NewObjectId()
 	}
 
+	var universityID bson.ObjectId
+	if userPayload.UniversityID != "" {
+		universityID = bson.ObjectIdHex(userPayload.UniversityID)
+	} else {
+		universityID = bson.NewObjectId()
+	}
+
 	return UserPayloadModel{
 		ID:                 userID,
 		Name:               userPayload.Name,
@@ -59,18 +67,26 @@ func toUserPayloadModel(userPayload entity.UserPayload) UserPayloadModel {
 		RegistrationNumber: userPayload.RegistrationNumber,
 		Password:           userPayload.Password,
 		Status:             userPayload.Status,
-		UniversityID:       userPayload.UniversityID,
+		UniversityID:       universityID,
 		CreationDate:       userPayload.CreationDate,
 	}
 }
 
 func toEntityTinyUser(user TinyUserModel) entity.TinyUser {
+
+	university := entity.University{
+		ID:             user.University.ID.Hex(),
+		Name:           user.University.Name,
+		ProfilePicture: user.University.ProfilePicture,
+	}
+
 	return entity.TinyUser{
 		ID:                 user.ID.Hex(),
 		Name:               user.Name,
 		BirthDate:          user.BirthDate,
 		Email:              user.Email,
 		RegistrationNumber: user.RegistrationNumber,
+		University:         university,
 	}
 }
 
@@ -121,8 +137,21 @@ func (r *UserRepository) GetTinyUserByID(userID string) (*entity.TinyUser, error
 		"status": entity.ActiveStatus,
 	}
 
+	pipes := []bson.M{
+		{
+			"$lookup": bson.M{
+				"from":         "universities",
+				"localField":   "university_id",
+				"foreignField": "_id",
+				"as":           "university",
+			},
+		},
+		{"$unwind": "$university"},
+		{"$match": searchQuery},
+	}
+
 	var tinyUserM TinyUserModel
-	err := com.Find(searchQuery).One(&tinyUserM)
+	err := com.Pipe(pipes).One(&tinyUserM)
 	if err != nil {
 		return nil, err
 	}
@@ -141,8 +170,21 @@ func (r *UserRepository) GetTinyUserByEmail(email string) (*entity.TinyUser, err
 		"status": entity.ActiveStatus,
 	}
 
+	pipes := []bson.M{
+		{
+			"$lookup": bson.M{
+				"from":         "universities",
+				"localField":   "university_id",
+				"foreignField": "_id",
+				"as":           "university",
+			},
+		},
+		{"$unwind": "$university"},
+		{"$match": searchQuery},
+	}
+
 	var tinyUserM TinyUserModel
-	err := com.Find(searchQuery).One(&tinyUserM)
+	err := com.Pipe(pipes).One(&tinyUserM)
 	if err != nil {
 		return nil, err
 	}
@@ -161,8 +203,21 @@ func (r *UserRepository) GetTinyUserByRegistrationNumber(registrationNumber stri
 		"status":              entity.ActiveStatus,
 	}
 
+	pipes := []bson.M{
+		{
+			"$lookup": bson.M{
+				"from":         "universities",
+				"localField":   "university_id",
+				"foreignField": "_id",
+				"as":           "university",
+			},
+		},
+		{"$unwind": "$university"},
+		{"$match": searchQuery},
+	}
+
 	var tinyUserM TinyUserModel
-	err := com.Find(searchQuery).One(&tinyUserM)
+	err := com.Pipe(pipes).One(&tinyUserM)
 	if err != nil {
 		return nil, err
 	}
@@ -181,12 +236,25 @@ func (r *UserRepository) GetUserByID(userID string) (*entity.User, error) {
 	defer session.Close()
 	com := session.DB(r.DatabaseName).C("users")
 	searchQuery := bson.M{
-		"_id":    bson.ObjectIdHex(userID),
+		"_id":    bson.ObjectId(userID),
 		"status": entity.ActiveStatus,
 	}
 
+	pipes := []bson.M{
+		{
+			"$lookup": bson.M{
+				"from":         "universities",
+				"localField":   "university_id",
+				"foreignField": "_id",
+				"as":           "university",
+			},
+		},
+		{"$unwind": "$university"},
+		{"$match": searchQuery},
+	}
+
 	var userM UserModel
-	err := com.Find(searchQuery).One(&userM)
+	err := com.Pipe(pipes).One(&userM)
 	if err != nil {
 		return nil, err
 	}
@@ -205,8 +273,21 @@ func (r *UserRepository) GetUserByEmail(email string) (*entity.User, error) {
 		"status": entity.ActiveStatus,
 	}
 
+	pipes := []bson.M{
+		{
+			"$lookup": bson.M{
+				"from":         "universities",
+				"localField":   "university_id",
+				"foreignField": "_id",
+				"as":           "university",
+			},
+		},
+		{"$unwind": "$university"},
+		{"$match": searchQuery},
+	}
+
 	var userM UserModel
-	err := com.Find(searchQuery).One(&userM)
+	err := com.Pipe(pipes).One(&userM)
 	if err != nil {
 		return nil, err
 	}
