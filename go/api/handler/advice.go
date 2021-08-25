@@ -31,6 +31,7 @@ func (c *AdviceController) Routes() chi.Router {
 	r := chi.NewRouter()
 	r.Use(middleware.IsAuthorized(c.TokenService))
 	r.Get("/", c.List)
+	r.Post("/", c.Create)
 	return r
 }
 
@@ -65,4 +66,44 @@ func (c *AdviceController) List(w http.ResponseWriter, r *http.Request) {
 
 	render.Status(r, http.StatusOK)
 	render.Render(w, r, &res)
+}
+
+// Create stores a new advice.
+func (c *AdviceController) Create(w http.ResponseWriter, r *http.Request) {
+
+	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	if !ok {
+		CheckError(errors.New("user not in context"), w, r)
+		return
+	}
+
+	var data presenter.AdvicePayload
+	if err := render.Bind(r, &data); err != nil {
+		render.Render(w, r, presenter.ErrInvalidRequest(err))
+		return
+	}
+
+	adviceDate, err := time.ParseInLocation("2006-01-02 15:04", data.AdviceDate, time.Local)
+	if err != nil {
+		CheckError(err, w, r)
+		return
+	}
+
+	newAdvice := entity.AdvicePayload{
+		UserID:       userID,
+		Subject:      data.Subject,
+		AdviceDate:   adviceDate,
+		Classroom:    data.Classroom,
+		Status:       entity.ActiveStatus,
+		CreationDate: time.Now().In(time.Local),
+	}
+
+	err = c.AdviceService.CreateAdvice(newAdvice)
+	if err != nil {
+		CheckError(err, w, r)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	render.Status(r, http.StatusOK)
 }
