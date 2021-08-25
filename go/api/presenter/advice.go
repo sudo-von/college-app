@@ -18,11 +18,11 @@ func (al *AdviceList) Render(w http.ResponseWriter, r *http.Request) error {
 
 type AdviceResponse struct {
 	ID             string           `json:"id"`
-	User           TinyUserResponse `json:"user"`
 	Subject        string           `json:"subject"`
 	AdviceDate     string           `json:"advice_date"`
 	Classroom      int              `json:"classroom"`
 	StudentsNumber int              `json:"students_number"`
+	User           TinyUserResponse `json:"user"`
 }
 
 func (ar *AdviceResponse) Render(w http.ResponseWriter, r *http.Request) error {
