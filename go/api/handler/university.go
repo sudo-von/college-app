@@ -27,8 +27,31 @@ func NewUniversityController(university university.Service, token token.Service)
 func (c *UniversityController) Routes() chi.Router {
 	r := chi.NewRouter()
 	r.Use(middleware.IsAuthorized(c.TokenService))
+	r.Get("/", c.List)
 	r.Get("/{id}", c.ShowUniversity)
 	return r
+}
+
+// List renders a list of tiny universities.
+func (c *UniversityController) List(w http.ResponseWriter, r *http.Request) {
+
+	list, total, err := c.UniversityService.GetTinyUniversities()
+	if err != nil {
+		CheckError(err, w, r)
+		return
+	}
+
+	res := presenter.TinyUniversityList{
+		Total:            *total,
+		TinyUniversities: make([]presenter.TinyUniversityResponse, 0, len(list)),
+	}
+
+	for _, university := range list {
+		res.TinyUniversities = append(res.TinyUniversities, presenter.ToTinyUniversityPresenter(university))
+	}
+
+	render.Status(r, http.StatusOK)
+	render.Render(w, r, &res)
 }
 
 // ShowUniversity renders a university given its id.
