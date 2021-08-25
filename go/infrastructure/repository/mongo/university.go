@@ -2,6 +2,7 @@ package mongo
 
 import (
 	"errors"
+	"fmt"
 
 	"freelancer/college-app/go/entity"
 
@@ -9,10 +10,36 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-type UniversityModel struct {
+type TinyUniversityModel struct {
 	ID             bson.ObjectId `bson:"_id"`
 	Name           string        `bson:"name"`
 	ProfilePicture string        `bson:"profile_picture"`
+}
+
+func toTinyUniversityEntity(university UniversityModel) entity.University {
+
+	classrooms := make([]entity.Classroom, len(university.Classrooms))
+	for _, c := range university.Classrooms {
+		classrooms = append(classrooms, entity.Classroom{
+			ID:   c.ID.Hex(),
+			Name: c.Name,
+		})
+	}
+
+	fmt.Println(classrooms)
+	return entity.University{
+		ID:             university.ID.Hex(),
+		Name:           university.Name,
+		ProfilePicture: university.ProfilePicture,
+		Classrooms:     classrooms,
+	}
+}
+
+type UniversityModel struct {
+	ID             bson.ObjectId   `bson:"_id"`
+	Name           string          `bson:"name"`
+	ProfilePicture string          `bson:"profile_picture"`
+	Classrooms     []ClasroomModel `bson:"classrooms"`
 }
 
 type UniversityPayloadModel struct {
@@ -21,11 +48,21 @@ type UniversityPayloadModel struct {
 	ProfilePicture string        `bson:"profile_picture"`
 }
 
-func toEntityUniversity(university UniversityModel) entity.University {
+func toUniversityEntity(university UniversityModel) entity.University {
+
+	classrooms := make([]entity.Classroom, 0)
+	for _, c := range university.Classrooms {
+		classrooms = append(classrooms, entity.Classroom{
+			ID:   c.ID.Hex(),
+			Name: c.Name,
+		})
+	}
+
 	return entity.University{
 		ID:             university.ID.Hex(),
 		Name:           university.Name,
 		ProfilePicture: university.ProfilePicture,
+		Classrooms:     classrooms,
 	}
 }
 
@@ -57,6 +94,6 @@ func (r *UniversityRepository) GetUniversityByID(universityID string) (*entity.U
 		return nil, err
 	}
 
-	userApi := toEntityUniversity(universityM)
+	userApi := toUniversityEntity(universityM)
 	return &userApi, nil
 }

@@ -43,11 +43,12 @@ func ListenAndServe(services Services) {
 	// Token.
 
 	// Http hanlders.
-	r.Mount("/users", handler.NewUserController(services.UserService, services.TokenService).Routes())
-	r.Mount("/suggestions", handler.NewSuggestionController(services.SuggestionService, services.TokenService).Routes())
-	r.Mount("/contacts", handler.NewContactController(services.ContactService, services.TokenService).Routes())
-	r.Mount("/users-mood", handler.NewUserMoodController(services.UserMoodService, services.TokenService).Routes())
 	r.Mount("/advices", handler.NewAdviceController(services.AdviceService, services.TokenService).Routes())
+	r.Mount("/contacts", handler.NewContactController(services.ContactService, services.TokenService).Routes())
+	r.Mount("/suggestions", handler.NewSuggestionController(services.SuggestionService, services.TokenService).Routes())
+	r.Mount("/users", handler.NewUserController(services.UserService, services.TokenService).Routes())
+	r.Mount("/users-mood", handler.NewUserMoodController(services.UserMoodService, services.TokenService).Routes())
+	r.Mount("/universities", handler.NewUniversityController(services.UniversityService, services.TokenService).Routes())
 
 	// Start http server.
 	if err := http.ListenAndServe(":4000", r); err != nil {

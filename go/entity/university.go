@@ -1,5 +1,11 @@
 package entity
 
+type TinyUniversity struct {
+	ID             string
+	Name           string
+	ProfilePicture string
+}
+
 type University struct {
 	ID             string
 	Name           string
@@ -11,9 +17,4 @@ type UniversityPayload struct {
 	ID             string
 	Name           string
 	ProfilePicture string
-}
-
-type Classroom struct {
-	ID   string
-	Name string
 }
