@@ -3,7 +3,6 @@ package presenter
 import (
 	"freelancer/college-app/go/entity"
 	"net/http"
-	"time"
 )
 
 type UserMoodResponse struct {
@@ -27,9 +26,7 @@ func ToUserMoodPresenter(um entity.UserMood) UserMoodResponse {
 }
 
 type UserMoodPayload struct {
-	ID           string    `json:"id"`
-	Mood         int       `json:"mood"`
-	CreationDate time.Time `json:"creation_date"`
+	Mood int `json:"mood"`
 }
 
 func (ump *UserMoodPayload) validate() (err error) {

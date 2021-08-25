@@ -4,14 +4,10 @@ import (
 	"errors"
 	"net/http"
 	"strings"
-	"time"
 )
 
 type SuggestionPayload struct {
-	ID           string    `json:"id"`
-	UserID       string    `json:"user_id"`
-	Suggestion   string    `json:"suggestion"`
-	CreationDate time.Time `json:"creation_date"`
+	Suggestion string `json:"suggestion"`
 }
 
 func (sp *SuggestionPayload) validate() (err error) {

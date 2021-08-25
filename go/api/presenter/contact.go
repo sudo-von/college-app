@@ -5,7 +5,6 @@ import (
 	"freelancer/college-app/go/entity"
 	"net/http"
 	"strings"
-	"time"
 )
 
 type ContactResponse struct {
@@ -31,12 +30,9 @@ func ToContactPresenter(contact entity.Contact) ContactResponse {
 }
 
 type ContactPayload struct {
-	ID            string    `json:"id"`
-	UserID        string    `json:"user_id"`
-	ContactName   string    `json:"contact_name"`
-	ContactNumber string    `json:"contact_number"`
-	Message       string    `json:"message"`
-	CreationDate  time.Time `json:"creation_date"`
+	ContactName   string `json:"contact_name"`
+	ContactNumber string `json:"contact_number"`
+	Message       string `json:"message"`
 }
 
 func (cp *ContactPayload) validate() (err error) {

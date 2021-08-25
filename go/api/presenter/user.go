@@ -5,7 +5,6 @@ import (
 	"freelancer/college-app/go/entity"
 	"net/http"
 	"strings"
-	"time"
 )
 
 type TinyUserResponse struct {
@@ -32,15 +31,12 @@ func ToTinyPresenterUser(user entity.TinyUser) TinyUserResponse {
 }
 
 type UserPayload struct {
-	ID                 string    `json:"id"`
-	Name               string    `json:"name"`
-	BirthDate          string    `json:"birth_date"`
-	Email              string    `json:"email"`
-	RegistrationNumber string    `json:"registration_number"`
-	Password           string    `json:"password"`
-	UniversityID       string    `json:"university_id"`
-	Status             string    `json:"status"`
-	CreationDate       time.Time `json:"creation_date"`
+	Name               string `json:"name"`
+	BirthDate          string `json:"birth_date"`
+	Email              string `json:"email"`
+	RegistrationNumber string `json:"registration_number"`
+	Password           string `json:"password"`
+	UniversityID       string `json:"university_id"`
 }
 
 func (up *UserPayload) validate() (err error) {
