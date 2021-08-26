@@ -27,11 +27,10 @@ func (s *Service) GetAdvices(userID string, adviceFilters entity.AdviceFilters) 
 
 	user, err := s.userRepository.GetUserByID(userID)
 	if err != nil {
-		err = fmt.Errorf("GetUserByID: %w", err)
 		if err.Error() == "not found" {
-			return nil, nil, entity.NewErrorNotFound(err)
+			return nil, nil, entity.NewErrorNotFound(fmt.Errorf("GetUserByID: %w", errors.New("user not found")))
 		}
-		return nil, nil, entity.NewErrorInternalServer(err)
+		return nil, nil, entity.NewErrorInternalServer(fmt.Errorf("GetUserByID: %w", err))
 	}
 
 	advices, total, err := s.adviceRepository.GetAdvices(user.University.ID, adviceFilters)
@@ -57,11 +56,10 @@ func (s *Service) CreateAdvice(newAdvice entity.AdvicePayload) error {
 	// Gets university id from the user.
 	user, err := s.userRepository.GetUserByID(newAdvice.UserID)
 	if err != nil {
-		err = fmt.Errorf("GetUserByID: %w", err)
 		if err.Error() == "not found" {
-			return entity.NewErrorNotFound(err)
+			return entity.NewErrorNotFound(fmt.Errorf("GetUserByID: %w", errors.New("user not found")))
 		}
-		return entity.NewErrorInternalServer(err)
+		return entity.NewErrorInternalServer(fmt.Errorf("GetUserByID: %w", err))
 	}
 	newAdvice.UniversityID = user.University.ID
 
@@ -70,7 +68,7 @@ func (s *Service) CreateAdvice(newAdvice entity.AdvicePayload) error {
 	// Stores new advice.
 	err = s.adviceRepository.CreateAdvice(newAdvice)
 	if err != nil {
-		return entity.NewErrorInternalServer(err)
+		return entity.NewErrorInternalServer(fmt.Errorf("CreateAdvice: %w", err))
 	}
 	return nil
 }
