@@ -2,6 +2,7 @@ package user
 
 import (
 	"errors"
+	"fmt"
 	"freelancer/college-app/go/entity"
 	"freelancer/college-app/go/usecase/university"
 	"strings"
@@ -30,12 +31,15 @@ func (s *Service) GetTinyUserByID(userID, requestedUserID string) (*entity.TinyU
 		hasPermission = true
 	}
 	if !hasPermission {
-		return nil, errors.New("user has no permission to see this user")
+		return nil, entity.NewErrorUnauthorized(errors.New("user has no permission to see this user"))
 	}
 
 	user, err := s.userRepository.GetTinyUserByID(requestedUserID)
 	if err != nil {
-		return nil, err
+		if err.Error() == "not found" {
+			return nil, entity.NewErrorNotFound(fmt.Errorf("GetTinyUserByID: %w", errors.New("user not found")))
+		}
+		return nil, entity.NewErrorInternalServer(fmt.Errorf("GetTinyUserByID: %w", err))
 	}
 	return user, nil
 
@@ -46,37 +50,40 @@ func (s *Service) CreateUser(newUser entity.UserPayload) error {
 	// Check if the email is valid.
 	err := checkmail.ValidateFormat(newUser.Email)
 	if err != nil {
-		return errors.New("invalid email")
+		return entity.NewErrorConflict(errors.New("invalid email"))
 	}
 	// Check if the registration number is valid.
 	if len(strings.Replace(newUser.RegistrationNumber, " ", "", -1)) != 8 {
-		return errors.New("invalid registration_number")
+		return entity.NewErrorConflict(errors.New("invalid registration_number"))
 	}
 	// Check if email is already in use.
 	_, err = s.userRepository.GetTinyUserByEmail(newUser.Email)
 	if err == nil {
-		return errors.New("email already in use")
+		return entity.NewErrorConflict(fmt.Errorf("GetTinyUserByEmail: %w", errors.New("email already in use")))
 	}
 	// Check if registration number is already in use.
 	_, err = s.userRepository.GetTinyUserByRegistrationNumber(newUser.RegistrationNumber)
 	if err == nil {
-		return errors.New("registration number already in use")
+		return entity.NewErrorConflict(fmt.Errorf("GetTinyUserByRegistrationNumber: %w", errors.New("registration number already in use")))
 	}
 	// Check if university exists.
 	_, err = s.universityRepository.GetUniversityByID(newUser.UniversityID)
 	if err != nil {
-		return err
+		if err.Error() == "not found" {
+			return entity.NewErrorNotFound(fmt.Errorf("GetUniversityByID: %w", errors.New("university not found")))
+		}
+		return entity.NewErrorInternalServer(fmt.Errorf("GetUniversityByID: %w", err))
 	}
 	// Encrypt password.
 	hash, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
 	if err != nil {
-		return err
+		return entity.NewErrorInternalServer(fmt.Errorf("GenerateFromPassword: %w", err))
 	}
 	newUser.Password = string(hash)
 	// Stores newUser.
 	err = s.userRepository.CreateUser(newUser)
 	if err != nil {
-		return err
+		return entity.NewErrorInternalServer(fmt.Errorf("CreateUser: %w", err))
 	}
 	return nil
 }
@@ -89,35 +96,38 @@ func (s *Service) UpdateTinyUser(userID, requestedUserID string, newUser entity.
 		hasPermission = true
 	}
 	if !hasPermission {
-		return errors.New("user has no permission to update this user")
+		return entity.NewErrorUnauthorized(errors.New("user has no permission to see this user"))
 	}
 
 	// Checks if the new email is valid.
 	err := checkmail.ValidateFormat(newUser.Email)
 	if err != nil {
-		return errors.New("invalid email")
+		return entity.NewErrorConflict(errors.New("invalid email"))
 	}
 	// Check if the new registration number is valid.
 	if len(strings.Replace(newUser.RegistrationNumber, " ", "", -1)) != 8 {
-		return errors.New("invalid registration_number")
+		return entity.NewErrorConflict(errors.New("invalid registration_number"))
 	}
 	// Gets old user.
 	oldUser, err := s.userRepository.GetUserByID(requestedUserID)
 	if err != nil {
-		return err
+		if err.Error() == "not found" {
+			return entity.NewErrorNotFound(fmt.Errorf("GetUserByID: %w", errors.New("user not found")))
+		}
+		return entity.NewErrorInternalServer(fmt.Errorf("GetUserByID: %w", err))
 	}
 	// If both emails are different, checks if the new email is already in use.
 	if oldUser.Email != newUser.Email {
 		_, err = s.userRepository.GetTinyUserByEmail(newUser.Email)
 		if err == nil {
-			return errors.New("email already in use")
+			return entity.NewErrorConflict(fmt.Errorf("GetTinyUserByEmail: %w", errors.New("email already in use")))
 		}
 	}
 	// If both registration numbers are different, checks if the new registration number is already in use.
 	if oldUser.RegistrationNumber != newUser.RegistrationNumber {
 		_, err = s.userRepository.GetTinyUserByRegistrationNumber(newUser.RegistrationNumber)
 		if err == nil {
-			return errors.New("registration number already in use")
+			return entity.NewErrorConflict(fmt.Errorf("GetTinyUserByRegistrationNumber: %w", errors.New("registration number already in use")))
 		}
 	}
 	// Creates a new user payload and then replaces the old one.
@@ -134,9 +144,8 @@ func (s *Service) UpdateTinyUser(userID, requestedUserID string, newUser entity.
 	}
 	err = s.userRepository.UpdateUser(updatedUser)
 	if err != nil {
-		return err
+		return entity.NewErrorInternalServer(fmt.Errorf("UpdateUser: %w", err))
 	}
-
 	return nil
 }
 
@@ -144,13 +153,15 @@ func (s *Service) AuthenticateUser(email, password string) (*entity.User, error)
 
 	user, err := s.userRepository.GetUserByEmail(email)
 	if err != nil {
-		return nil, err
+		if err.Error() == "not found" {
+			return nil, entity.NewErrorNotFound(fmt.Errorf("GetUserByEmail: %w", errors.New("user not found")))
+		}
+		return nil, entity.NewErrorInternalServer(fmt.Errorf("GetUserByEmail: %w", err))
 	}
 	// Compares passwords.
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
-		return nil, errors.New("invalid credentials")
+		return nil, entity.NewErrorUnauthorized(fmt.Errorf("CompareHashAndPassword: %w", errors.New("invalid credentials")))
 	}
-
 	return user, nil
 }
