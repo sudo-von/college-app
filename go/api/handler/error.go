@@ -6,13 +6,15 @@ import (
 	"freelancer/college-app/go/api/presenter"
 	"freelancer/college-app/go/entity"
 	"net/http"
+	"time"
 
 	"github.com/go-chi/render"
 )
 
 func CheckError(err error, w http.ResponseWriter, r *http.Request) {
 	// Prints the wrapped error for debugging purposes.
-	fmt.Println(err)
+	errorDate := time.Now().In(time.Local).Format("2006-01-02 15:04:00")
+	fmt.Println("[error]:", errorDate, err)
 	// Gets the first error which was wrapped.
 	for errors.Unwrap(err) != nil {
 		err = errors.Unwrap(err)
