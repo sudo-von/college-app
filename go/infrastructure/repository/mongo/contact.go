@@ -91,6 +91,29 @@ func (r *ContactRepository) CreateContact(newContact entity.ContactPayload) erro
 	return nil
 }
 
+func (r *ContactRepository) GetContactByID(contactID string) (*entity.Contact, error) {
+
+	if !bson.IsObjectIdHex(contactID) {
+		return nil, errors.New("given user_id is not a valid hex")
+	}
+
+	session := r.Session.Copy()
+	defer session.Close()
+	com := session.DB(r.DatabaseName).C("contacts")
+	searchQuery := bson.M{
+		"_id": bson.ObjectIdHex(contactID),
+	}
+
+	var contactM ContactModel
+	err := com.Find(searchQuery).One(&contactM)
+	if err != nil {
+		return nil, err
+	}
+
+	contact := toEntityContact(contactM)
+	return &contact, nil
+}
+
 func (r *ContactRepository) GetContactByUserID(userID string) (*entity.Contact, error) {
 
 	if !bson.IsObjectIdHex(userID) {

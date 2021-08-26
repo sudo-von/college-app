@@ -33,7 +33,7 @@ func (s *Service) GetTinyUserByID(userID, requestedUserID string) (*entity.TinyU
 		return nil, errors.New("user has no permission to see this user")
 	}
 
-	user, err := s.userRepository.GetTinyUserByID(userID)
+	user, err := s.userRepository.GetTinyUserByID(requestedUserID)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +102,7 @@ func (s *Service) UpdateTinyUser(userID, requestedUserID string, newUser entity.
 		return errors.New("invalid registration_number")
 	}
 	// Gets old user.
-	oldUser, err := s.userRepository.GetUserByID(userID)
+	oldUser, err := s.userRepository.GetUserByID(requestedUserID)
 	if err != nil {
 		return err
 	}

@@ -16,9 +16,18 @@ func NewService(userMoodRepository UserMoodRepository) *Service {
 	}
 }
 
-func (s *Service) GetUserMoodByUserID(userID string, userMoodFilters entity.UserMoodFilters) (*entity.UserMood, error) {
+func (s *Service) GetUserMoodByUserID(userID, requestedUserID string, userMoodFilters entity.UserMoodFilters) (*entity.UserMood, error) {
 
-	userMood, err := s.userMoodRepository.GetUserMoodByUserID(userID, userMoodFilters)
+	// Checks permissions.
+	hasPermission := false
+	if userID == requestedUserID {
+		hasPermission = true
+	}
+	if !hasPermission {
+		return nil, errors.New("user has no permission to see this user")
+	}
+
+	userMood, err := s.userMoodRepository.GetUserMoodByUserID(requestedUserID, userMoodFilters)
 	if err != nil {
 		return nil, err
 	}
@@ -42,11 +51,10 @@ func (s *Service) CreateUserMood(newUserMood entity.UserMoodPayload) error {
 	userMoodFilters := entity.UserMoodFilters{
 		CreationDate: &currentDate,
 	}
-	_, err := s.GetUserMoodByUserID(newUserMood.UserID, userMoodFilters)
+	_, err := s.GetUserMoodByUserID(newUserMood.UserID, newUserMood.UserID, userMoodFilters)
 	if err == nil {
 		return errors.New("user mood has already been registered today")
 	}
-
 	// Stores new user mood.
 	err = s.userMoodRepository.CreateUserMood(newUserMood)
 	if err != nil {

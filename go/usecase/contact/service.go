@@ -16,15 +16,53 @@ func NewService(contactRepository ContactRepository) *Service {
 	}
 }
 
-func (s *Service) GetContactByUserID(userID string) (*entity.Contact, error) {
-	contact, err := s.contactRepository.GetContactByUserID(userID)
+func (s *Service) GetContactByID(userID, contactID string) (*entity.Contact, error) {
+
+	contact, err := s.contactRepository.GetContactByID(contactID)
+	if err != nil {
+		return nil, err
+	}
+
+	// Checks permissions.
+	hasPermission := false
+	if userID == contact.UserID {
+		hasPermission = true
+	}
+	if !hasPermission {
+		return nil, errors.New("user has no permission to see this contact")
+	}
+
+	return contact, nil
+}
+
+func (s *Service) GetContactByUserID(userID, requestedUserID string) (*entity.Contact, error) {
+
+	// Checks permissions.
+	hasPermission := false
+	if userID == requestedUserID {
+		hasPermission = true
+	}
+	if !hasPermission {
+		return nil, errors.New("user has no permission to see this contact")
+	}
+
+	contact, err := s.contactRepository.GetContactByUserID(requestedUserID)
 	if err != nil {
 		return nil, err
 	}
 	return contact, nil
 }
 
-func (s *Service) CreateContact(newContact entity.ContactPayload) error {
+func (s *Service) CreateContact(userID, requestedUserID string, newContact entity.ContactPayload) error {
+
+	// Checks permissions.
+	hasPermission := false
+	if userID == requestedUserID {
+		hasPermission = true
+	}
+	if !hasPermission {
+		return errors.New("user has no permission to create this contact")
+	}
 
 	// Regex to verify if there are only numbers.
 	isNumerical := regexp.MustCompile(`^[0-9]*$`)
@@ -36,8 +74,8 @@ func (s *Service) CreateContact(newContact entity.ContactPayload) error {
 	if !validContactNumber {
 		return errors.New("invalid contact number")
 	}
-	// Verifies if the given user_id has registered his contact yet.
-	_, err := s.contactRepository.GetContactByUserID(newContact.UserID)
+	// Verifies if the given user has registered his contact yet.
+	_, err := s.GetContactByUserID(userID, requestedUserID)
 	if err == nil {
 		return errors.New("given user_id already has a contact registered")
 	}
@@ -49,13 +87,14 @@ func (s *Service) CreateContact(newContact entity.ContactPayload) error {
 	return nil
 }
 
-func (s *Service) UpdateContactByUserID(userID string, newContact entity.UpdateContactPayload) error {
+func (s *Service) UpdateContactByID(userID, contactID string, newContact entity.UpdateContactPayload) error {
 
 	// Gets old contact.
-	oldContact, err := s.contactRepository.GetContactByUserID(userID)
+	oldContact, err := s.GetContactByID(userID, contactID)
 	if err != nil {
 		return err
 	}
+
 	// If both phone numbers are different, checks if the new contact number is valid.
 	if oldContact.ContactNumber != newContact.ContactNumber {
 		// Regex to verify if there are only numbers.

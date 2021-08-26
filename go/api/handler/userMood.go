@@ -30,7 +30,7 @@ func NewUserMoodController(userMood user_mood.Service, token token.Service) *Use
 func (c *UserMoodController) Routes() chi.Router {
 	r := chi.NewRouter()
 	r.Use(middleware.IsAuthorized(c.TokenService))
-	r.Get("/", c.Show)
+	r.Get("/users/{id}", c.Show)
 	r.Post("/", c.Create)
 	return r
 }
@@ -43,12 +43,13 @@ func (c *UserMoodController) Show(w http.ResponseWriter, r *http.Request) {
 		CheckError(errors.New("user not in context"), w, r)
 		return
 	}
+	requestedUserID := chi.URLParam(r, "id")
 
 	userMoodFilters := entity.UserMoodFilters{
 		CreationDate: ParamToDate("creation_date", r.URL.Query()),
 	}
 
-	userMood, err := c.UserMoodService.GetUserMoodByUserID(userID, userMoodFilters)
+	userMood, err := c.UserMoodService.GetUserMoodByUserID(userID, requestedUserID, userMoodFilters)
 	if err != nil {
 		CheckError(err, w, r)
 		return

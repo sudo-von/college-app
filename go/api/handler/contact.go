@@ -30,9 +30,9 @@ func NewContactController(contact contact.Service, token token.Service) *Contact
 func (c *ContactController) Routes() chi.Router {
 	r := chi.NewRouter()
 	r.Use(middleware.IsAuthorized(c.TokenService))
-	r.Get("/", c.Show)
-	r.Post("/", c.Create)
-	r.Patch("/", c.Update)
+	r.Get("/users/{id}", c.Show)
+	r.Post("/users/{id}", c.Create)
+	r.Patch("/{id}", c.Update)
 	return r
 }
 
@@ -44,8 +44,9 @@ func (c *ContactController) Show(w http.ResponseWriter, r *http.Request) {
 		CheckError(errors.New("user not in context"), w, r)
 		return
 	}
+	requestedUserID := chi.URLParam(r, "id")
 
-	contact, err := c.ContactService.GetContactByUserID(userID)
+	contact, err := c.ContactService.GetContactByUserID(userID, requestedUserID)
 	if err != nil {
 		CheckError(err, w, r)
 		return
@@ -64,6 +65,7 @@ func (c *ContactController) Create(w http.ResponseWriter, r *http.Request) {
 		CheckError(errors.New("user not in context"), w, r)
 		return
 	}
+	requestedUserID := chi.URLParam(r, "id")
 
 	var data presenter.ContactPayload
 	if err := render.Bind(r, &data); err != nil {
@@ -78,14 +80,14 @@ func (c *ContactController) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	newContact := entity.ContactPayload{
-		UserID:        userID,
+		UserID:        requestedUserID,
 		ContactName:   data.ContactName,
 		ContactNumber: data.ContactNumber,
 		Message:       data.Message,
 		CreationDate:  time.Now().In(loc),
 	}
 
-	err = c.ContactService.CreateContact(newContact)
+	err = c.ContactService.CreateContact(userID, requestedUserID, newContact)
 	if err != nil {
 		CheckError(err, w, r)
 		return
@@ -103,6 +105,7 @@ func (c *ContactController) Update(w http.ResponseWriter, r *http.Request) {
 		CheckError(errors.New("user not in context"), w, r)
 		return
 	}
+	contactID := chi.URLParam(r, "id")
 
 	var data presenter.UpdateContactPayload
 	if err := render.Bind(r, &data); err != nil {
@@ -116,7 +119,7 @@ func (c *ContactController) Update(w http.ResponseWriter, r *http.Request) {
 		Message:       data.Message,
 	}
 
-	err := c.ContactService.UpdateContactByUserID(userID, newContact)
+	err := c.ContactService.UpdateContactByID(userID, contactID, newContact)
 	if err != nil {
 		CheckError(err, w, r)
 		return

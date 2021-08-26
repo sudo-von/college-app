@@ -5,6 +5,7 @@ import (
 )
 
 type Reader interface {
+	GetContactByID(contactID string) (*entity.Contact, error)
 	GetContactByUserID(userID string) (*entity.Contact, error)
 }
 
@@ -19,7 +20,8 @@ type ContactRepository interface {
 }
 
 type UseCase interface {
-	GetContactByUserID(userID string) (*entity.Contact, error)
+	GetContactByID(contactID string) (*entity.Contact, error)
+	GetContactByUserID(userID, requestedUserID string) (*entity.Contact, error)
 	CreateContact(newContact entity.ContactPayload) error
 	UpdateContactByUserID(userID string, newContact entity.UpdateContactPayload) error
 }
