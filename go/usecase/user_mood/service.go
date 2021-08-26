@@ -25,17 +25,18 @@ func (s *Service) GetUserMoodByUserID(userID, requestedUserID string, userMoodFi
 		hasPermission = true
 	}
 	if !hasPermission {
-		err := errors.New("user has no permission to see this user")
-		return nil, entity.NewErrorUnauthorized(fmt.Errorf("GetUserMoodByUserID: %w", err))
+		return nil, entity.NewErrorUnauthorized(errors.New("user has no permission to see this user"))
 	}
 
 	userMood, err := s.userMoodRepository.GetUserMoodByUserID(requestedUserID, userMoodFilters)
 	if err != nil {
-		return nil, err
+		if err.Error() == "not found" {
+			return nil, entity.NewErrorNotFound(fmt.Errorf("GetUserMoodByUserID: %w", errors.New("user not found")))
+		}
+		return nil, entity.NewErrorInternalServer(fmt.Errorf("GetUserMoodByUserID: %w", err))
 	}
 
 	return userMood, nil
-
 }
 
 func (s *Service) CreateUserMood(newUserMood entity.UserMoodPayload) error {
@@ -46,7 +47,7 @@ func (s *Service) CreateUserMood(newUserMood entity.UserMoodPayload) error {
 		validMood = true
 	}
 	if !validMood {
-		return errors.New("invalid mood, not in range from 1 to 5")
+		return entity.NewErrorConflict(errors.New("invalid mood, not in range from 1 to 5"))
 	}
 	// Checks if the user mood has already been registered today.
 	currentDate := time.Now().In(time.Local)
@@ -55,12 +56,12 @@ func (s *Service) CreateUserMood(newUserMood entity.UserMoodPayload) error {
 	}
 	_, err := s.GetUserMoodByUserID(newUserMood.UserID, newUserMood.UserID, userMoodFilters)
 	if err == nil {
-		return errors.New("user mood has already been registered today")
+		return entity.NewErrorConflict(fmt.Errorf("GetUserMoodByUserID: %w", errors.New("user mood has already been registered today")))
 	}
 	// Stores new user mood.
 	err = s.userMoodRepository.CreateUserMood(newUserMood)
 	if err != nil {
-		return err
+		return entity.NewErrorInternalServer(fmt.Errorf("CreateUserMood: %w", err))
 	}
 	return nil
 }
