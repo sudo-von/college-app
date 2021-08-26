@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"freelancer/college-app/go/api"
 	"freelancer/college-app/go/config"
 	"freelancer/college-app/go/infrastructure/repository/mongo"
@@ -21,7 +20,7 @@ func main() {
 	log.Println("[main]: Starting a new connection to MongoDB...")
 	db, err := mongo.NewStorage(config.DB_URL, config.DB_NAME, config.DB_USER, config.DB_PASSWORD)
 	if err != nil {
-		log.Println("[main] error:", err)
+		log.Panic("[main] error:", err)
 		return
 	}
 	log.Println("[main]: MongoDB connection established")
@@ -29,7 +28,7 @@ func main() {
 	// Token service.
 	tokenService, err := token.NewJWTMaker(config.SECRET_KEY)
 	if err != nil {
-		log.Panic(fmt.Errorf("cannot create token: %w", err))
+		log.Panic("cannot create token: %w", err)
 	}
 
 	// Repositories.

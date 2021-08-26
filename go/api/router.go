@@ -52,6 +52,6 @@ func ListenAndServe(services Services) {
 
 	// Start http server.
 	if err := http.ListenAndServe(":4000", r); err != nil {
-		log.Printf("[routes] error: %s", err.Error())
+		log.Panic("[ListenAndServe] error: %w", err.Error())
 	}
 }
