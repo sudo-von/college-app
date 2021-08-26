@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"errors"
 	"net/http"
 	"time"
 
@@ -40,7 +39,7 @@ func (c *AdviceController) List(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
 	if !ok {
-		CheckError(errors.New("user not in context"), w, r)
+		CheckError(entity.NewErrorInternalServer("user not in context"), w, r)
 		return
 	}
 
@@ -73,13 +72,13 @@ func (c *AdviceController) Create(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
 	if !ok {
-		CheckError(errors.New("user not in context"), w, r)
+		CheckError(entity.NewErrorInternalServer("user not in context"), w, r)
 		return
 	}
 
 	var data presenter.AdvicePayload
 	if err := render.Bind(r, &data); err != nil {
-		render.Render(w, r, presenter.ErrInvalidRequest(err))
+		CheckError(entity.NewErrorBadRequest(err.Error()), w, r)
 		return
 	}
 

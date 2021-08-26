@@ -54,28 +54,28 @@ func IsAuthorized(uses token.Service) func(http.Handler) http.Handler {
 			authorizationHeader := r.Header.Get("Authorization")
 			if len(authorizationHeader) == 0 {
 				err := errors.New("authorization header is not provided")
-				render.Render(w, r, presenter.ErrUnauthorized(err))
+				render.Render(w, r, presenter.ErrorUnauthorizedResponse(err))
 				return
 			}
 
 			fields := strings.Fields(authorizationHeader)
 			if len(fields) != 2 {
 				err := errors.New("invalid authorization header format")
-				render.Render(w, r, presenter.ErrUnauthorized(err))
+				render.Render(w, r, presenter.ErrorUnauthorizedResponse(err))
 				return
 			}
 
 			authorizationType := fields[0]
 			if authorizationType != "Bearer" {
 				err := fmt.Errorf("unsupported authorization type %s", authorizationType)
-				render.Render(w, r, presenter.ErrUnauthorized(err))
+				render.Render(w, r, presenter.ErrorUnauthorizedResponse(err))
 				return
 			}
 
 			accessToken := fields[1]
 			payload, err := uses.VerifyToken(accessToken)
 			if err != nil {
-				render.Render(w, r, presenter.ErrUnauthorized(err))
+				render.Render(w, r, presenter.ErrorUnauthorizedResponse(err))
 				return
 			}
 

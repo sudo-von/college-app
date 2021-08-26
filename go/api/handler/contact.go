@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"errors"
 	"net/http"
 	"time"
 
@@ -41,7 +40,7 @@ func (c *ContactController) Show(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
 	if !ok {
-		CheckError(errors.New("user not in context"), w, r)
+		CheckError(entity.NewErrorInternalServer("user not in context"), w, r)
 		return
 	}
 	requestedUserID := chi.URLParam(r, "id")
@@ -62,14 +61,14 @@ func (c *ContactController) Create(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
 	if !ok {
-		CheckError(errors.New("user not in context"), w, r)
+		CheckError(entity.NewErrorInternalServer("user not in context"), w, r)
 		return
 	}
 	requestedUserID := chi.URLParam(r, "id")
 
 	var data presenter.ContactPayload
 	if err := render.Bind(r, &data); err != nil {
-		render.Render(w, r, presenter.ErrInvalidRequest(err))
+		CheckError(entity.NewErrorBadRequest(err.Error()), w, r)
 		return
 	}
 
@@ -102,14 +101,14 @@ func (c *ContactController) Update(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
 	if !ok {
-		CheckError(errors.New("user not in context"), w, r)
+		CheckError(entity.NewErrorInternalServer("user not in context"), w, r)
 		return
 	}
 	contactID := chi.URLParam(r, "id")
 
 	var data presenter.UpdateContactPayload
 	if err := render.Bind(r, &data); err != nil {
-		render.Render(w, r, presenter.ErrInvalidRequest(err))
+		CheckError(entity.NewErrorBadRequest(err.Error()), w, r)
 		return
 	}
 

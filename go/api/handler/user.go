@@ -69,7 +69,7 @@ func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
 
 	var data presenter.UserPayload
 	if err := render.Bind(r, &data); err != nil {
-		render.Render(w, r, presenter.ErrInvalidRequest(err))
+		CheckError(entity.NewErrorBadRequest(err.Error()), w, r)
 		return
 	}
 
@@ -138,7 +138,7 @@ func (c *UserController) UpdateTinyUser(w http.ResponseWriter, r *http.Request) 
 
 	var data presenter.UpdateUserPayload
 	if err := render.Bind(r, &data); err != nil {
-		render.Render(w, r, presenter.ErrInvalidRequest(err))
+		CheckError(entity.NewErrorBadRequest(err.Error()), w, r)
 		return
 	}
 
