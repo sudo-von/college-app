@@ -7,20 +7,20 @@ import (
 	"github.com/go-chi/render"
 )
 
-type ErrResponse struct {
+type ErrorResponse struct {
 	Err            error  `json:"-"`
 	HTTPStatusCode int    `json:"-"`
-	ErrorCode      int    `form:"error_code" json:"error_code" yaml:"error_code" xml:"error_code"`
-	Message        string `form:"message" json:"message" yaml:"message" xml:"message"`
+	ErrorCode      int    `json:"error_code"`
+	Message        string `json:"message"`
 }
 
-func (e *ErrResponse) Render(w http.ResponseWriter, r *http.Request) error {
+func (e *ErrorResponse) Render(w http.ResponseWriter, r *http.Request) error {
 	render.Status(r, e.HTTPStatusCode)
 	return nil
 }
 
-func ErrInvalidRequest(err error) render.Renderer {
-	return &ErrResponse{
+func ErrorBadRequestResponse(err error) render.Renderer {
+	return &ErrorResponse{
 		Err:            err,
 		HTTPStatusCode: 400,
 		ErrorCode:      400,
@@ -28,26 +28,8 @@ func ErrInvalidRequest(err error) render.Renderer {
 	}
 }
 
-func ErrInternalServer(err error) render.Renderer {
-	return &ErrResponse{
-		Err:            err,
-		HTTPStatusCode: 500,
-		ErrorCode:      500,
-		Message:        err.Error(),
-	}
-}
-
-func ErrNotFound(err error) render.Renderer {
-	return &ErrResponse{
-		Err:            err,
-		HTTPStatusCode: 404,
-		ErrorCode:      404,
-		Message:        err.Error(),
-	}
-}
-
-func ErrUnauthorized(err error) render.Renderer {
-	return &ErrResponse{
+func ErrorUnauthorizedResponse(err error) render.Renderer {
+	return &ErrorResponse{
 		Err:            err,
 		HTTPStatusCode: 401,
 		ErrorCode:      401,
@@ -55,20 +37,29 @@ func ErrUnauthorized(err error) render.Renderer {
 	}
 }
 
-func ErrConflict(err error) render.Renderer {
-	return &ErrResponse{
+func ErrorForbiddenResponse(err error) render.Renderer {
+	return &ErrorResponse{
 		Err:            err,
-		HTTPStatusCode: 409,
-		ErrorCode:      409,
+		HTTPStatusCode: 403,
+		ErrorCode:      403,
 		Message:        err.Error(),
 	}
 }
 
-func ErrForbidden(err error) render.Renderer {
-	return &ErrResponse{
+func ErrorNotFoundResponse(err error) render.Renderer {
+	return &ErrorResponse{
 		Err:            err,
-		HTTPStatusCode: 403,
-		ErrorCode:      403,
+		HTTPStatusCode: 404,
+		ErrorCode:      404,
+		Message:        err.Error(),
+	}
+}
+
+func ErrorInternalServerResponse(err error) render.Renderer {
+	return &ErrorResponse{
+		Err:            err,
+		HTTPStatusCode: 500,
+		ErrorCode:      500,
 		Message:        err.Error(),
 	}
 }

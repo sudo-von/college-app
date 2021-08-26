@@ -2,6 +2,7 @@ package user_mood
 
 import (
 	"errors"
+	"freelancer/college-app/go/api/presenter"
 	"freelancer/college-app/go/entity"
 	"time"
 )
@@ -24,7 +25,7 @@ func (s *Service) GetUserMoodByUserID(userID, requestedUserID string, userMoodFi
 		hasPermission = true
 	}
 	if !hasPermission {
-		return nil, errors.New("user has no permission to see this user")
+		return nil, presenter.ErrUnauthorized("user has no permission to see this user")
 	}
 
 	userMood, err := s.userMoodRepository.GetUserMoodByUserID(requestedUserID, userMoodFilters)
