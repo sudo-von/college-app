@@ -1,85 +1,85 @@
 package entity
 
 type ErrorBadRequest struct {
-	message error
+	Message error
 }
 
 func (e *ErrorBadRequest) Error() string {
-	return e.message.Error()
+	return e.Message.Error()
 }
 
-func NewErrorBadRequest(message error) error {
+func NewErrorBadRequest(Message error) error {
 	return &ErrorBadRequest{
-		message,
+		Message,
 	}
 }
 
 type ErrorUnauthorized struct {
-	message error
+	Message error
 }
 
 func (e *ErrorUnauthorized) Error() string {
-	return e.message.Error()
+	return e.Message.Error()
 }
 
-func NewErrorUnauthorized(message error) error {
+func NewErrorUnauthorized(Message error) error {
 	return &ErrorUnauthorized{
-		message,
+		Message,
 	}
 }
 
 type ErrorForbidden struct {
-	message error
+	Message error
 }
 
 func (e *ErrorForbidden) Error() string {
-	return e.message.Error()
+	return e.Message.Error()
 }
 
-func NewErrorForbidden(message error) error {
+func NewErrorForbidden(Message error) error {
 	return &ErrorForbidden{
-		message,
+		Message,
 	}
 }
 
 type ErrorNotFound struct {
-	message error
+	Message error
 }
 
 func (e *ErrorNotFound) Error() string {
-	return e.message.Error()
+	return e.Message.Error()
 }
 
-func NewErrorNotFound(message error) error {
+func NewErrorNotFound(Message error) error {
 	return &ErrorNotFound{
-		message,
+		Message,
 	}
 }
 
 type ErrorConflict struct {
-	message error
+	Message error
 }
 
 func (e *ErrorConflict) Error() string {
-	return e.message.Error()
+	return e.Message.Error()
 }
 
-func NewErrorConflict(message error) error {
+func NewErrorConflict(Message error) error {
 	return &ErrorConflict{
-		message,
+		Message,
 	}
 }
 
 type ErrorInternalServer struct {
-	message error
+	Message error
 }
 
 func (e *ErrorInternalServer) Error() string {
-	return e.message.Error()
+	return e.Message.Error()
 }
 
-func NewErrorInternalServer(message error) error {
+func NewErrorInternalServer(Message error) error {
 	return &ErrorInternalServer{
-		message,
+		Message,
 	}
 }
