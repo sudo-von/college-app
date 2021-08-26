@@ -1,6 +1,7 @@
 package suggestion
 
 import (
+	"fmt"
 	"freelancer/college-app/go/entity"
 )
 
@@ -17,7 +18,7 @@ func NewService(suggestionRepository SuggestionRepository) *Service {
 func (s *Service) CreateSuggestion(newSuggestion entity.SuggestionPayload) error {
 	err := s.suggestionRepository.CreateSuggestion(newSuggestion)
 	if err != nil {
-		return err
+		return entity.NewErrorInternalServer(fmt.Errorf("CreateSuggestion: %w", err))
 	}
 	return nil
 }
