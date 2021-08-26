@@ -3,14 +3,13 @@ package handler
 import (
 	"errors"
 	"fmt"
-	"net/http"
-	"time"
-
 	"freelancer/college-app/go/api/middleware"
 	"freelancer/college-app/go/api/presenter"
 	"freelancer/college-app/go/entity"
-	"freelancer/college-app/go/token"
+	"freelancer/college-app/go/pkg/token"
 	"freelancer/college-app/go/usecase/advice"
+	"net/http"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"

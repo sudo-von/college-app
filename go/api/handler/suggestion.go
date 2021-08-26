@@ -9,7 +9,7 @@ import (
 	"freelancer/college-app/go/api/middleware"
 	"freelancer/college-app/go/api/presenter"
 	"freelancer/college-app/go/entity"
-	"freelancer/college-app/go/token"
+	"freelancer/college-app/go/pkg/token"
 	"freelancer/college-app/go/usecase/suggestion"
 
 	"github.com/go-chi/chi"

@@ -4,7 +4,7 @@ import (
 	"freelancer/college-app/go/api"
 	"freelancer/college-app/go/config"
 	"freelancer/college-app/go/infrastructure/repository/mongo"
-	"freelancer/college-app/go/token"
+	"freelancer/college-app/go/pkg/token"
 	"freelancer/college-app/go/usecase/advice"
 	"freelancer/college-app/go/usecase/contact"
 	"freelancer/college-app/go/usecase/suggestion"

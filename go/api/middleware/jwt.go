@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"freelancer/college-app/go/api/presenter"
-	"freelancer/college-app/go/token"
+	"freelancer/college-app/go/pkg/token"
 	"freelancer/college-app/go/usecase/user"
 	"strings"
 

@@ -3,7 +3,7 @@ package api
 import (
 	"freelancer/college-app/go/api/handler"
 	"freelancer/college-app/go/api/middleware"
-	"freelancer/college-app/go/token"
+	"freelancer/college-app/go/pkg/token"
 	"freelancer/college-app/go/usecase/advice"
 	"freelancer/college-app/go/usecase/contact"
 	"freelancer/college-app/go/usecase/suggestion"
