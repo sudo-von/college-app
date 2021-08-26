@@ -15,25 +15,32 @@ func CheckError(err error, w http.ResponseWriter, r *http.Request) {
 	// Prints the wrapped error for debugging purposes.
 	errorDate := time.Now().In(time.Local).Format("2006-01-02 15:04:00")
 	fmt.Println("[error]:", errorDate, err)
-	// Gets the first error which was wrapped.
+	// Gets first structure which was wrapped with multiple errors.
 	for errors.Unwrap(err) != nil {
 		err = errors.Unwrap(err)
 	}
 	// Renders the response depending on th error type.
-	switch err.(type) {
+	switch err := err.(type) {
 	case *entity.ErrorBadRequest:
-		render.Render(w, r, presenter.ErrorBadRequestResponse(err))
+		response := errors.Unwrap(err.Message)
+		render.Render(w, r, presenter.ErrorBadRequestResponse(response))
 	case *entity.ErrorUnauthorized:
-		render.Render(w, r, presenter.ErrorUnauthorizedResponse(err))
+		response := errors.Unwrap(err.Message)
+		render.Render(w, r, presenter.ErrorUnauthorizedResponse(response))
 	case *entity.ErrorForbidden:
-		render.Render(w, r, presenter.ErrorForbiddenResponse(err))
+		response := errors.Unwrap(err.Message)
+		render.Render(w, r, presenter.ErrorForbiddenResponse(response))
 	case *entity.ErrorNotFound:
-		render.Render(w, r, presenter.ErrorNotFoundResponse(err))
+		response := errors.Unwrap(err.Message)
+		render.Render(w, r, presenter.ErrorNotFoundResponse(response))
 	case *entity.ErrorConflict:
-		render.Render(w, r, presenter.ErrorConflict(err))
+		response := errors.Unwrap(err.Message)
+		render.Render(w, r, presenter.ErrorConflict(response))
 	case *entity.ErrorInternalServer:
-		render.Render(w, r, presenter.ErrorInternalServerResponse(err))
+		response := errors.Unwrap(err.Message)
+		render.Render(w, r, presenter.ErrorInternalServerResponse(response))
 	default:
-		render.Render(w, r, presenter.ErrorInternalServerResponse(err))
+		response := errors.Unwrap(err.(*entity.ErrorInternalServer).Message)
+		render.Render(w, r, presenter.ErrorInternalServerResponse(response))
 	}
 }
