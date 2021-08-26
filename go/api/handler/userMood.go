@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -39,7 +41,8 @@ func (c *UserMoodController) Show(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
 	if !ok {
-		CheckError(entity.NewErrorInternalServer("user not in context"), w, r)
+		err := errors.New("user not in context")
+		CheckError(entity.NewErrorInternalServer(fmt.Errorf("UserMoodController > Show: %w", err)), w, r)
 		return
 	}
 	requestedUserID := chi.URLParam(r, "id")
@@ -50,7 +53,7 @@ func (c *UserMoodController) Show(w http.ResponseWriter, r *http.Request) {
 
 	userMood, err := c.UserMoodService.GetUserMoodByUserID(userID, requestedUserID, userMoodFilters)
 	if err != nil {
-		CheckError(err, w, r)
+		CheckError(fmt.Errorf("UserMoodController > Show > GetUserMoodByUserID: %w", err), w, r)
 		return
 	}
 
@@ -64,13 +67,14 @@ func (c *UserMoodController) Create(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
 	if !ok {
-		CheckError(entity.NewErrorInternalServer("user not in context"), w, r)
+		err := errors.New("user not in context")
+		CheckError(entity.NewErrorInternalServer(fmt.Errorf("UserMoodController > Create: %w", err)), w, r)
 		return
 	}
 
 	var data presenter.UserMoodPayload
 	if err := render.Bind(r, &data); err != nil {
-		CheckError(entity.NewErrorBadRequest(err.Error()), w, r)
+		CheckError(entity.NewErrorBadRequest(fmt.Errorf("UserMoodController > Create: %w", err)), w, r)
 		return
 	}
 
@@ -82,7 +86,7 @@ func (c *UserMoodController) Create(w http.ResponseWriter, r *http.Request) {
 
 	err := c.UserMoodService.CreateUserMood(newUserMood)
 	if err != nil {
-		CheckError(err, w, r)
+		CheckError(fmt.Errorf("UserMoodController > Create > CreateUserMood: %w", err), w, r)
 		return
 	}
 
