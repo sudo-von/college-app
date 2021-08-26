@@ -1,6 +1,8 @@
 package university
 
 import (
+	"errors"
+	"fmt"
 	"freelancer/college-app/go/entity"
 )
 
@@ -17,7 +19,7 @@ func NewService(universityRepository UniversityRepository) *Service {
 func (s Service) GetTinyUniversities() ([]entity.TinyUniversity, *int, error) {
 	universities, total, err := s.universityRepository.GetTinyUniversities()
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, entity.NewErrorInternalServer(fmt.Errorf("GetTinyUniversities: %w", err))
 	}
 	return universities, total, nil
 }
@@ -25,7 +27,10 @@ func (s Service) GetTinyUniversities() ([]entity.TinyUniversity, *int, error) {
 func (s Service) GetUniversityByID(universityID string) (*entity.University, error) {
 	university, err := s.universityRepository.GetUniversityByID(universityID)
 	if err != nil {
-		return nil, err
+		if err.Error() == "not found" {
+			return nil, entity.NewErrorNotFound(fmt.Errorf("GetUniversityByID: %w", errors.New("university not found")))
+		}
+		return nil, entity.NewErrorInternalServer(fmt.Errorf("GetUniversityByID: %w", err))
 	}
 	return university, nil
 }
