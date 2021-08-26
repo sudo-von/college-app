@@ -55,6 +55,15 @@ func ErrorNotFoundResponse(err error) render.Renderer {
 	}
 }
 
+func ErrorConflict(err error) render.Renderer {
+	return &ErrorResponse{
+		Err:            err,
+		HTTPStatusCode: 409,
+		ErrorCode:      409,
+		Message:        err.Error(),
+	}
+}
+
 func ErrorInternalServerResponse(err error) render.Renderer {
 	return &ErrorResponse{
 		Err:            err,

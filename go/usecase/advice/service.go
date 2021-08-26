@@ -2,6 +2,7 @@ package advice
 
 import (
 	"errors"
+	"fmt"
 	"freelancer/college-app/go/entity"
 	"freelancer/college-app/go/usecase/university"
 	"freelancer/college-app/go/usecase/user"
@@ -26,12 +27,16 @@ func (s *Service) GetAdvices(userID string, adviceFilters entity.AdviceFilters) 
 
 	user, err := s.userRepository.GetUserByID(userID)
 	if err != nil {
-		return nil, nil, err
+		if err.Error() == "not found" {
+			err = fmt.Errorf("GetAdvices > GetUserByID: %w", err)
+			return nil, nil, entity.NewErrorNotFound(err)
+		}
+		return nil, nil, entity.NewErrorInternalServer(fmt.Errorf("GetAdvices > GetUserByID: %w", err))
 	}
 
 	advices, total, err := s.adviceRepository.GetAdvices(user.University.ID, adviceFilters)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, entity.NewErrorInternalServer(fmt.Errorf("GetAdvices > GetAdvices: %w", err))
 	}
 
 	return advices, total, nil
@@ -46,7 +51,7 @@ func (s *Service) CreateAdvice(newAdvice entity.AdvicePayload) error {
 		validDate = true
 	}
 	if !validDate {
-		return errors.New("advice_date can not be before the current date")
+		return entity.NewErrorConflict(fmt.Errorf("CreateAdvice: %w", errors.New("advice_date can not be before the current date")))
 	}
 
 	// Gets university id from the user.
