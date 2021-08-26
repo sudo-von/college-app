@@ -27,16 +27,16 @@ func (s *Service) GetAdvices(userID string, adviceFilters entity.AdviceFilters) 
 
 	user, err := s.userRepository.GetUserByID(userID)
 	if err != nil {
+		err = fmt.Errorf("GetUserByID: %w", err)
 		if err.Error() == "not found" {
-			err = fmt.Errorf("GetAdvices > GetUserByID: %w", err)
 			return nil, nil, entity.NewErrorNotFound(err)
 		}
-		return nil, nil, entity.NewErrorInternalServer(fmt.Errorf("GetAdvices > GetUserByID: %w", err))
+		return nil, nil, entity.NewErrorInternalServer(err)
 	}
 
 	advices, total, err := s.adviceRepository.GetAdvices(user.University.ID, adviceFilters)
 	if err != nil {
-		return nil, nil, entity.NewErrorInternalServer(fmt.Errorf("GetAdvices > GetAdvices: %w", err))
+		return nil, nil, entity.NewErrorInternalServer(fmt.Errorf("GetAdvices: %w", err))
 	}
 
 	return advices, total, nil
@@ -51,13 +51,17 @@ func (s *Service) CreateAdvice(newAdvice entity.AdvicePayload) error {
 		validDate = true
 	}
 	if !validDate {
-		return entity.NewErrorConflict(fmt.Errorf("CreateAdvice: %w", errors.New("advice_date can not be before the current date")))
+		return entity.NewErrorConflict(errors.New("advice_date can not be before the current date"))
 	}
 
 	// Gets university id from the user.
 	user, err := s.userRepository.GetUserByID(newAdvice.UserID)
 	if err != nil {
-		return err
+		err = fmt.Errorf("GetUserByID: %w", err)
+		if err.Error() == "not found" {
+			return entity.NewErrorNotFound(err)
+		}
+		return entity.NewErrorInternalServer(err)
 	}
 	newAdvice.UniversityID = user.University.ID
 
@@ -66,7 +70,7 @@ func (s *Service) CreateAdvice(newAdvice entity.AdvicePayload) error {
 	// Stores new advice.
 	err = s.adviceRepository.CreateAdvice(newAdvice)
 	if err != nil {
-		return err
+		return entity.NewErrorInternalServer(err)
 	}
 	return nil
 }
