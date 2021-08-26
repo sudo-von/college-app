@@ -2,6 +2,7 @@ package contact
 
 import (
 	"errors"
+	"fmt"
 	"freelancer/college-app/go/entity"
 	"regexp"
 )
@@ -17,38 +18,31 @@ func NewService(contactRepository ContactRepository) *Service {
 }
 
 func (s *Service) GetContactByID(userID, contactID string) (*entity.Contact, error) {
-
 	contact, err := s.contactRepository.GetContactByID(contactID)
 	if err != nil {
-		return nil, err
+		if err.Error() == "not found" {
+			return nil, entity.NewErrorNotFound(fmt.Errorf("GetContactByID: %w", errors.New("contact not found")))
+		}
+		return nil, entity.NewErrorInternalServer(fmt.Errorf("GetContactByID: %w", err))
 	}
-
-	// Checks permissions.
-	hasPermission := false
-	if userID == contact.UserID {
-		hasPermission = true
-	}
-	if !hasPermission {
-		return nil, errors.New("user has no permission to see this contact")
-	}
-
 	return contact, nil
 }
 
 func (s *Service) GetContactByUserID(userID, requestedUserID string) (*entity.Contact, error) {
-
 	// Checks permissions.
 	hasPermission := false
 	if userID == requestedUserID {
 		hasPermission = true
 	}
 	if !hasPermission {
-		return nil, errors.New("user has no permission to see this contact")
+		return nil, entity.NewErrorUnauthorized(errors.New("user has no permission to see this user"))
 	}
-
 	contact, err := s.contactRepository.GetContactByUserID(requestedUserID)
 	if err != nil {
-		return nil, err
+		if err.Error() == "not found" {
+			return nil, entity.NewErrorNotFound(fmt.Errorf("GetContactByUserID: %w", errors.New("contact not found")))
+		}
+		return nil, entity.NewErrorInternalServer(fmt.Errorf("GetContactByUserID: %w", err))
 	}
 	return contact, nil
 }
@@ -61,7 +55,7 @@ func (s *Service) CreateContact(userID, requestedUserID string, newContact entit
 		hasPermission = true
 	}
 	if !hasPermission {
-		return errors.New("user has no permission to create this contact")
+		return entity.NewErrorUnauthorized(errors.New("user has no permission to see this user"))
 	}
 
 	// Regex to verify if there are only numbers.
@@ -72,17 +66,17 @@ func (s *Service) CreateContact(userID, requestedUserID string, newContact entit
 		validContactNumber = true
 	}
 	if !validContactNumber {
-		return errors.New("invalid contact number")
+		return entity.NewErrorConflict(errors.New("invalid contact number"))
 	}
 	// Verifies if the given user has registered his contact yet.
 	_, err := s.GetContactByUserID(userID, requestedUserID)
 	if err == nil {
-		return errors.New("given user_id already has a contact registered")
+		return entity.NewErrorConflict(fmt.Errorf("GetContactByUserID: %w", errors.New("given user_id already has a contact registered")))
 	}
 	// Stores new contact.
 	err = s.contactRepository.CreateContact(newContact)
 	if err != nil {
-		return err
+		return entity.NewErrorInternalServer(fmt.Errorf("CreateContact: %w", err))
 	}
 	return nil
 }
@@ -105,7 +99,7 @@ func (s *Service) UpdateContactByID(userID, contactID string, newContact entity.
 			validContactNumber = true
 		}
 		if !validContactNumber {
-			return errors.New("invalid contact number")
+			return entity.NewErrorConflict(errors.New("invalid contact number"))
 		}
 	}
 	// Creates a new user payload and then replaces the old one.
@@ -119,7 +113,7 @@ func (s *Service) UpdateContactByID(userID, contactID string, newContact entity.
 	}
 	err = s.contactRepository.UpdateContactByUserID(updatedContact)
 	if err != nil {
-		return err
+		return entity.NewErrorInternalServer(fmt.Errorf("UpdateContactByUserID: %w", err))
 	}
 
 	return nil
