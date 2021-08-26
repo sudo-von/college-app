@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -39,7 +41,8 @@ func (c *AdviceController) List(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
 	if !ok {
-		CheckError(entity.NewErrorInternalServer("user not in context"), w, r)
+		err := errors.New("user not in context")
+		CheckError(entity.NewErrorInternalServer(fmt.Errorf("AdviceController > List: %w", err)), w, r)
 		return
 	}
 
@@ -50,7 +53,7 @@ func (c *AdviceController) List(w http.ResponseWriter, r *http.Request) {
 
 	list, total, err := c.AdviceService.GetAdvices(userID, adviceFilters)
 	if err != nil {
-		CheckError(err, w, r)
+		CheckError(fmt.Errorf("AdviceController > List > GetAdvices: %w", err), w, r)
 		return
 	}
 
@@ -72,19 +75,20 @@ func (c *AdviceController) Create(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
 	if !ok {
-		CheckError(entity.NewErrorInternalServer("user not in context"), w, r)
+		err := errors.New("user not in context")
+		CheckError(entity.NewErrorInternalServer(fmt.Errorf("AdviceController > Create: %w", err)), w, r)
 		return
 	}
 
 	var data presenter.AdvicePayload
 	if err := render.Bind(r, &data); err != nil {
-		CheckError(entity.NewErrorBadRequest(err.Error()), w, r)
+		CheckError(entity.NewErrorBadRequest(fmt.Errorf("AdviceController > Create: %w", err)), w, r)
 		return
 	}
 
 	adviceDate, err := time.ParseInLocation("2006-01-02 15:04", data.AdviceDate, time.Local)
 	if err != nil {
-		CheckError(err, w, r)
+		CheckError(entity.NewErrorBadRequest(fmt.Errorf("AdviceController > Create: %w", err)), w, r)
 		return
 	}
 
@@ -99,7 +103,7 @@ func (c *AdviceController) Create(w http.ResponseWriter, r *http.Request) {
 
 	err = c.AdviceService.CreateAdvice(newAdvice)
 	if err != nil {
-		CheckError(err, w, r)
+		CheckError(fmt.Errorf("AdviceController > Create > CreateAdvice: %w", err), w, r)
 		return
 	}
 
