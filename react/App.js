@@ -1,13 +1,17 @@
 import React from 'react'
+/* React-native-paper. */
 import { Provider as PaperProvider } from 'react-native-paper'
-import { Text, View } from 'react-native'
+/* React router. */
+import { NativeRouter, Route, Link } from 'react-router-native'
+/* Routes. */
+import Login from './src/pages/Login'
 
 export default function App() {
   return (
     <PaperProvider>
-      <View>
-        <Text>Open up App.js to start working on your app!</Text>
-      </View>
+      <NativeRouter>
+        <Route exact path="/" component={Login}/>
+      </NativeRouter>
     </PaperProvider>
   )
 }
