@@ -32,7 +32,8 @@ func (c *AdviceController) Routes() chi.Router {
 	r.Use(middleware.IsAuthorized(c.TokenService))
 	r.Get("/", c.List)
 	r.Post("/", c.Create)
-	r.Patch("/{id}", c.UpdateAdvice)
+	r.Patch("/{id}", c.Update)
+	r.Delete("/{id}", c.Delete)
 	return r
 }
 
@@ -111,8 +112,8 @@ func (c *AdviceController) Create(w http.ResponseWriter, r *http.Request) {
 	render.Status(r, http.StatusOK)
 }
 
-// UpdateAdvice updates an advice given its id.
-func (c *AdviceController) UpdateAdvice(w http.ResponseWriter, r *http.Request) {
+// Update updates an advice given its id.
+func (c *AdviceController) Update(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
 	if !ok {
@@ -134,13 +135,13 @@ func (c *AdviceController) UpdateAdvice(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	newUser := entity.UpdateAdvicePayload{
+	newAdvice := entity.UpdateAdvicePayload{
 		Subject:     data.Subject,
 		AdviceDate:  adviceDate,
 		ClassroomID: data.ClassroomID,
 	}
 
-	err = c.AdviceService.UpdateAdvice(userID, adviceID, newUser)
+	err = c.AdviceService.UpdateAdvice(userID, adviceID, newAdvice)
 	if err != nil {
 		CheckError(fmt.Errorf("AdviceController > UpdateAdvice > UpdateAdvice: %w", err), w, r)
 		return
@@ -148,4 +149,25 @@ func (c *AdviceController) UpdateAdvice(w http.ResponseWriter, r *http.Request) 
 
 	w.Header().Set("Content-Type", "application/json")
 	render.Status(r, http.StatusOK)
+}
+
+// Delete disables an advice given its id.
+func (c *AdviceController) Delete(w http.ResponseWriter, r *http.Request) {
+
+	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	if !ok {
+		err := errors.New("user not in context")
+		CheckError(entity.NewErrorInternalServer(fmt.Errorf("AdviceController > Delete: %w", err)), w, r)
+		return
+	}
+	adviceID := chi.URLParam(r, "id")
+
+	err := c.AdviceService.DeleteAdvice(userID, adviceID)
+	if err != nil {
+		CheckError(fmt.Errorf("AdviceController > Delete > DeleteAdvice: %w", err), w, r)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	render.Status(r, http.StatusAccepted)
 }
