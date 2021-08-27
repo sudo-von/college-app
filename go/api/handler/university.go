@@ -27,9 +27,11 @@ func NewUniversityController(university university.Service, token token.Service)
 
 func (c *UniversityController) Routes() chi.Router {
 	r := chi.NewRouter()
-	r.Use(middleware.IsAuthorized(c.TokenService))
 	r.Get("/", c.List)
-	r.Get("/{id}", c.ShowUniversity)
+	r.Group(func(r chi.Router) {
+		r.Use(middleware.IsAuthorized(c.TokenService))
+		r.Get("/{id}", c.ShowUniversity)
+	})
 	return r
 }
 
