@@ -13,34 +13,32 @@ import (
 
 func CheckError(err error, w http.ResponseWriter, r *http.Request) {
 	// Prints the wrapped error for debugging purposes.
-	errorDate := time.Now().In(time.Local).Format("2006-01-02 15:04:00")
+	errorDate := time.Now().In(time.Local).Format("2006-01-02 15:04:05")
 	fmt.Println("[error]:", errorDate, err)
 	// Gets first structure which was wrapped with multiple errors.
+	err = UnwrapError(err)
+	// Renders the response depending on th error type.
+	switch errorType := err.(type) {
+	case *entity.ErrorBadRequest:
+		render.Render(w, r, presenter.ErrorBadRequestResponse(UnwrapError(errorType.Message)))
+	case *entity.ErrorUnauthorized:
+		render.Render(w, r, presenter.ErrorUnauthorizedResponse(UnwrapError(errorType.Message)))
+	case *entity.ErrorForbidden:
+		render.Render(w, r, presenter.ErrorForbiddenResponse(UnwrapError(errorType.Message)))
+	case *entity.ErrorNotFound:
+		render.Render(w, r, presenter.ErrorNotFoundResponse(UnwrapError(errorType.Message)))
+	case *entity.ErrorConflict:
+		render.Render(w, r, presenter.ErrorConflict(UnwrapError(errorType.Message)))
+	case *entity.ErrorInternalServer:
+		render.Render(w, r, presenter.ErrorInternalServerResponse(UnwrapError(errorType.Message)))
+	default:
+		render.Render(w, r, presenter.ErrorInternalServerResponse(UnwrapError(err.(*entity.ErrorInternalServer).Message)))
+	}
+}
+
+func UnwrapError(err error) error {
 	for errors.Unwrap(err) != nil {
 		err = errors.Unwrap(err)
 	}
-	// Renders the response depending on th error type.
-	switch err := err.(type) {
-	case *entity.ErrorBadRequest:
-		response := errors.Unwrap(err.Message)
-		render.Render(w, r, presenter.ErrorBadRequestResponse(response))
-	case *entity.ErrorUnauthorized:
-		response := errors.Unwrap(err.Message)
-		render.Render(w, r, presenter.ErrorUnauthorizedResponse(response))
-	case *entity.ErrorForbidden:
-		response := errors.Unwrap(err.Message)
-		render.Render(w, r, presenter.ErrorForbiddenResponse(response))
-	case *entity.ErrorNotFound:
-		response := errors.Unwrap(err.Message)
-		render.Render(w, r, presenter.ErrorNotFoundResponse(response))
-	case *entity.ErrorConflict:
-		response := errors.Unwrap(err.Message)
-		render.Render(w, r, presenter.ErrorConflict(response))
-	case *entity.ErrorInternalServer:
-		response := errors.Unwrap(err.Message)
-		render.Render(w, r, presenter.ErrorInternalServerResponse(response))
-	default:
-		response := errors.Unwrap(err.(*entity.ErrorInternalServer).Message)
-		render.Render(w, r, presenter.ErrorInternalServerResponse(response))
-	}
+	return err
 }
