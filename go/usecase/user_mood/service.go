@@ -31,7 +31,7 @@ func (s *Service) GetUserMoodByUserID(userID, requestedUserID string, userMoodFi
 	userMood, err := s.userMoodRepository.GetUserMoodByUserID(requestedUserID, userMoodFilters)
 	if err != nil {
 		if err.Error() == "not found" {
-			return nil, entity.NewErrorNotFound(fmt.Errorf("GetUserMoodByUserID: %w", errors.New("user not found")))
+			return nil, entity.NewErrorNotFound(fmt.Errorf("GetUserMoodByUserID: %w", errors.New("mood not found")))
 		}
 		return nil, entity.NewErrorInternalServer(fmt.Errorf("GetUserMoodByUserID: %w", err))
 	}
