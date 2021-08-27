@@ -156,3 +156,39 @@ func (s *Service) UpdateAdvice(userID, adviceID string, newAdvice entity.UpdateA
 	}
 	return nil
 }
+
+func (s *Service) DeleteAdvice(userID, adviceID string) error {
+
+	oldAdvice, err := s.adviceRepository.GetAdviceByID(adviceID)
+	if err != nil {
+		if err.Error() == "not found" {
+			return entity.NewErrorNotFound(fmt.Errorf("GetAdviceByID: %w", errors.New("advice not found")))
+		}
+		return entity.NewErrorInternalServer(fmt.Errorf("GetAdviceByID: %w", err))
+	}
+
+	// Checks permissions.
+	if oldAdvice.User.ID != userID {
+		return entity.NewErrorUnauthorized(errors.New("user has no permission to delete this advice"))
+	}
+
+	// Creates a new advice payload and then replaces the old one with the difference that now it has the deleted status.
+	updatedAdvice := entity.AdvicePayload{
+		ID:             oldAdvice.ID,
+		UserID:         oldAdvice.User.ID,
+		ClassroomID:    oldAdvice.Classroom.ID,
+		UniversityID:   oldAdvice.UniversityID,
+		Subject:        oldAdvice.Subject,
+		AdviceDate:     oldAdvice.AdviceDate,
+		StudentsNumber: oldAdvice.StudentsNumber,
+		Status:         entity.DeletedStatus,
+		CreationDate:   oldAdvice.CreationDate,
+	}
+
+	// Stores new advice.
+	err = s.adviceRepository.UpdateAdvice(updatedAdvice)
+	if err != nil {
+		return entity.NewErrorInternalServer(fmt.Errorf("UpdateAdvice: %w", err))
+	}
+	return nil
+}
