@@ -25,6 +25,16 @@ func (s *Service) GetContactByID(userID, contactID string) (*entity.Contact, err
 		}
 		return nil, entity.NewErrorInternalServer(fmt.Errorf("GetContactByID: %w", err))
 	}
+
+	// Checks permissions.
+	hasPermission := false
+	if userID == contact.UserID {
+		hasPermission = true
+	}
+	if !hasPermission {
+		return nil, entity.NewErrorUnauthorized(errors.New("user has no permission to see this user"))
+	}
+
 	return contact, nil
 }
 

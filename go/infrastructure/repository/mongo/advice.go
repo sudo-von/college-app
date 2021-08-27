@@ -1,7 +1,6 @@
 package mongo
 
 import (
-	"fmt"
 	"time"
 
 	"freelancer/college-app/go/entity"
@@ -16,7 +15,7 @@ type AdviceModel struct {
 	AdviceDate     time.Time       `bson:"advice_date"`
 	ClassroomID    bson.ObjectId   `bson:"classroom_id"`
 	University     UniversityModel `bson:"university"`
-	StudentsNumber int             `bson:"students_number"`
+	StudentsNumber []bson.ObjectId `bson:"students_number"`
 	User           TinyUserModel   `bson:"user"`
 }
 
@@ -30,7 +29,6 @@ func toEntityAdvice(advice AdviceModel) entity.Advice {
 		RegistrationNumber: advice.User.RegistrationNumber,
 	}
 
-	fmt.Println(advice)
 	var classroom entity.Classroom
 	for _, a := range advice.University.Classrooms {
 		if a.ID.Hex() == advice.ClassroomID.Hex() {
@@ -40,24 +38,25 @@ func toEntityAdvice(advice AdviceModel) entity.Advice {
 	}
 
 	return entity.Advice{
-		ID:         advice.ID.Hex(),
-		User:       user,
-		Subject:    advice.Subject,
-		Classroom:  classroom,
-		AdviceDate: advice.AdviceDate,
+		ID:             advice.ID.Hex(),
+		User:           user,
+		Subject:        advice.Subject,
+		Classroom:      classroom,
+		AdviceDate:     advice.AdviceDate,
+		StudentsNumber: len(advice.StudentsNumber),
 	}
 }
 
 type AdvicePayloadModel struct {
-	ID             bson.ObjectId `bson:"_id"`
-	UserID         bson.ObjectId `bson:"user_id"`
-	UniversityID   bson.ObjectId `bson:"university_id"`
-	ClassroomID    bson.ObjectId `bson:"classroom_id"`
-	Subject        string        `bson:"subject"`
-	AdviceDate     time.Time     `bson:"advice_date"`
-	StudentsNumber int           `bson:"students_number"`
-	Status         string        `bson:"status"`
-	CreationDate   time.Time     `bson:"creation_date"`
+	ID             bson.ObjectId   `bson:"_id"`
+	UserID         bson.ObjectId   `bson:"user_id"`
+	UniversityID   bson.ObjectId   `bson:"university_id"`
+	ClassroomID    bson.ObjectId   `bson:"classroom_id"`
+	Subject        string          `bson:"subject"`
+	AdviceDate     time.Time       `bson:"advice_date"`
+	StudentsNumber []bson.ObjectId `bson:"students_number"`
+	Status         string          `bson:"status"`
+	CreationDate   time.Time       `bson:"creation_date"`
 }
 
 func toAdvicePayloadModel(advice entity.AdvicePayload) AdvicePayloadModel {
@@ -90,6 +89,17 @@ func toAdvicePayloadModel(advice entity.AdvicePayload) AdvicePayloadModel {
 		classroomID = bson.NewObjectId()
 	}
 
+	studentsNumber := make([]bson.ObjectId, 0)
+	for _, student := range advice.StudentsNumber {
+		var studentID bson.ObjectId
+		if student != "" {
+			studentID = bson.ObjectIdHex(student)
+		} else {
+			studentID = bson.NewObjectId()
+		}
+		studentsNumber = append(studentsNumber, studentID)
+	}
+
 	return AdvicePayloadModel{
 		ID:             adviceID,
 		UserID:         userID,
@@ -97,7 +107,7 @@ func toAdvicePayloadModel(advice entity.AdvicePayload) AdvicePayloadModel {
 		ClassroomID:    classroomID,
 		Subject:        advice.Subject,
 		AdviceDate:     advice.AdviceDate,
-		StudentsNumber: advice.StudentsNumber,
+		StudentsNumber: studentsNumber,
 		Status:         advice.Status,
 		CreationDate:   advice.CreationDate,
 	}

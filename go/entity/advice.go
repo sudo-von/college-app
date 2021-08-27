@@ -20,7 +20,7 @@ type AdvicePayload struct {
 	UniversityID   string
 	Subject        string
 	AdviceDate     time.Time
-	StudentsNumber int
+	StudentsNumber []string
 	Status         string
 	CreationDate   time.Time
 }

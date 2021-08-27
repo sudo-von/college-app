@@ -63,7 +63,23 @@ func (s *Service) CreateAdvice(newAdvice entity.AdvicePayload) error {
 	}
 	newAdvice.UniversityID = user.University.ID
 
-	// Checks if classroom is a valid classroom for the given university.
+	// Checks if given classroom is a valid classroom from that university.
+	validClassroom := false
+	university, err := s.universityRepository.GetUniversityByID(user.University.ID)
+	if err != nil {
+		if err.Error() == "not found" {
+			return entity.NewErrorNotFound(fmt.Errorf("GetUniversityByID: %w", errors.New("university not found")))
+		}
+		return entity.NewErrorInternalServer(fmt.Errorf("GetUniversityByID: %w", err))
+	}
+	for _, c := range university.Classrooms {
+		if c.ID == newAdvice.ClassroomID {
+			validClassroom = true
+		}
+	}
+	if !validClassroom {
+		return entity.NewErrorConflict(errors.New("invalid classroom_id"))
+	}
 
 	// Stores new advice.
 	err = s.adviceRepository.CreateAdvice(newAdvice)
