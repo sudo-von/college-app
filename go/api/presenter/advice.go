@@ -50,7 +50,7 @@ func ToAdvicePresenter(advice entity.Advice) AdviceResponse {
 		Subject:        advice.Subject,
 		AdviceDate:     advice.AdviceDate.Local().Format("2006-01-02 15:04"),
 		Classroom:      classroom,
-		StudentsNumber: advice.StudentsNumber,
+		StudentsNumber: len(advice.StudentsNumber),
 	}
 }
 
@@ -74,6 +74,32 @@ func (ap *AdvicePayload) validate() (err error) {
 }
 
 func (ap *AdvicePayload) Bind(r *http.Request) error {
+	if err := ap.validate(); err != nil {
+		return err
+	}
+	return nil
+}
+
+type UpdateAdvicePayload struct {
+	Subject     string `json:"subject"`
+	AdviceDate  string `json:"advice_date"`
+	ClassroomID string `json:"classroom_id"`
+}
+
+func (ap *UpdateAdvicePayload) validate() (err error) {
+	if len(strings.TrimSpace(ap.Subject)) == 0 {
+		err = mergeErrors(err, errors.New("missing field subject"))
+	}
+	if len(strings.TrimSpace(ap.AdviceDate)) == 0 {
+		err = mergeErrors(err, errors.New("missing field advice_date"))
+	}
+	if len(strings.TrimSpace(ap.ClassroomID)) == 0 {
+		err = mergeErrors(err, errors.New("missing field classroom_id"))
+	}
+	return
+}
+
+func (ap *UpdateAdvicePayload) Bind(r *http.Request) error {
 	if err := ap.validate(); err != nil {
 		return err
 	}

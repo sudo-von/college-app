@@ -5,11 +5,13 @@ import (
 )
 
 type Reader interface {
+	GetAdviceByID(adviceID string) (*entity.Advice, error)
 	GetAdvices(universityID string, adviceFilters entity.AdviceFilters) ([]entity.Advice, *int, error)
 }
 
 type Writer interface {
 	CreateAdvice(newAdvice entity.AdvicePayload) error
+	UpdateAdvice(updatedAdvice entity.AdvicePayload) error
 }
 
 type AdviceRepository interface {
@@ -20,4 +22,5 @@ type AdviceRepository interface {
 type UseCase interface {
 	GetAdvices(userID string, adviceFilters entity.AdviceFilters) ([]entity.Advice, *int, error)
 	CreateAdvice(newAdvice entity.AdvicePayload) error
+	UpdateAdvice(updatedAdvice entity.UpdateAdvicePayload) error
 }

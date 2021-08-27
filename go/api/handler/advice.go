@@ -32,6 +32,7 @@ func (c *AdviceController) Routes() chi.Router {
 	r.Use(middleware.IsAuthorized(c.TokenService))
 	r.Get("/", c.List)
 	r.Post("/", c.Create)
+	r.Patch("/{id}", c.UpdateAdvice)
 	return r
 }
 
@@ -103,6 +104,45 @@ func (c *AdviceController) Create(w http.ResponseWriter, r *http.Request) {
 	err = c.AdviceService.CreateAdvice(newAdvice)
 	if err != nil {
 		CheckError(fmt.Errorf("AdviceController > Create > CreateAdvice: %w", err), w, r)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	render.Status(r, http.StatusOK)
+}
+
+// UpdateAdvice updates an advice given its id.
+func (c *AdviceController) UpdateAdvice(w http.ResponseWriter, r *http.Request) {
+
+	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	if !ok {
+		err := errors.New("user not in context")
+		CheckError(entity.NewErrorInternalServer(fmt.Errorf("AdviceController > UpdateAdvice: %w", err)), w, r)
+		return
+	}
+	adviceID := chi.URLParam(r, "id")
+
+	var data presenter.UpdateAdvicePayload
+	if err := render.Bind(r, &data); err != nil {
+		CheckError(entity.NewErrorBadRequest(fmt.Errorf("AdviceController > UpdateAdvice: %w", err)), w, r)
+		return
+	}
+
+	adviceDate, err := time.ParseInLocation("2006-01-02 15:04", data.AdviceDate, time.Local)
+	if err != nil {
+		CheckError(entity.NewErrorBadRequest(fmt.Errorf("AdviceController > UpdateAdvice: %w", err)), w, r)
+		return
+	}
+
+	newUser := entity.UpdateAdvicePayload{
+		Subject:     data.Subject,
+		AdviceDate:  adviceDate,
+		ClassroomID: data.ClassroomID,
+	}
+
+	err = c.AdviceService.UpdateAdvice(userID, adviceID, newUser)
+	if err != nil {
+		CheckError(fmt.Errorf("AdviceController > UpdateAdvice > UpdateAdvice: %w", err), w, r)
 		return
 	}
 

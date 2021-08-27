@@ -1,6 +1,7 @@
 package mongo
 
 import (
+	"errors"
 	"time"
 
 	"freelancer/college-app/go/entity"
@@ -17,6 +18,8 @@ type AdviceModel struct {
 	University     UniversityModel `bson:"university"`
 	StudentsNumber []bson.ObjectId `bson:"students_number"`
 	User           TinyUserModel   `bson:"user"`
+	Status         string          `bson:"status"`
+	CreationDate   time.Time       `bson:"creation_date"`
 }
 
 func toEntityAdvice(advice AdviceModel) entity.Advice {
@@ -37,13 +40,21 @@ func toEntityAdvice(advice AdviceModel) entity.Advice {
 		}
 	}
 
+	studentsNumber := make([]string, 0)
+	for _, student := range advice.StudentsNumber {
+		studentsNumber = append(studentsNumber, student.Hex())
+	}
+
 	return entity.Advice{
 		ID:             advice.ID.Hex(),
 		User:           user,
+		UniversityID:   advice.University.ID.Hex(),
 		Subject:        advice.Subject,
 		Classroom:      classroom,
 		AdviceDate:     advice.AdviceDate,
-		StudentsNumber: len(advice.StudentsNumber),
+		StudentsNumber: studentsNumber,
+		Status:         advice.Status,
+		CreationDate:   advice.CreationDate,
 	}
 }
 
@@ -125,6 +136,54 @@ func NewAdviceRepository(repository *Repository) *AdviceRepository {
 	}
 }
 
+func (r *AdviceRepository) GetAdviceByID(adviceID string) (*entity.Advice, error) {
+
+	session := r.Session.Copy()
+	defer session.Close()
+	com := session.DB(r.DatabaseName).C("advices")
+
+	searchQuery := bson.M{
+		"_id":         bson.ObjectIdHex(adviceID),
+		"status":      entity.ActiveStatus,
+		"user.status": entity.ActiveStatus,
+		"advice_date": bson.M{
+			"$gte": time.Now().In(time.Local),
+		},
+	}
+
+	pipes := []bson.M{
+		{
+			"$lookup": bson.M{
+				"from":         "users",
+				"localField":   "user_id",
+				"foreignField": "_id",
+				"as":           "user",
+			},
+		},
+		{"$unwind": "$user"},
+		{
+			"$lookup": bson.M{
+				"from":         "universities",
+				"localField":   "university_id",
+				"foreignField": "_id",
+				"as":           "university",
+			},
+		},
+		{"$unwind": "$university"},
+		{"$match": searchQuery},
+	}
+
+	var adviceM AdviceModel
+	pipe := com.Pipe(pipes)
+	err := pipe.One(&adviceM)
+	if err != nil {
+		return nil, err
+	}
+
+	advice := toEntityAdvice(adviceM)
+	return &advice, nil
+}
+
 func (r *AdviceRepository) GetAdvices(universityID string, adviceFilters entity.AdviceFilters) ([]entity.Advice, *int, error) {
 
 	session := r.Session.Copy()
@@ -178,12 +237,12 @@ func (r *AdviceRepository) GetAdvices(universityID string, adviceFilters entity.
 		return nil, nil, err
 	}
 
-	consultancies := make([]entity.Advice, 0)
+	advices := make([]entity.Advice, 0)
 	for _, advice := range advicesM {
-		consultancies = append(consultancies, toEntityAdvice(advice))
+		advices = append(advices, toEntityAdvice(advice))
 	}
 
-	return consultancies, &total, nil
+	return advices, &total, nil
 }
 
 func (r *AdviceRepository) CreateAdvice(newAdvice entity.AdvicePayload) error {
@@ -194,6 +253,37 @@ func (r *AdviceRepository) CreateAdvice(newAdvice entity.AdvicePayload) error {
 
 	adviceM := toAdvicePayloadModel(newAdvice)
 	err := com.Insert(&adviceM)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *AdviceRepository) UpdateAdvice(UpdateAdvice entity.AdvicePayload) error {
+
+	if !bson.IsObjectIdHex(UpdateAdvice.ID) {
+		return errors.New("given advice id is not a valid hex")
+	}
+	if !bson.IsObjectIdHex(UpdateAdvice.UserID) {
+		return errors.New("given user_id is not a valid hex")
+	}
+	if !bson.IsObjectIdHex(UpdateAdvice.UniversityID) {
+		return errors.New("given university_id is not a valid hex")
+	}
+	if !bson.IsObjectIdHex(UpdateAdvice.ClassroomID) {
+		return errors.New("given classroom_id is not a valid hex")
+	}
+
+	session := r.Session.Copy()
+	defer session.Close()
+	com := session.DB(r.DatabaseName).C("advices")
+	searchQuery := bson.M{
+		"_id": bson.ObjectIdHex(UpdateAdvice.ID),
+	}
+
+	adviceM := toAdvicePayloadModel(UpdateAdvice)
+	err := com.Update(searchQuery, &adviceM)
 	if err != nil {
 		return err
 	}

@@ -88,3 +88,71 @@ func (s *Service) CreateAdvice(newAdvice entity.AdvicePayload) error {
 	}
 	return nil
 }
+
+func (s *Service) UpdateAdvice(userID, adviceID string, newAdvice entity.UpdateAdvicePayload) error {
+
+	oldAdvice, err := s.adviceRepository.GetAdviceByID(adviceID)
+	if err != nil {
+		if err.Error() == "not found" {
+			return entity.NewErrorNotFound(fmt.Errorf("GetAdviceByID: %w", errors.New("advice not found")))
+		}
+		return entity.NewErrorInternalServer(fmt.Errorf("GetAdviceByID: %w", err))
+	}
+
+	// Checks permissions.
+	if oldAdvice.User.ID != userID {
+		return entity.NewErrorUnauthorized(errors.New("user has no permission to update this advice"))
+	}
+
+	// If the old date is different from the new date then checks if current date is before than the advice date.
+	if oldAdvice.AdviceDate != newAdvice.AdviceDate {
+		validDate := false
+		currentDate := time.Now().In(time.Local)
+		if currentDate.Before(newAdvice.AdviceDate) {
+			validDate = true
+		}
+		if !validDate {
+			return entity.NewErrorConflict(errors.New("advice_date can not be before the current date"))
+		}
+	}
+
+	// If the old classroom is different from the new classroom then checks if given classroom is a valid classroom from that university.
+	university, err := s.universityRepository.GetUniversityByID(oldAdvice.UniversityID)
+	if err != nil {
+		if err.Error() == "not found" {
+			return entity.NewErrorNotFound(fmt.Errorf("GetUniversityByID: %w", errors.New("university not found")))
+		}
+		return entity.NewErrorInternalServer(fmt.Errorf("GetUniversityByID: %w", err))
+	}
+	if oldAdvice.Classroom.ID != newAdvice.ClassroomID {
+		validClassroom := false
+		for _, c := range university.Classrooms {
+			if c.ID == newAdvice.ClassroomID {
+				validClassroom = true
+			}
+		}
+		if !validClassroom {
+			return entity.NewErrorConflict(errors.New("invalid classroom_id"))
+		}
+	}
+
+	// Creates a new advice payload and then replaces the old one.
+	updatedAdvice := entity.AdvicePayload{
+		ID:             oldAdvice.ID,
+		UserID:         oldAdvice.User.ID,
+		UniversityID:   university.ID,
+		ClassroomID:    newAdvice.ClassroomID,
+		Subject:        newAdvice.Subject,
+		AdviceDate:     newAdvice.AdviceDate,
+		StudentsNumber: oldAdvice.StudentsNumber,
+		Status:         oldAdvice.Status,
+		CreationDate:   oldAdvice.CreationDate,
+	}
+
+	// Stores new advice.
+	err = s.adviceRepository.UpdateAdvice(updatedAdvice)
+	if err != nil {
+		return entity.NewErrorInternalServer(fmt.Errorf("UpdateAdvice: %w", err))
+	}
+	return nil
+}

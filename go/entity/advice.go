@@ -6,9 +6,10 @@ type Advice struct {
 	ID             string
 	User           TinyUser
 	Classroom      Classroom
+	UniversityID   string
 	Subject        string
 	AdviceDate     time.Time
-	StudentsNumber int
+	StudentsNumber []string
 	Status         string
 	CreationDate   time.Time
 }
@@ -23,6 +24,12 @@ type AdvicePayload struct {
 	StudentsNumber []string
 	Status         string
 	CreationDate   time.Time
+}
+
+type UpdateAdvicePayload struct {
+	Subject     string
+	ClassroomID string
+	AdviceDate  time.Time
 }
 
 type AdviceFilters struct {
