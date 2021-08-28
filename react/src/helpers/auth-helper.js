@@ -17,7 +17,16 @@ const setToken = async (token) => {
     }
 }
 
+const deleteToken = () => {
+    try{
+        await AsyncStorage.removeItem('token')
+    }catch(error){
+        return error
+    }
+}
+
 export { 
     getToken,
-    setToken
+    setToken,
+    deleteToken
 }
