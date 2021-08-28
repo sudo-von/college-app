@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
         margin: 0
     },
     subtitle: {
-        lineHeight: 10,
-        fontSize: 10,
+        lineHeight: 15,
+        fontSize: 12,
         textAlign: 'left',
     }
 })
