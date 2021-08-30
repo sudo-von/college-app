@@ -23,7 +23,7 @@ const login = async ({ email, password }) => {
         return user
     }catch(error){
         if(error.response?.status == 401){
-            throw new Error("Credenciales inválidas")
+            throw new Error("Credenciales incorrectas")
         }
         throw new Error("Ha ocurrido un error, intenta de nuevo más tarde")
     }

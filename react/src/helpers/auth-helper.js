@@ -8,7 +8,7 @@ const getToken = async () => {
         const token = await AsyncStorage.getItem('token')
         return token
     } catch(e) {
-        return error
+        throw e
     }
 }
 
@@ -16,7 +16,7 @@ const setToken = async (token) => {
     try{
         await AsyncStorage.setItem('token', token)
     }catch(error){
-        return error
+        throw e
     }
 }
 
@@ -24,7 +24,7 @@ const deleteToken = async () => {
     try{
         await AsyncStorage.removeItem('token')
     }catch(error){
-        return error
+        throw e
     }
 }
 
@@ -37,7 +37,7 @@ const decodeToken = async () => {
         const parsedUser = JSON.parse(user)
         return parsedUser
     }catch(error){
-        return error
+        throw e
     }
 }
 
