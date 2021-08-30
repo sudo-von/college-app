@@ -8,13 +8,13 @@ const useAuth = () => useContext(AuthContext)
 
 const AuthProvider = ({ children }) => {
 
-    const [state, dispatch] = useReducer(authReducer, {
+    const [authState, authDispatch] = useReducer(authReducer, {
         isLoggedIn: false,
         user: null
     })
 
     return (
-        <AuthContext.Provider value={{state, dispatch}}>
+        <AuthContext.Provider value={{authState, authDispatch}}>
             {children}
         </AuthContext.Provider>
     )
