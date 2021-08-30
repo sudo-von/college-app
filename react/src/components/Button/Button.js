@@ -3,9 +3,9 @@ import { StyleSheet } from 'react-native'
 /* React native paper. */
 import { Button } from 'react-native-paper'
 
-const CustomButton = ({...rest}) =>
-    <Button style={styles.button} mode='contained' {...rest}>
-        Iniciar sesión
+const CustomButton = ({loading, children, ...rest}) =>
+    <Button style={styles.button} mode='contained' loading={loading} disabled={loading} {...rest}>
+        {loading ? 'Cargando... ' : children}
     </Button>
 
 const styles = StyleSheet.create({
