@@ -1,12 +1,11 @@
-import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
-/* React native paper. */
-import { TextInput } from 'react-native-paper'
+import React from 'react'
+import { Text, StyleSheet, View } from 'react-native'
 /* Formik. */
 import { Formik } from 'formik'
 /* Custom components. */
 import Button from 'src/components/Button'
 import Input from 'src/components/Input'
+import PasswordInput from 'src/components/PasswordInput'
 /* Contexts. */
 import { useAuth } from 'src/providers/auth.provider'
 /* Services. */
@@ -14,15 +13,24 @@ import { login } from 'src/services/user.service'
 
 const LoginForm = () => {
 
-    const { dispatch } = useAuth()
-
-    const [ showPassword, setShowPassword ] = useState(false)
-
-    const initialValues = { email: 'martinez-angel@uadec.edu.mx', password: 'college-app'}
-    const onSubmit = async (data) => console.log(await login({email: data.email, password: data.password}))
+    const { state, dispatch } = useAuth()
+    console.log(state)
+    
+    const onSubmit = async (data) => {
+        try{
+            const user = await login({email: data.email, password: data.password})
+            dispatch({type: 'login', user})
+        }catch(error){
+            console.log(error)
+            alert(error)
+        }
+    }
 
     return (
-        <Formik initialValues={initialValues} onSubmit={onSubmit}>
+        <Formik 
+            initialValues={{ email: 'martinez-angel@uadec.edu.mx', password: 'college-app'}} 
+            onSubmit={onSubmit}
+        >
             {({ handleChange, handleBlur, handleSubmit, values }) => (
                 <View style={styles.container}>
                     <Input
@@ -31,13 +39,11 @@ const LoginForm = () => {
                         onBlur={handleBlur('email')}
                         value={values.email}
                     />
-                    <Input
+                    <PasswordInput
                         label='Ingresa tu contraseña'
                         onChangeText={handleChange('password')}
                         onBlur={handleBlur('password')}
                         value={values.password}
-                        secureTextEntry={showPassword ? true : false}
-                        right={<TextInput.Icon onPress={() => setShowPassword(!showPassword)} color='gray' name={showPassword ? 'eye-off' : 'eye'}/>}
                     />
                     <Button onPress={handleSubmit}>Iniciar sesión</Button>
                 </View>
@@ -52,6 +58,5 @@ const styles = StyleSheet.create({
         marginTop: 30
     }
 })
-
 
 export default LoginForm
