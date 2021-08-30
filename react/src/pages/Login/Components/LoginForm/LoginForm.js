@@ -1,11 +1,12 @@
-import React from 'react'
-import { Text, StyleSheet, View } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, View } from 'react-native'
 /* Formik. */
 import { Formik } from 'formik'
 /* Custom components. */
 import Button from 'src/components/Button'
 import Input from 'src/components/Input'
 import PasswordInput from 'src/components/PasswordInput'
+import Alert from 'src/components/Alert'
 /* Contexts. */
 import { useAuth } from 'src/providers/auth.provider'
 /* Services. */
@@ -13,16 +14,21 @@ import { login } from 'src/services/user.service'
 
 const LoginForm = () => {
 
-    const { state, dispatch } = useAuth()
-    console.log(state)
-    
+    /* States. */
+    const [ loading, setLoading ] = useState(false)
+    const [ error, setError ] = useState(null) 
+    const { authDispatch } = useAuth()
+
     const onSubmit = async (data) => {
         try{
+            setLoading(true)
+            setError(null)
             const user = await login({email: data.email, password: data.password})
-            dispatch({type: 'login', user})
+            authDispatch({type: 'login', user})
         }catch(error){
-            console.log(error)
-            alert(error)
+            setError(error.message)
+        }finally{
+            setLoading(false)
         }
     }
 
@@ -33,6 +39,7 @@ const LoginForm = () => {
         >
             {({ handleChange, handleBlur, handleSubmit, values }) => (
                 <View style={styles.container}>
+                    { error && <Alert title={error} type='error'/>}
                     <Input
                         label='Ingresa tu correo'
                         onChangeText={handleChange('email')}
@@ -45,7 +52,7 @@ const LoginForm = () => {
                         onBlur={handleBlur('password')}
                         value={values.password}
                     />
-                    <Button onPress={handleSubmit}>Iniciar sesión</Button>
+                    <Button loading={loading} onPress={handleSubmit}>Iniciar sesión</Button>
                 </View>
             )}
         </Formik>
