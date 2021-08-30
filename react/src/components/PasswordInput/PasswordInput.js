@@ -5,15 +5,15 @@ import { TextInput } from 'react-native-paper'
 import Input from 'src/components/Input'
 
 const PasswordInput = ({ ...rest }) => {
-    const [ showPassword, setShowPassword ] = useState(false)
+    const [ secureTextEntry, seSecureTextEntry ] = useState(true)
     return (
         <Input
-            secureTextEntry={showPassword ? true : false}
+            secureTextEntry={secureTextEntry ? true : false}
             right={
                 <TextInput.Icon 
-                    onPress={() => setShowPassword(!showPassword)} 
+                    onPress={() => seSecureTextEntry(!secureTextEntry)} 
                     color='gray' 
-                    name={showPassword ? 'eye-off' : 'eye'}
+                    name={secureTextEntry ? 'eye-off' : 'eye'}
                 />
             }
             {...rest}
