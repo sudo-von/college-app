@@ -10,7 +10,8 @@ const CustomButton = ({...rest}) =>
 
 const styles = StyleSheet.create({
     button: {
-        marginTop: 35,
+        marginTop: 40,
+        marginBottom: 40,
         backgroundColor: '#4C9DAF',
         color: 'white'
     }
