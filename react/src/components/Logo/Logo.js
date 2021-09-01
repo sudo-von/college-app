@@ -1,11 +1,11 @@
 import React from 'react'
 import { StyleSheet, View, Image } from 'react-native'
 
-const Logo = ({ source }) => {
+const Logo = ({ source, style }) => {
     return (
-        <View style={styles.view}>
+        <View style={styles(style).view}>
             <Image
-                style={styles.image}
+                style={styles(style).image}
                 source={source}
             />
         </View>
@@ -13,10 +13,10 @@ const Logo = ({ source }) => {
 }
 
 
-const styles = StyleSheet.create({ 
+const styles = (style) => StyleSheet.create({ 
     view: {
-        width: 180,
-        height: 180,
+        width: style ? style.width : 180,
+        height: style ? style.height : 180,
         borderRadius: 100,
         backgroundColor: '#4C9DAF',
         display: 'flex',
@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     image: {
-        width: 156,
-        height: 110,
+        width: style ? style.width-30 : 150,
+        height: style ? style.width-70 : 110,
         resizeMode: 'contain'
     }
 })
