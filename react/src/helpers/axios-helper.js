@@ -1,8 +1,8 @@
 import axios from 'axios'
 /* Constants. */
-import { API_URL } from 'src/constants'
+import { API_URL } from 'src/constants/endpoints'
 /* Helpers. */
-import { getToken } from './auth-helper'
+import { getToken, deleteToken } from './auth-helper'
 /* Refs. */
 import { navigate } from 'src/refs/navigation.ref'
 
@@ -28,10 +28,10 @@ instance.interceptors.request.use(async config => {
 
 /* Response interceptors. */
 instance.interceptors.response.use(response => response,
-    (error) => {
-        console.log(error.response.status)
-        if (error.response.status === 401) {
-            navigate('/signup')
+    async (error) => {
+        if (error.response?.status === 401) {
+            await deleteToken()
+            navigate('/')
         }
         return  Promise.reject(error)
     }
