@@ -1,49 +1,44 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { View, StyleSheet } from 'react-native'
 /* React native paper. */
-import { IconButton, Button, Paragraph, Dialog, Portal } from 'react-native-paper'
+import { Caption, IconButton } from 'react-native-paper'
 
-const Alert = ({ title, message, type }) => {
+const Alert = ({ title, type }) => {
 
-    const [visible, setVisible] = useState(true)
-    const hideDialog = () => setVisible(false)
-
-    let dialogStyles = {}
+    let alert = {}
     switch (type) {
         case 'error':
-            dialogStyles = styles.error
+            alert = setAlert({ 
+                icon: 'alert-circle', 
+                styles: styles.error
+            })
             break
         case 'warning':
-            dialogStyles = styles.warning
+            alert = setAlert({ 
+                icon: 'alert', 
+                styles: styles.warning
+            })
             break
         case 'info':
-            dialogStyles = styles.info
+            alert = setAlert({ 
+                icon: 'information-outline', 
+                styles: styles.info
+            })
             break
         case 'success':
-            dialogStyles = styles.success
+            alert = setAlert({ 
+                icon: 'check', 
+                styles: styles.success
+            })
             break
         default:
             break
     }
 
     return (
-        <View>
-            <Portal>
-            <Dialog visible={visible} onDismiss={hideDialog} style={dialogStyles}>
-                {title &&
-                    <Dialog.Title 
-                        theme={{ colors: { text: dialogStyles.color }}}>{title}</Dialog.Title>
-                }
-                {message &&
-                    <Dialog.Content>
-                        <Paragraph style={dialogStyles.color}>{message}</Paragraph>
-                    </Dialog.Content>
-                }
-                <Dialog.Actions>
-                <Button color={dialogStyles.color} onPress={hideDialog}>Cerrar</Button>
-                </Dialog.Actions>
-            </Dialog>
-            </Portal>
+        <View style={alert.styles}>
+            <IconButton icon={alert.icon} color={alert.styles.color}/>
+            <Caption style={{flexShrink: 1}}>{title}</Caption>
         </View>
     )
 }
@@ -51,7 +46,6 @@ const Alert = ({ title, message, type }) => {
 const styles = StyleSheet.create({
     error : {
         backgroundColor: '#f7d8d5',
-        fontSize: 40,
         color: '#611a15'
     },
     warning: {
@@ -68,5 +62,18 @@ const styles = StyleSheet.create({
     }
 })
 
+const setAlert = ({icon, styles}) => (
+    {
+        icon,
+        styles : {
+            marginTop: 10,
+            borderRadius: 2,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            ...styles
+        }
+    }
+)
 
 export default Alert

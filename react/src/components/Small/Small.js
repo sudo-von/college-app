@@ -12,8 +12,7 @@ const Small = ({ children, ...rest }) => {
 const styles = StyleSheet.create({
     message: {
         color: '#666666',
-        fontSize: 12,
-        textAlign: 'center'
+        fontSize: 12
     }
 })
 
