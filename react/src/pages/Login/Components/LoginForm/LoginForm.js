@@ -39,7 +39,6 @@ const LoginForm = () => {
         >
             {({ handleChange, handleBlur, handleSubmit, values }) => (
                 <View style={styles.container}>
-                    { error && <Alert title={error} type='error'/>}
                     <Input
                         label='Ingresa tu correo'
                         onChangeText={handleChange('email')}
@@ -52,7 +51,14 @@ const LoginForm = () => {
                         onBlur={handleBlur('password')}
                         value={values.password}
                     />
-                    <Button loading={loading} onPress={handleSubmit}>Iniciar sesión</Button>
+                    { error && <Alert title={error} type='error'/>}
+                    <Button 
+                        loading={loading} 
+                        loadingMessage='Iniciando sesión' 
+                        onPress={handleSubmit}
+                    >
+                        Iniciar sesión
+                    </Button>
                 </View>
             )}
         </Formik>
