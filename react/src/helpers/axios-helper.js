@@ -3,6 +3,8 @@ import axios from 'axios'
 import { API_URL } from 'src/constants'
 /* Helpers. */
 import { getToken } from './auth-helper'
+/* Refs. */
+import { navigate } from 'src/refs/navigation.ref'
 
 /* Instance defaults. */
 const instance = axios.create({
@@ -11,15 +13,28 @@ const instance = axios.create({
 
 /* Request interceptors. */
 instance.interceptors.request.use(async config => {
-    if (!config.headers.Authorization) {
-        // const token = await getToken()
-        // if(token){
-        //     config.headers.Authorization = `Bearer ${token}`;
-        // }
+    try{
+        const token = await getToken()
+        if (!config.headers.Authorization && token) {
+            config.headers.Authorization = token
+        }
+        return config
+    }catch(error){
+        throw error
     }
-    return config
   },
   error => Promise.reject(error)
+)
+
+/* Response interceptors. */
+instance.interceptors.response.use(response => response,
+    (error) => {
+        console.log(error.response.status)
+        if (error.response.status === 401) {
+            navigate('/signup')
+        }
+        return  Promise.reject(error)
+    }
 )
 
 export default instance
