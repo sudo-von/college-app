@@ -1,36 +1,31 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
 /* Custom components. */
+import Container from 'src/components/Container'
 import Logo from 'src/components/Logo'
 import Header from 'src/components/Header'
 import Link from 'src/components/Link'
 import Small from 'src/components/Small'
+import Center from 'src/components/Center'
 import LoginForm from './Components/LoginForm'
 
 const Login = () => {
     const logo = require('../../../assets/gopher.png')
     return (
-        <View style={styles.container}>
-            <Logo source={logo}/>
+        <Container>
+            <Center>
+                <Logo source={logo}/>
+            </Center>
             <Header 
                 title='Universidad Autónoma de Gojs'
                 subtitle='"Siempre parece imposible, hasta que se hace".'
             />
             <LoginForm/>
-            <Small>¿No tienes una cuenta?</Small>
-            <Link url='/signup'>¡Regístrate aquí!</Link>
-        </View>
+            <Center>
+                <Small>¿No tienes una cuenta?</Small>
+                <Link url='/signup'>¡Regístrate aquí!</Link>
+            </Center>
+        </Container>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        padding: 25,
-        flex: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
-})
 
 export default Login
