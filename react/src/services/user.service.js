@@ -4,7 +4,7 @@ import base64 from 'react-native-base64'
 import axios from 'src/helpers/axios-helper'
 import { setToken, decodeToken } from 'src/helpers/auth-helper'
 /* Constants. */
-import { LOGIN, SIGNUP } from 'src/constants'
+import { LOGIN, SIGNUP } from 'src/constants/endpoints'
 
 export {
     login,
@@ -33,8 +33,7 @@ const login = async ({ email, password }) => {
 /* Adds a new user. */
 const signup = async (user) => {
     try{
-        const response = await axios.post(SIGNUP,user)
-        console.log(response)
+        await axios.post(SIGNUP, user)
         return "¡Registro éxitoso!"
     }catch(error){
         if(error.response?.data.message){
