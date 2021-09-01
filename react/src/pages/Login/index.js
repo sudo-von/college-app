@@ -18,7 +18,7 @@ const Login = () => {
             />
             <LoginForm/>
             <Small>¿No tienes una cuenta?</Small>
-            <Link url='signup'>¡Regístrate aquí!</Link>
+            <Link url='/signup'>¡Regístrate aquí!</Link>
         </View>
     )
 }
