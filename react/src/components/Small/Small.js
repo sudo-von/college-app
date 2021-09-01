@@ -3,9 +3,9 @@ import { StyleSheet } from 'react-native'
 /* React native paper. */
 import { Caption } from 'react-native-paper'
 
-const Small = ({ children }) => {
+const Small = ({ children, ...rest }) => {
     return (
-        <Caption style={styles.message}>{children}</Caption>
+        <Caption style={styles.message} {...rest}>{children}</Caption>
     )
 }
 
