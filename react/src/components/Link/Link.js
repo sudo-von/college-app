@@ -1,13 +1,13 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-/* React router native. */
-import { Link } from 'react-router-native'
+/* React navigation. */
+import { Link } from '@react-navigation/native'
 /* React native paper. */
 import { Caption } from 'react-native-paper'
 
 const CustomLink = ({ url, children }) =>
     <Link
-        to={url}
+        to={{ screen: url }}
         style={styles.link}
         underlayColor="#f0f4f7"
     >
