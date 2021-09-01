@@ -11,17 +11,27 @@ import Signup from './src/pages/Signup'
 import { AuthProvider } from './src/providers/auth.provider'
 /* Refs. */
 import { navigationRef } from './src/refs/navigation.ref'
+/* Constants. */
+import { theme } from 'src/constants/themes'
 
 const Stack = createNativeStackNavigator()
 
 export default function App() {
   return (
     <AuthProvider>
-      <PaperProvider>
-        <NavigationContainer ref={navigationRef}>
+      <PaperProvider theme={theme}>
+        <NavigationContainer theme={theme} ref={navigationRef}>
           <Stack.Navigator>
-            <Stack.Screen name="/" component={Login}/>
-            <Stack.Screen name="/signup" component={Signup}/>
+            <Stack.Screen 
+              name="/" 
+              component={Login} 
+              options={{header: () => null}}
+            />
+            <Stack.Screen 
+              name="/signup" 
+              component={Signup}
+              options={{header: () => null}}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
