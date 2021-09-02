@@ -1,23 +1,21 @@
 import React, { useState } from 'react'
 import { View, Alert } from 'react-native'
 /* Formik. */
-import { Formik } from 'formik'
+import { Formik, Field } from 'formik'
 /* Custom components. */
 import Button from 'src/components/Button'
 import Input from 'src/components/Input'
 import PasswordInput from 'src/components/PasswordInput'
+import Datepicker from 'src/components/Datepicker'
 /* Services. */
 import { signup } from 'src/services/user.service'
 /* React navigation. */
 import { useNavigation } from '@react-navigation/native'
 
-
 const SignupForm = () => {
 
     const navigation = useNavigation()
-    
     const [ loading, setLoading ] = useState(false)
-
     const onSubmit = async (form) => {
         try{
             setLoading(true)
@@ -42,12 +40,12 @@ const SignupForm = () => {
     return (
         <Formik 
             initialValues={{ 
-                name: '',
-                birth_date: '',
-                email : '', 
-                registration_number: '',
-                university_id: '', 
-                password: ''
+                name: 'VoN',
+                birth_date: '1997-04-17',
+                email : 'martinez-angel@uadec.edu.mx', 
+                registration_number: '16190775',
+                university_id: '612803c400e131d7b8163642', 
+                password: 'college-app'
             }}
             validate={values => {
                 const { name, birth_date, email, registration_number, university_id, password } = values
@@ -83,13 +81,16 @@ const SignupForm = () => {
                         value={values.name}
                         error={errors.name}
                     />
-                    <Input
-                        label='Selecciona tu fecha de nacimiento'
-                        onChangeText={handleChange('birth_date')}
-                        onBlur={handleBlur('birth_date')}
-                        value={values.birth_date}
-                        error={errors.birth_date}
-                    />
+                    <Field name='birth_date'>
+                        {({ field, form, meta }) => (
+                            <Datepicker 
+                                label='Selecciona tu fecha de nacimiento'
+                                field={field} 
+                                form={form} 
+                                meta={meta}
+                            />
+                        )}
+                    </Field>
                     <Input
                         label='Ingresa tu correo institucional'
                         onChangeText={handleChange('email')}
