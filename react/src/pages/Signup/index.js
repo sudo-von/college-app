@@ -22,7 +22,7 @@ const Signup = () => {
                     <SignupForm/>
                     <Center>
                         <Small>¿Ya tienes una cuenta?</Small>
-                        <Link url='/'>¡Inicia sesión aquí!</Link>
+                        <Link url='/login'>¡Inicia sesión aquí!</Link>
                     </Center>
                 </Container>
             </ScrollView>
