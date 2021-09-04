@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
 
 const styles = (backgroundColor) => StyleSheet.create({
     view: {
-        marginTop: 20,
+        marginTop: 10,
         borderRadius: 2,
         flexDirection: 'row',
         alignItems: 'center',
