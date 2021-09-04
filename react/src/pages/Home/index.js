@@ -3,8 +3,9 @@ import { StyleSheet, View } from 'react-native'
 /* Custom components. */
 import Container from 'src/components/Container'
 import Small from 'src/components/Small'
+import Bold from 'src/components/Bold'
 import NavigationBadge from 'src/components/NavigationBadge'
-import Mood from 'src/components/Mood'
+import Mood from './Components/Mood'
 /* React native paper. */
 import { Title } from 'react-native-paper'
 /* Contexts. */
@@ -13,19 +14,20 @@ import { useAuth } from 'src/providers/auth.provider'
 import { getMood } from 'src/services/mood.service'
 
 const Home = () => {
-    
-    const [ modal, setModal ] = useState(false)
 
+    /* Destructuring user properties. */
     const { authState } = useAuth()
     const { user } = authState
     const { user_name, user_id } = user
 
+    /* If user has not sent its mood today then the modal mood will be show. */
+    const [showMood, setShowMood] = useState(false)
     useEffect(() => {
-        
         const getDailyMood = async () => {
             try{
                 await getMood(user_id)
             }catch(error){
+                setShowMood(true)
             }
         }
         getDailyMood()
@@ -33,25 +35,35 @@ const Home = () => {
 
     return (
         <Container style={styles.container}>
-            <Mood/>
-            <Title>¡Hola {user_name}!</Title>
-            <Small>Mantente al día con las últimas noticias visitando la página de tu escuela.</Small>
+            {showMood && 
+                <Mood 
+                    initialMoodValue={2.5}
+                    minimumValue={0}
+                    maximumValue={5}
+                    minimumText='Triste'
+                    maximumText='Feliz'
+                />
+            }
+            <View style={styles.view}>
+                <Title style={styles.title}><Bold>¡Hola {user_name}!</Bold></Title>
+                <Small>Mantente al día con las últimas noticias visitando la página de tu escuela.</Small>
+            </View>
             <NavigationBadge
-                url='/'
+                url='/panicButton'
                 title='Botón de pánico'
                 icon='alert-circle-outline'
                 color='#611a15'
                 backgroundColor='#f7d8d5'
             />
             <NavigationBadge
-                url='/'
+                url='/advices'
                 title='Asesorías'
                 icon='book-open-variant'
                 color='#4F89F8'
                 backgroundColor='#e8f4fd'
             />
             <NavigationBadge
-                url='/'
+                url='/suggestions'
                 title='Sugerencias'
                 icon='email-outline'
                 color='#F8DD4F'
@@ -64,6 +76,13 @@ const Home = () => {
 const styles = StyleSheet.create({
     container: {
         justifyContent: 'flex-start'
+    },
+    view: {
+        marginTop: 20,
+        marginBottom: 20
+    },
+    title: {
+        fontSize: 24
     }
 })
 
