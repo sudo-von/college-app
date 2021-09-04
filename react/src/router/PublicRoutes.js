@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator()
 const PublicRoutes = () =>
     <Stack.Navigator>
         <Stack.Screen 
-            name="/" 
+            name="/login" 
             component={Login} 
             options={{header: () => null}}
         />
