@@ -20,7 +20,6 @@ const Logout = () => {
                 await deleteToken()
                 authDispatch({ type: 'logout'})
             }catch(error){
-                console.log(error)
             }
         }
         doLogout()

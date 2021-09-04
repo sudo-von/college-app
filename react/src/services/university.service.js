@@ -10,7 +10,7 @@ export {
 const getUniversities = async () => {
     try{
         const universities = await axios.get(`${UNIVERSITY}`)
-        return universities.data
+        return universities.data.results
     }catch(error){
         throw new Error(error.response.data.message)
     }

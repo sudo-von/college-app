@@ -31,7 +31,7 @@ instance.interceptors.response.use(response => response,
     async (error) => {
         if (error.response?.status === 401) {
             await deleteToken()
-            navigate('/')
+            navigate('/login')
         }
         return  Promise.reject(error)
     }

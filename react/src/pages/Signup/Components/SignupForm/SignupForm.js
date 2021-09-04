@@ -1,38 +1,57 @@
-import React, { useState } from 'react'
-import { View, Alert } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { View, Alert, StyleSheet } from 'react-native'
 /* Formik. */
 import { Formik, Field } from 'formik'
 /* Custom components. */
-import Button from 'src/components/Button'
 import Input from 'src/components/Input'
 import PasswordInput from 'src/components/PasswordInput'
+import SelectInput from 'src/components/SelectInput'
 import Datepicker from 'src/components/Datepicker'
+import Option from 'src/components/Option'
+import Button from 'src/components/Button'
 /* Services. */
 import { signup } from 'src/services/user.service'
+import { getUniversities } from 'src/services/university.service'
 /* React navigation. */
 import { useNavigation } from '@react-navigation/native'
 
 const SignupForm = () => {
 
+    /* Handles university list. */
+    const [ universityList, setUniversityList ] = useState([])
+    useEffect(() => {
+        const searchUniversities = async () => {
+            try{
+                const response = await getUniversities()
+                /* Creates a new array with the special structure that the SelectInput needs. */
+                const universities = response.map((university) => (
+                    { 
+                        label : university.name, 
+                        value : university.id, 
+                        custom: <Option source={university.profile_picture} label={university.name}/>
+                    }
+                ))
+                setUniversityList(universities)
+            }catch(error){
+                Alert.alert('¡Ha ocurrido un error!', error.message)
+            }
+        }
+        searchUniversities()
+    },[])
+
+    /* Handles form submit. */
     const navigation = useNavigation()
     const [ loading, setLoading ] = useState(false)
-    const onSubmit = async (form) => {
+    const onSubmit = async (form, { resetForm }) => {
         try{
             setLoading(true)
             const response = await signup(form)
-            if(response){
-                Alert.alert(
-                    response,
-                    "Ya puedes iniciar sesión."
-                )
-                navigation.navigate('/')
-            }
+            setLoading(false)
+            resetForm()
+            Alert.alert(response, 'Ya puedes iniciar sesión.')
+            navigation.navigate('/login')
         }catch(error){
-            Alert.alert(
-                "¡Ha ocurrido un error!",
-                error.message
-            )
-        }finally{
+            Alert.alert('¡Ha ocurrido un error!', error.message)
             setLoading(false)
         }
     }
@@ -44,7 +63,7 @@ const SignupForm = () => {
                 birth_date: '1997-04-17',
                 email : 'martinez-angel@uadec.edu.mx', 
                 registration_number: '16190775',
-                university_id: '612803c400e131d7b8163642', 
+                university_id: '', 
                 password: 'college-app'
             }}
             validate={values => {
@@ -105,13 +124,18 @@ const SignupForm = () => {
                         value={values.registration_number}
                         error={errors.registration_number}
                     />
-                    <Input
-                        label='Selecciona tu facultad'
-                        onChangeText={handleChange('university_id')}
-                        onBlur={handleBlur('university_id')}
-                        value={values.university_id}
-                        error={errors.university_id}
-                    />
+                    <Field name='university_id'>
+                        {({ field, form, meta }) => (
+                            <SelectInput
+                                label='Selecciona tu facultad'
+                                data={universityList}
+                                field={field} 
+                                form={form} 
+                                meta={meta}
+                                error={errors.university_id}
+                            />
+                        )}
+                    </Field>
                     <PasswordInput
                         label='Ingresa tu contraseña'
                         onChangeText={handleChange('password')}
@@ -123,6 +147,7 @@ const SignupForm = () => {
                         loading={loading} 
                         loadingMessage='Registrando usuario...' 
                         onPress={handleSubmit}
+                        style={styles.button}
                     >
                         Registrarse
                     </Button>
@@ -131,5 +156,12 @@ const SignupForm = () => {
         </Formik>
     )
 }
+
+const styles = StyleSheet.create({
+    button: {
+        marginTop: 30,
+        marginBottom: 20
+    }
+})
 
 export default SignupForm

@@ -24,8 +24,7 @@ const styles = (style) => StyleSheet.create({
         justifyContent: 'center'
     },
     image: {
-        width: style ? style.width-30 : 150,
-        height: style ? style.width-70 : 110,
+        width: style ? style.width-15 : 150,
         resizeMode: 'contain'
     }
 })

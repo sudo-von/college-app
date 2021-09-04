@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { StyleSheet, View } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, View, Alert } from 'react-native'
 /* Formik. */
 import { Formik } from 'formik'
 /* Custom components. */
 import Button from 'src/components/Button'
 import Input from 'src/components/Input'
 import PasswordInput from 'src/components/PasswordInput'
-import Alert from 'src/components/Alert'
 /* Contexts. */
 import { useAuth } from 'src/providers/auth.provider'
 /* Services. */
@@ -16,18 +15,16 @@ const LoginForm = () => {
 
     /* States. */
     const [ loading, setLoading ] = useState(false)
-    const [ error, setError ] = useState(null) 
     const { authDispatch } = useAuth()
 
     const onSubmit = async (data) => {
         try{
             setLoading(true)
-            setError(null)
             const user = await login({email: data.email, password: data.password})
+            setLoading(false)
             authDispatch({type: 'login', user})
         }catch(error){
-            setError(error.message)
-        }finally{
+            Alert.alert('',error.message)
             setLoading(false)
         }
     }
@@ -35,26 +32,39 @@ const LoginForm = () => {
     return (
         <Formik 
             initialValues={{ email: 'martinez-angel@uadec.edu.mx', password: 'college-app'}} 
+            validate={values => {
+                const { email, password } = values
+                const errors = {}
+                if(!email){
+                    errors.email = 'Correo requerido'
+                }
+                if(!password){
+                    errors.password = 'Contraseña requerida'
+                }
+                return errors
+            }}
             onSubmit={onSubmit}
         >
-            {({ handleChange, handleBlur, handleSubmit, values }) => (
+            {({ handleChange, handleBlur, handleSubmit, errors, values }) => (
                 <View style={styles.container}>
                     <Input
                         label='Ingresa tu correo'
                         onChangeText={handleChange('email')}
                         onBlur={handleBlur('email')}
                         value={values.email}
+                        error={errors.email}
                     />
                     <PasswordInput
                         label='Ingresa tu contraseña'
                         onChangeText={handleChange('password')}
                         onBlur={handleBlur('password')}
                         value={values.password}
+                        error={errors.password}
                     />
-                    { error && <Alert title={error} type='error'/>}
                     <Button 
                         loading={loading} 
                         loadingMessage='Iniciando sesión' 
+                        style={styles.button}
                         onPress={handleSubmit}
                     >
                         Iniciar sesión
@@ -67,8 +77,11 @@ const LoginForm = () => {
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        marginTop: 30
+        marginTop: 30,
+        marginBottom: 30
+    },
+    button: {
+        marginTop: 40,
     }
 })
 

@@ -10,7 +10,6 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import moment from 'moment'
 
 const Datepicker = ({ field, form, meta, ...rest }) => {
-  console.log(meta)
   /* Destructuring props. */
   const { name, value } = field
   const { setFieldValue } = form
