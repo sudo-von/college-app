@@ -7,7 +7,7 @@ const SelectInput = ({ label, data }) => {
   
   const [showDropDown, setShowDropDown] = useState(false)
   const [selectedOption, setSelectedOption] = useState('')
-
+  
   return (
     <View style={styles.containerStyle}>
       <DropDown
