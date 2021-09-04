@@ -4,14 +4,24 @@ import axios from 'src/helpers/axios-helper'
 import { MOOD } from 'src/constants/endpoints'
 
 export {
-    getMood
+    getMood,
+    sendMood
 }
 
-/* Handles basic auth. */
+/* Gets the current day user's mood. */
 const getMood = async (userID) => {
     try{
         const mood = await axios.get(`${MOOD}/users/${userID}`)
-        return mood
+        return mood.data
+    }catch(error){
+        throw new Error(error.response.data.message)
+    }
+}
+
+/* Sends user's mood for the current day. */
+const sendMood = async (mood) => {
+    try{
+        await axios.post(`${MOOD}`, mood)
     }catch(error){
         throw new Error(error.response.data.message)
     }
