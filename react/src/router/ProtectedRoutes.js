@@ -4,7 +4,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 /* Routes. */
 import Home from 'src/pages/Home'
 import Logout from 'src/pages/Logout'
-import Small from 'src/components/Small'
 /* React native paper. */
 import { useTheme } from '@react-navigation/native'
 
@@ -19,24 +18,28 @@ const ProtectedRoutes = () => {
                 backgroundColor: '#FFFFFF',
                 width: 250,
                 },
-                drawerActiveBackgroundColor: colors.transparency
+                drawerActiveBackgroundColor: colors.transparency,
+                headerStyle:{
+                    backgroundColor: colors.primary,
+                },
+                headerTintColor: 'white',
             }}
             initialRouteName='/'
         >
             <Drawer.Screen 
                 name="/" 
                 component={Home} 
-                options={{ title: 'Inicio' }}
+                options={{ 
+                    title: 'Inicio',
+                }}
             />
             <Drawer.Screen 
                 name="/logout" 
                 component={Logout} 
-                options={
-                    { 
+                options={{ 
                         title: 'Cerrar sesión',
                         header: () => null
-                    }
-                }
+                }}
             />
         </Drawer.Navigator>
     )
