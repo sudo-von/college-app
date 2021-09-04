@@ -7,6 +7,7 @@ const theme = {
     ...DefaultTheme.colors,
     background: '#FFFFFF',
     primary: '#4C9DAF',
+    transparency: '#CAE2E8',
     placeholder: '#7D8286'
    },
 }
