@@ -3,16 +3,17 @@ import { StyleSheet } from 'react-native'
 /* React native paper. */
 import { Caption } from 'react-native-paper'
 
-const Small = ({ children, ...rest }) => {
+const Small = ({ children, style, ...rest }) => {
     return (
-        <Caption style={styles.message} {...rest}>{children}</Caption>
+        <Caption style={styles(style).message} {...rest}>{children}</Caption>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (style) => StyleSheet.create({
     message: {
         color: '#666666',
-        fontSize: 12
+        fontSize: 12,
+        ...style
     }
 })
 
