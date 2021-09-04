@@ -1,20 +1,26 @@
 import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Alert } from 'react-native'
 /* React native paper. */
 import {Dialog, Portal } from 'react-native-paper'
 /* Custom components. */
 import Small from 'src/components/Small'
-import Center from 'src/components/Center'
 import Button from 'src/components/Button'
 import SliderInput from 'src/components/SliderInput'
-import { FAB } from 'react-native-paper';
+/* Services. */
+import { sendMood } from 'src/services/mood.service'
 
-const Mood = () => {
+const Mood = ({ initialMoodValue, minimumValue, maximumValue, minimumText, maximumText }) => {
 
-  const initialMoodValue = 2.5
   const [visible, setVisible] = useState(true)
-  const hideDialog = () => setVisible(false)
   const [mood, setMood] = useState(initialMoodValue)
+  const handleMood = async () => {
+    try{
+      await sendMood({mood})
+      setVisible(false)
+    }catch(error){
+      Alert.alert('',error.message)
+    }
+  }
 
   return (
       <View>
@@ -26,13 +32,14 @@ const Mood = () => {
               <Small style={styles.small}>Usa el slider de abajo para contárnoslo.</Small>
               <SliderInput
                 initialValue={initialMoodValue}
-                minimumValue={0}
-                maximumValue={5}
+                minimumValue={minimumValue}
+                maximumValue={maximumValue}
                 changeValue={setMood}
-                minimumText='Triste'
-                maximumText='Feliz'
+                minimumText={minimumText}
+                maximumText={maximumText}
+                style={styles.sliderInput}
               />
-              <Button onPress={hideDialog}>Guardar estado de ánimo</Button>
+              <Button onPress={() => handleMood()}>Guardar estado de ánimo</Button>
             </Dialog.Content>
           </Dialog>
         </Portal>
@@ -42,12 +49,16 @@ const Mood = () => {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 20,
+    fontSize: 24,
     textAlign: 'center',
     fontWeight: 'bold'
   },
   small: {
     textAlign: 'center',
+  },
+  sliderInput: {
+    marginTop: 25,
+    marginBottom: 25
   }
 })
 
