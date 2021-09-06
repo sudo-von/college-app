@@ -10,8 +10,6 @@ import Mood from './Components/Mood'
 import { Title } from 'react-native-paper'
 /* Contexts. */
 import { useAuth } from 'src/providers/auth.provider'
-/* Services. */
-import { getMood } from 'src/services/mood.service'
 
 const Home = () => {
 
@@ -20,30 +18,16 @@ const Home = () => {
     const { user } = authState
     const { user_name, user_id } = user
 
-    /* If user has not sent its mood today then the modal mood will be show. */
-    const [showMood, setShowMood] = useState(false)
-    useEffect(() => {
-        const getDailyMood = async () => {
-            try{
-                await getMood(user_id)
-            }catch(error){
-                setShowMood(true)
-            }
-        }
-        getDailyMood()
-    }, [])
-
     return (
         <Container style={styles.container}>
-            {showMood && 
-                <Mood 
-                    initialMoodValue={2.5}
-                    minimumValue={0}
-                    maximumValue={5}
-                    minimumText='Triste'
-                    maximumText='Feliz'
-                />
-            }
+            <Mood 
+                initialMoodValue={2.5}
+                minimumValue={0}
+                maximumValue={5}
+                minimumText='Triste'
+                maximumText='Feliz'
+                userID={user_id}
+            />
             <View style={styles.view}>
                 <Title style={styles.title}><Bold>¡Hola {user_name}!</Bold></Title>
                 <Small>Mantente al día con las últimas noticias visitando la página de tu escuela.</Small>

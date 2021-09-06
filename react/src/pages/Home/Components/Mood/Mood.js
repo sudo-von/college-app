@@ -1,49 +1,59 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Alert } from 'react-native'
 /* React native paper. */
-import {Dialog, Portal } from 'react-native-paper'
+import {Dialog, Portal, Provider } from 'react-native-paper'
 /* Custom components. */
 import Small from 'src/components/Small'
 import Button from 'src/components/Button'
 import SliderInput from 'src/components/SliderInput'
 /* Services. */
-import { sendMood } from 'src/services/mood.service'
+import { getMood, sendMood } from 'src/services/mood.service'
 
-const Mood = ({ initialMoodValue, minimumValue, maximumValue, minimumText, maximumText }) => {
+const Mood = ({ initialMoodValue, minimumValue, maximumValue, minimumText, maximumText, userID }) => {
 
-  const [visible, setVisible] = useState(true)
+  /* If user has not sent its mood today then the modal mood will be show. */
+  const [showMood, setShowMood] = useState(false)
+  useEffect(() => {
+      const getDailyMood = async () => {
+        try{
+          await getMood(userID)
+        }catch(error){
+          setShowMood(true)
+        }
+      }
+      getDailyMood()
+  }, [])
+  /* Sends user mood. */
   const [mood, setMood] = useState(initialMoodValue)
   const handleMood = async () => {
     try{
       await sendMood({mood})
-      setVisible(false)
+      setShowMood(false)
     }catch(error){
       Alert.alert('',error.message)
     }
   }
 
   return (
-      <View>
-        <Portal>
-          <Dialog visible={visible}>
-            <Dialog.Content>
-              <Dialog.Title style={styles.title}>¿Cómo te sientes el día de hoy?</Dialog.Title>
-              <Small style={styles.small}>Nos importas mucho y nos gustaría saber cómo te sientes el día de hoy.</Small>
-              <Small style={styles.small}>Usa el slider de abajo para contárnoslo.</Small>
-              <SliderInput
-                initialValue={initialMoodValue}
-                minimumValue={minimumValue}
-                maximumValue={maximumValue}
-                changeValue={setMood}
-                minimumText={minimumText}
-                maximumText={maximumText}
-                style={styles.sliderInput}
-              />
-              <Button onPress={() => handleMood()}>Guardar estado de ánimo</Button>
-            </Dialog.Content>
-          </Dialog>
-        </Portal>
-      </View>
+    <Portal>
+      <Dialog visible={showMood}>
+        <Dialog.Content>
+          <Dialog.Title style={styles.title}>¿Cómo te sientes el día de hoy?</Dialog.Title>
+          <Small style={styles.small}>Nos importas mucho y nos gustaría saber cómo te sientes el día de hoy.</Small>
+          <Small style={styles.small}>Usa el slider de abajo para contárnoslo.</Small>
+          <SliderInput
+            initialValue={initialMoodValue}
+            minimumValue={minimumValue}
+            maximumValue={maximumValue}
+            changeValue={setMood}
+            minimumText={minimumText}
+            maximumText={maximumText}
+            style={styles.sliderInput}
+          />
+          <Button onPress={() => handleMood()}>Guardar estado de ánimo</Button>
+        </Dialog.Content>
+      </Dialog>
+    </Portal>
   )
 }
 
