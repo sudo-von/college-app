@@ -2,29 +2,29 @@ import React from 'react'
 /* React navigation. */
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 /* Routes. */
-import Home from 'src/pages/Home'
-import Suggestions from 'src/pages/Suggestions'
+import Configuration from 'src/pages/Configuration'
+import AccountConfiguration from 'src/pages/AccountConfiguration'
 
 const Stack = createNativeStackNavigator()
 
 const routes = [
     {
-        title: 'Inicio',
-        name: '/',
-        component: Home,
+        title: 'Configuración',
+        name: '/configuration-home',
+        component: Configuration,
         options: {
             header: () => null
         }
     },
     {
-        title: 'Sugerencias',
-        name: '/suggestions',
-        component: Suggestions,
+        title: 'Configuración de la cuenta',
+        name: '/account-configuration',
+        component: AccountConfiguration,
         options: {}
     }
 ]
 
-const NestedHomeNavigator = () =>
+const NestedConfigurationNavigator = () =>
     <Stack.Navigator>
         { routes && routes.map(({ title, name, component, options }, index) =>
             <Stack.Screen 
@@ -33,10 +33,10 @@ const NestedHomeNavigator = () =>
                 component={component}
                 options={{
                     title,
-                    ...options   
+                    ...options
                 }}
             />
         )}
     </Stack.Navigator>
 
-export default NestedHomeNavigator
+export default NestedConfigurationNavigator

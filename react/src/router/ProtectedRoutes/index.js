@@ -5,21 +5,32 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import DrawerContent from './DrawerContent'
 /* Routes. */
 import Logout from 'src/pages/Logout'
+import Configuration from 'src/pages/Configuration'
 /* React native paper. */
 import { useTheme } from 'react-native-paper'
 /* React native icons. */
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 /* Nested routers. */
 import NestedHomeNavigator from './NestedHomeNavigator'
+import NestedConfigurationNavigator from './NestedConfigurationNavigator'
 
 const Drawer = createDrawerNavigator()
 
 const routes = [
     {
-        name: '/',
+        name: '/home',
         component: NestedHomeNavigator,
         title: 'Inicio',
         icon: 'home',
+        options: {
+            header: () => null
+        } 
+    },
+    {
+        name: '/configuration',
+        component: NestedConfigurationNavigator,
+        title: 'Configuración',
+        icon: 'cog',
         options: {
             header: () => null
         } 
