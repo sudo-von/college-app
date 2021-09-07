@@ -10,6 +10,10 @@ const authReducer = (state, action) => {
                 user: null
             }
         }
+        case 'update': {
+            let { user } = action
+            return {...state, user : {...state.user, "user_name": user.name}}
+        }
         default:
             return state
     }
