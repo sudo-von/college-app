@@ -1,15 +1,13 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 /* React navigation. */
-import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
+import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer'
 /* Custom components. */
 import Logo from 'src/components/Logo'
-import Small from 'src/components/Small'
 import Header from 'src/components/Header'
 /* React native paper. */
-import { Title } from 'react-native-paper'
 
-const CustomDrawer = (props) => {
+const DrawerContent = (props) => {
     const logo = require('../../../../assets/gopher.png')
     return (
         <DrawerContentScrollView {...props}>
@@ -44,4 +42,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default CustomDrawer
+export default DrawerContent

@@ -3,10 +3,11 @@ import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 /* Routes. */
 import Home from 'src/pages/Home'
+import Suggestions from 'src/pages/Suggestions'
 
 const Stack = createNativeStackNavigator()
 
-const ProtectedNestedNavigator = () =>
+const NestedHomeNavigator = () =>
     <Stack.Navigator>
         <Stack.Screen 
             component={Home}
@@ -14,9 +15,10 @@ const ProtectedNestedNavigator = () =>
             options={{header: () => null}}
         />
         <Stack.Screen 
-            component={Home} 
+            component={Suggestions}
+            options={{ title: 'Sugerencias'}}
             name="/suggestions"
         />
     </Stack.Navigator>
 
-export default ProtectedNestedNavigator
+export default NestedHomeNavigator

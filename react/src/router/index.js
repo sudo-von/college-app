@@ -1,7 +1,7 @@
 import React from 'react'
 /* Custom components. */
-import PublicStackNavigator from './Components/PublicStackNavigator'
-import ProtectedDrawerNavigator from './Components/ProtectedDrawerNavigator'
+import PublicRoutes from './PublicRoutes'
+import ProtectedRoutes from './ProtectedRoutes'
 /* React navigation. */
 import { NavigationContainer } from '@react-navigation/native'
 /* Refs. */
@@ -15,10 +15,10 @@ const Router = () => {
   const { authState } = useAuth()
   return (
     <NavigationContainer theme={theme} ref={navigationRef}>
-        { authState.isLoggedIn ?
-          <ProtectedDrawerNavigator/> :
-          <PublicStackNavigator/>
-        }
+      { authState.isLoggedIn ?
+        <ProtectedRoutes/> :
+        <PublicRoutes/>
+      }
     </NavigationContainer>
   )
 }
