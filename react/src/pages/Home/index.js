@@ -53,8 +53,8 @@ const Home = () => {
                 userID={user_id}
             />
             <View style={styles.view}>
-                <Title style={styles.title}><Bold>¡Hola {user_name}!</Bold></Title>
-                <Small>Mantente al día con las últimas noticias visitando la página de tu escuela.</Small>
+                <Title><Bold>¡Hola {user_name}!</Bold></Title>
+                <Small>Mantente al día con las últimas{'\n'}noticias visitando la página de tu escuela.</Small>
             </View>
             { routes && routes.map(({ url, title, icon, color, backgroundColor }, index) =>
                 <NavigationBadge
@@ -75,8 +75,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start'
     },
     view: {
-        marginTop: 20,
-        marginBottom: 20
+        marginVertical: 40,
     },
     title: {
         fontSize: 24
