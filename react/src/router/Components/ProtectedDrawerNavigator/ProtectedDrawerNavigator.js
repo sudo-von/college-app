@@ -9,6 +9,8 @@ import Logout from 'src/pages/Logout'
 import { useTheme } from 'react-native-paper'
 /* React native icons. */
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+/* Nested routers. */
+import ProtectedNestedNavigator from '../ProtectedNestedNavigator'
 
 const Drawer = createDrawerNavigator()
 
@@ -31,7 +33,7 @@ const ProtectedDrawerNavigator = () => {
         >
             <Drawer.Screen 
                 name="/" 
-                component={Home} 
+                component={ProtectedNestedNavigator} 
                 options={{ 
                     title: 'Inicio',
                     drawerIcon: ({focused, size}) => (
