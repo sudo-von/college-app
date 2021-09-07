@@ -17,27 +17,6 @@ const NavigationBadge = ({ url, title, icon, color, backgroundColor }) => {
     )
 }
 
-/*
-const styles = StyleSheet.create({
-    error : {
-        backgroundColor: '#f7d8d5',
-        color: '#611a15'
-    },
-    warning: {
-        backgroundColor: '#fff4e5',
-        color: '#663c00'
-    },
-    info: {
-        backgroundColor: '#e8f4fd',
-        color: '#0d5a43'
-    },
-    success: {
-        backgroundColor: '#edf7ed',
-        color: '#1e4620'
-    }
-})
-*/
-
 const styles = (backgroundColor) => StyleSheet.create({
     view: {
         marginTop: 10,
