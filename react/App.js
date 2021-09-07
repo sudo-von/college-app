@@ -1,9 +1,6 @@
 import React from 'react'
 /* React native paper. */
 import { Provider as PaperProvider } from 'react-native-paper'
-/* React navigation. */
-import { NavigationContainer } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
 /* Custom components. */
 import Router from './src/router'
 /* Contexts. */

@@ -5,7 +5,6 @@ import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navi
 /* Custom components. */
 import Logo from 'src/components/Logo'
 import Header from 'src/components/Header'
-/* React native paper. */
 
 const DrawerContent = (props) => {
     const logo = require('../../../../assets/gopher.png')
