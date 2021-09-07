@@ -11,6 +11,30 @@ import { Title } from 'react-native-paper'
 /* Contexts. */
 import { useAuth } from 'src/providers/auth.provider'
 
+const routes = [
+    {
+        url: '/panic-button',
+        title: 'Botón de pánico',
+        icon: 'alert-circle-outline',
+        color: '#611a15',
+        backgroundColor: '#f7d8d5'
+    },
+    {
+        url: '/advices',
+        title: 'Asesorías',
+        icon: 'book-open-variant',
+        color: '#4F89F8',
+        backgroundColor: '#e8f4fd'
+    },
+    {
+        url: '/suggestions',
+        title: 'Sugerencias',
+        icon: 'email-outline',
+        color: '#F8DD4F',
+        backgroundColor: '#FEFFB7'
+    }
+]
+
 const Home = () => {
 
     /* Destructuring user properties. */
@@ -32,27 +56,16 @@ const Home = () => {
                 <Title style={styles.title}><Bold>¡Hola {user_name}!</Bold></Title>
                 <Small>Mantente al día con las últimas noticias visitando la página de tu escuela.</Small>
             </View>
-            <NavigationBadge
-                url='/panicButton'
-                title='Botón de pánico'
-                icon='alert-circle-outline'
-                color='#611a15'
-                backgroundColor='#f7d8d5'
-            />
-            <NavigationBadge
-                url='/advices'
-                title='Asesorías'
-                icon='book-open-variant'
-                color='#4F89F8'
-                backgroundColor='#e8f4fd'
-            />
-            <NavigationBadge
-                url='/suggestions'
-                title='Sugerencias'
-                icon='email-outline'
-                color='#F8DD4F'
-                backgroundColor='#FEFFB7'
-            />
+            { routes && routes.map(({ url, title, icon, color, backgroundColor }, index) =>
+                <NavigationBadge
+                    key={`${url}-${title}-${index}`}
+                    url={url}
+                    title={title}
+                    icon={icon}
+                    color={color}
+                    backgroundColor={backgroundColor}
+                />
+            )}
         </Container>
     )
 }
