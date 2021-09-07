@@ -4,11 +4,13 @@ import base64 from 'react-native-base64'
 import axios from 'src/helpers/axios-helper'
 import { setToken, decodeToken } from 'src/helpers/auth-helper'
 /* Constants. */
-import { LOGIN, SIGNUP } from 'src/constants/endpoints'
+import { LOGIN, SIGNUP, USERS } from 'src/constants/endpoints'
 
 export {
     login,
-    signup
+    signup,
+    getUserByID,
+    updateUserByID
 }
 
 /* Handles basic auth. */
@@ -35,6 +37,27 @@ const signup = async (user) => {
     try{
         await axios.post(SIGNUP, user)
         return "¡Registro éxitoso!"
+    }catch(error){
+        if(error.response?.data.message){
+            throw new Error(error.response.data.message)
+        }
+        throw new Error("Ha ocurrido un error, intenta de nuevo más tarde")
+    }
+}
+
+const getUserByID = async (userID) => {
+    try{
+        const response = await axios.get(`${USERS}/${userID}`)
+        const user = await response.data
+        return user
+    }catch(error){
+        throw new Error("Ha ocurrido un error, intenta de nuevo más tarde")
+    }
+}
+
+const updateUserByID = async (userID, user) => {
+    try{
+        await axios.patch(`${USERS}/${userID}`, user)
     }catch(error){
         if(error.response?.data.message){
             throw new Error(error.response.data.message)
