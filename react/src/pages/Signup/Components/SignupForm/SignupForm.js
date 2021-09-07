@@ -123,6 +123,7 @@ const SignupForm = () => {
                         onBlur={handleBlur('registration_number')}
                         value={values.registration_number}
                         error={errors.registration_number}
+                        keyboardType='phone-pad'
                     />
                     <Field name='university_id'>
                         {({ field, form, meta }) => (
@@ -159,8 +160,7 @@ const SignupForm = () => {
 
 const styles = StyleSheet.create({
     button: {
-        marginTop: 30,
-        marginBottom: 20
+        marginVertical: 40
     }
 })
 

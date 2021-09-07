@@ -77,8 +77,7 @@ const LoginForm = () => {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 30,
-        marginBottom: 30
+        marginVertical: 30
     },
     button: {
         marginTop: 40,

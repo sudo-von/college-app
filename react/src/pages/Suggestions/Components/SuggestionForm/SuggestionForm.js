@@ -16,9 +16,9 @@ const SuggestionForm = () => {
             setLoading(true)
             await sendSuggestion({ suggestion })
             resetForm()
-            Alert.alert('', 'Tu sugerencia ha sido enviada con éxito')
+            Alert.alert('¡Increíble!', 'Tu sugerencia ha sido enviada con éxito.')
         }catch(error){
-            Alert.alert('', error.message)
+            Alert.alert('¡Ha ocurrido un error!', error.message)
         }finally{
             setLoading(false)
         }
