@@ -5,7 +5,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import DrawerContent from './DrawerContent'
 /* Routes. */
 import Logout from 'src/pages/Logout'
-import Configuration from 'src/pages/Configuration'
 /* React native paper. */
 import { useTheme } from 'react-native-paper'
 /* React native icons. */
