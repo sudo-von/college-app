@@ -1,3 +1,12 @@
+export const ADVICE_ERRORS = {
+    "ADVICE_NOT_FOUND": {
+        "esp" : "La asesoría que estás buscando no fue encontrada."
+    },
+    "INVALID_ADVICE_DATE": {
+        "esp": "La fecha de la asesoría no puede ser menor a la fecha actual."
+    }
+}
+
 export const CONTACT_ERRORS = {
     "CONTACT_NOT_FOUND": {
         "esp": "El contacto que estás buscando no fue encontrado."
