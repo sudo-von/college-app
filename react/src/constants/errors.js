@@ -1,3 +1,12 @@
+export const UNIVERSITY_ERRORS = {
+    "UNIVERSITY_NOT_FOUND": {
+        "esp": "La universidad que estás buscando no fue encontrada."
+    },
+    "INVALID_CLASSROOM": {
+        "esp": "El salón proporcionado no pertenece a tu universidad."
+    }
+}
+
 export const USER_ERRORS = {
     "UNAUTHORIZED_USER" : {
         "esp": "El usuario no cuenta con los permisos necesarios para realizar esta acción."
