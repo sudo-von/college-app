@@ -7,69 +7,77 @@ import (
 	"github.com/go-chi/render"
 )
 
+var (
+	ErrIntServError = "INTERNAL_SERVER_ERROR"
+)
+
 type ErrorResponse struct {
-	Err            error  `json:"-"`
-	HTTPStatusCode int    `json:"-"`
-	ErrorCode      int    `json:"error_code"`
-	Message        string `json:"message"`
+	Err     error  `json:"-"`
+	Status  int    `json:"status"`
+	Code    string `json:"code"`
+	Message string `json:"message"`
+}
+
+func (e *ErrorResponse) Error() string {
+	return e.Err.Error()
 }
 
 func (e *ErrorResponse) Render(w http.ResponseWriter, r *http.Request) error {
-	render.Status(r, e.HTTPStatusCode)
+	render.Status(r, e.Status)
 	return nil
 }
 
-func ErrorBadRequestResponse(err error) render.Renderer {
+func ErrorBadRequestResponse(err error, code string) render.Renderer {
 	return &ErrorResponse{
-		Err:            err,
-		HTTPStatusCode: 400,
-		ErrorCode:      400,
-		Message:        err.Error(),
+		Err:     err,
+		Status:  400,
+		Code:    code,
+		Message: err.Error(),
 	}
 }
 
-func ErrorUnauthorizedResponse(err error) render.Renderer {
+func ErrorUnauthorizedResponse(err error, code string) render.Renderer {
 	return &ErrorResponse{
-		Err:            err,
-		HTTPStatusCode: 401,
-		ErrorCode:      401,
-		Message:        err.Error(),
+		Err:     err,
+		Status:  401,
+		Code:    code,
+		Message: err.Error(),
 	}
 }
 
-func ErrorForbiddenResponse(err error) render.Renderer {
+func ErrorForbiddenResponse(err error, code string) render.Renderer {
 	return &ErrorResponse{
-		Err:            err,
-		HTTPStatusCode: 403,
-		ErrorCode:      403,
-		Message:        err.Error(),
+		Err:     err,
+		Status:  403,
+		Code:    code,
+		Message: err.Error(),
 	}
 }
 
-func ErrorNotFoundResponse(err error) render.Renderer {
+func ErrorNotFoundResponse(err error, code string) render.Renderer {
 	return &ErrorResponse{
-		Err:            err,
-		HTTPStatusCode: 404,
-		ErrorCode:      404,
-		Message:        err.Error(),
+		Err:     err,
+		Status:  404,
+		Code:    code,
+		Message: err.Error(),
 	}
 }
 
-func ErrorConflict(err error) render.Renderer {
+func ErrorConflict(err error, code string) render.Renderer {
 	return &ErrorResponse{
-		Err:            err,
-		HTTPStatusCode: 409,
-		ErrorCode:      409,
-		Message:        err.Error(),
+		Err:     err,
+		Status:  409,
+		Code:    code,
+		Message: err.Error(),
 	}
 }
 
-func ErrorInternalServerResponse(err error) render.Renderer {
+func ErrorInternalServerResponse(err error, code string) render.Renderer {
 	return &ErrorResponse{
-		Err:            err,
-		HTTPStatusCode: 500,
-		ErrorCode:      500,
-		Message:        err.Error(),
+		Err:     err,
+		Status:  500,
+		Code:    code,
+		Message: err.Error(),
 	}
 }
 
