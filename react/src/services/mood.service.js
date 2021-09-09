@@ -1,12 +1,8 @@
 /* Helpers. */
-import axios from 'src/helpers/axios-helper'
-import { authorizationRequestInterceptor, authorizationerrorResponseInterceptor } from 'src/helpers/interceptor-helper'
+import { protectedAxios } from 'src/helpers/axios-helper'
 /* Constants. */
 import { MOOD } from 'src/constants/endpoints'
-
-/* Add interceptors to the axios instance. */
-axios.interceptors.request.use(config => authorizationRequestInterceptor(config), error => Promise.reject(error))
-axios.interceptors.response.use(response => response, error => authorizationerrorResponseInterceptor(error))
+import { USER_MOOD_ERRORS } from 'src/constants/errors'
 
 export {
     getMood,
@@ -16,18 +12,18 @@ export {
 /* Gets the current day user's mood. */
 const getMood = async (userID) => {
     try{
-        const mood = await axios.get(`${MOOD}/users/${userID}`)
+        const mood = await protectedAxios.get(`${MOOD}/users/${userID}`)
         return mood.data
     }catch(error){
-        throw new Error(error.response.data.message)
+        throw new Error(USER_MOOD_ERRORS[error.response.data.code]['esp'])
     }
 }
 
 /* Sends user's mood for the current day. */
 const sendMood = async (mood) => {
     try{
-        await axios.post(`${MOOD}`, mood)
+        await protectedAxios.post(`${MOOD}`, mood)
     }catch(error){
-        throw new Error(error.response.data.message)
+        throw new Error(USER_MOOD_ERRORS[error.response.data.code]['esp'])
     }
 }

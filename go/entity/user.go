@@ -47,7 +47,7 @@ type UpdateUserPayload struct {
 
 func (up *UserPayload) ValidateRegistrationNumber() error {
 	validRegistrationNumber := false
-	if len(strings.Replace(up.RegistrationNumber, " ", "", -1)) != 8 {
+	if len(strings.Replace(up.RegistrationNumber, " ", "", -1)) == 8 {
 		validRegistrationNumber = true
 	}
 	if !validRegistrationNumber {
@@ -58,7 +58,7 @@ func (up *UserPayload) ValidateRegistrationNumber() error {
 
 func (uup *UpdateUserPayload) ValidateRegistrationNumber() error {
 	validRegistrationNumber := false
-	if len(strings.Replace(uup.RegistrationNumber, " ", "", -1)) != 8 {
+	if len(strings.Replace(uup.RegistrationNumber, " ", "", -1)) == 8 {
 		validRegistrationNumber = true
 	}
 	if !validRegistrationNumber {

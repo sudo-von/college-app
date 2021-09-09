@@ -1,7 +1,8 @@
 /* Helpers. */
-import axios from 'src/helpers/axios-helper'
+import { publicAxios } from 'src/helpers/axios-helper'
 /* Constants. */
 import { UNIVERSITY } from 'src/constants/endpoints'
+import { UNIVERSITY_ERRORS } from 'src/constants/errors'
 
 export {
     getUniversities
@@ -9,9 +10,9 @@ export {
 
 const getUniversities = async () => {
     try{
-        const universities = await axios.get(`${UNIVERSITY}`)
+        const universities = await publicAxios.get(`${UNIVERSITY}`)
         return universities.data.results
     }catch(error){
-        throw new Error(error.response.data.message)
+        throw new Error(UNIVERSITY_ERRORS[error.response.data.code]['esp'])
     }
 }

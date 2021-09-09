@@ -1,12 +1,8 @@
 /* Helpers. */
-import axios from 'src/helpers/axios-helper'
-import { authorizationRequestInterceptor, authorizationerrorResponseInterceptor } from 'src/helpers/interceptor-helper'
+import { protectedAxios } from 'src/helpers/axios-helper'
 /* Constants. */
 import { CONTACT, USERS } from 'src/constants/endpoints'
-
-/* Add interceptors to the axios instance. */
-axios.interceptors.request.use(config => authorizationRequestInterceptor(config), error => Promise.reject(error))
-axios.interceptors.response.use(response => response, error => authorizationerrorResponseInterceptor(error))
+import { CONTACT_ERRORS } from 'src/constants/errors'
 
 export {
     getContactByUserID,
@@ -15,36 +11,35 @@ export {
 
 const getContactByUserID = async (userID) => {
     try{
-        const response = await axios.get(`${CONTACT}${USERS}/${userID}`)
+        const response = await protectedAxios.get(`${CONTACT}${USERS}/${userID}`)
         const user = await response.data
         console.log(user)
         return user
     }catch(error){
-        console.log(error)
-        throw new Error("Ha ocurrido un error, intenta de nuevo más tarde")
+        throw new Error(CONTACT_ERRORS[error.response.data.code]['esp'])
     }
 }
 
 const sendContactByUserID = async (userID, user) => {
     try{
-        await axios.post(`${CONTACT}${USERS}/${userID}`, user)
+        await protectedAxios.post(`${CONTACT}${USERS}/${userID}`, user)
     }catch(error){
         console.log(error)
         if(error.response?.data.message){
             throw new Error(error.response.data.message)
         }
-        throw new Error("Ha ocurrido un error, intenta de nuevo más tarde")
+        throw new Error(CONTACT_ERRORS[error.response.data.code]['esp'])
     }
 }
 
 const updateContactByUserID = async (userID, user) => {
     try{
-        await axios.patch(`${CONTACT}${USERS}/${userID}`, user)
+        await protectedAxios.patch(`${CONTACT}${USERS}/${userID}`, user)
     }catch(error){
         console.log(error)
         if(error.response?.data.message){
             throw new Error(error.response.data.message)
         }
-        throw new Error("Ha ocurrido un error, intenta de nuevo más tarde")
+        throw new Error(CONTACT_ERRORS[error.response.data.code]['esp'])
     }
 }

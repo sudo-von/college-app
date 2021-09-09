@@ -45,9 +45,9 @@ const Home = () => {
     return (
         <Container style={styles.container}>
             <Mood 
-                initialMoodValue={2.5}
+                initialMoodValue={5}
                 minimumValue={0}
-                maximumValue={5}
+                maximumValue={10}
                 minimumText='Triste'
                 maximumText='Feliz'
                 userID={user_id}

@@ -57,10 +57,10 @@ export const USER_ERRORS = {
         "esp": "El usuario que estás buscando no fue encontrado."
     },
     "USER_EMAIL_ALREADY_REGISTERED" : {
-        "esp": "El correo que deseas utilizar ya se encuentra en uso."
+        "esp": "El correo que deseas utilizar no está disponible."
     },
     "USER_REGISTRATION_NUMBER_ALREADY_REGISTERED" : {
-        "esp": "La matrícula que deseas utilizar ya se encuentra en uso."
+        "esp": "La matrícula que deseas utilizar no está disponible."
     }
 }
 
