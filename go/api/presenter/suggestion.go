@@ -6,10 +6,6 @@ import (
 	"strings"
 )
 
-var (
-	ErrSuggestionNotFound = "SUGGESTION_NOT_FOUND"
-)
-
 type SuggestionPayload struct {
 	Suggestion string `json:"suggestion"`
 }
