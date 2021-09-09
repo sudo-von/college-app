@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 
 	"freelancer/college-app/go/api/middleware"
@@ -40,7 +39,7 @@ func (c *UniversityController) List(w http.ResponseWriter, r *http.Request) {
 
 	list, total, err := c.UniversityService.GetTinyUniversities()
 	if err != nil {
-		CheckError(fmt.Errorf("UniversityController > List > GetTinyUniversities: %w", err), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
@@ -63,7 +62,7 @@ func (c *UniversityController) ShowUniversity(w http.ResponseWriter, r *http.Req
 	universityID := chi.URLParam(r, "id")
 	university, err := c.UniversityService.GetUniversityByID(universityID)
 	if err != nil {
-		CheckError(fmt.Errorf("UniversityController > ShowUniversity > GetUniversityByID: %w", err), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
