@@ -5,6 +5,12 @@ import (
 	"net/http"
 )
 
+var (
+	ErrUserMoodNotFound          = "USER_MOOD_NOT_FOUND"
+	ErrUserMoodAlreadyRegistered = "USER_MOOD_ALREADY_REGISTERED"
+	ErrInvMood                   = "INVALID_MOOD_VALUE"
+)
+
 type UserMoodResponse struct {
 	ID           string `json:"id"`
 	UserID       string `json:"user_id"`

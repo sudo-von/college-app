@@ -2,7 +2,6 @@ package handler
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -42,7 +41,7 @@ func (c *UserMoodController) Show(w http.ResponseWriter, r *http.Request) {
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
-		CheckError(entity.NewErrorInternalServer(fmt.Errorf("UserMoodController > Show: %w", err)), w, r)
+		CheckError(err, w, r)
 		return
 	}
 	requestedUserID := chi.URLParam(r, "id")
@@ -53,7 +52,7 @@ func (c *UserMoodController) Show(w http.ResponseWriter, r *http.Request) {
 
 	userMood, err := c.UserMoodService.GetUserMoodByUserID(userID, requestedUserID, userMoodFilters)
 	if err != nil {
-		CheckError(fmt.Errorf("UserMoodController > Show > GetUserMoodByUserID: %w", err), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
@@ -68,14 +67,20 @@ func (c *UserMoodController) Create(w http.ResponseWriter, r *http.Request) {
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
-		CheckError(entity.NewErrorInternalServer(fmt.Errorf("UserMoodController > Create: %w", err)), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
 	var data presenter.UserMoodPayload
 	if err := render.Bind(r, &data); err != nil {
-		CheckError(entity.NewErrorBadRequest(fmt.Errorf("UserMoodController > Create: %w", err)), w, r)
+		CheckError(err, w, r)
 		return
+	}
+
+	// Checks if the user mood has already been registered today.
+	currentDate := time.Now().In(time.Local)
+	userMoodFilters := entity.UserMoodFilters{
+		CreationDate: &currentDate,
 	}
 
 	newUserMood := entity.UserMoodPayload{
@@ -84,9 +89,9 @@ func (c *UserMoodController) Create(w http.ResponseWriter, r *http.Request) {
 		CreationDate: time.Now().In(time.Local),
 	}
 
-	err := c.UserMoodService.CreateUserMood(newUserMood)
+	err := c.UserMoodService.CreateUserMood(newUserMood, userMoodFilters)
 	if err != nil {
-		CheckError(fmt.Errorf("UserMoodController > Create > CreateUserMood: %w", err), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
