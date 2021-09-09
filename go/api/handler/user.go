@@ -49,14 +49,14 @@ func (c *UserController) GetTinyUser(w http.ResponseWriter, r *http.Request) {
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
-		CheckError(entity.NewErrorInternalServer(fmt.Errorf("UserController > GetTinyUser: %w", err)), w, r)
+		CheckError(err, w, r)
 		return
 	}
 	requestedUserID := chi.URLParam(r, "id")
 
 	user, err := c.UserService.GetTinyUserByID(userID, requestedUserID)
 	if err != nil {
-		CheckError(fmt.Errorf("UserController > GetTinyUser > GetTinyUserByID: %w", err), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
@@ -70,13 +70,13 @@ func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
 
 	var data presenter.UserPayload
 	if err := render.Bind(r, &data); err != nil {
-		CheckError(entity.NewErrorBadRequest(fmt.Errorf("UserController > Create: %w", err)), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
 	birthDate, err := time.ParseInLocation("2006-01-02", data.BirthDate, time.Local)
 	if err != nil {
-		CheckError(entity.NewErrorBadRequest(fmt.Errorf("UserController > Create: %w", err)), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
@@ -93,7 +93,7 @@ func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
 
 	err = c.UserService.CreateUser(newUser)
 	if err != nil {
-		CheckError(fmt.Errorf("UserController > Create > CreateUser: %w", err), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
@@ -107,13 +107,13 @@ func (c *UserController) Login(w http.ResponseWriter, r *http.Request) {
 	user, ok := r.Context().Value(middleware.ContextKeyUser).(*entity.User)
 	if !ok {
 		err := errors.New("user not in context")
-		CheckError(entity.NewErrorInternalServer(fmt.Errorf("UserController > Create: %w", err)), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
 	signedToken, err := c.TokenService.CreateToken(user.ID, user.Name, 15)
 	if err != nil {
-		CheckError(fmt.Errorf("UserController > Login > CreateToken: %w", err), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
@@ -128,20 +128,20 @@ func (c *UserController) UpdateTinyUser(w http.ResponseWriter, r *http.Request) 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
-		CheckError(entity.NewErrorInternalServer(fmt.Errorf("UserController > Create: %w", err)), w, r)
+		CheckError(err, w, r)
 		return
 	}
 	requestedUserID := chi.URLParam(r, "id")
 
 	var data presenter.UpdateUserPayload
 	if err := render.Bind(r, &data); err != nil {
-		CheckError(entity.NewErrorBadRequest(fmt.Errorf("UserController > UpdateTinyUser: %w", err)), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
 	birthDate, err := time.ParseInLocation("2006-01-02", data.BirthDate, time.Local)
 	if err != nil {
-		CheckError(entity.NewErrorBadRequest(fmt.Errorf("UserController > UpdateTinyUser: %w", err)), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
@@ -154,7 +154,7 @@ func (c *UserController) UpdateTinyUser(w http.ResponseWriter, r *http.Request) 
 
 	err = c.UserService.UpdateTinyUser(userID, requestedUserID, newUser)
 	if err != nil {
-		CheckError(fmt.Errorf("UserController > UpdateTinyUser > UpdateTinyUser: %w", err), w, r)
+		CheckError(err, w, r)
 		return
 	}
 

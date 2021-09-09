@@ -7,6 +7,20 @@ import (
 	"strings"
 )
 
+var (
+	ErrUnauthorizedUser                        = "UNAUTHORIZED_USER"
+	ErrAuthHeaderNotProvided                   = "AUTH_HEADER_NOT_PROVIDED"
+	ErrInvAuthHeaderFormat                     = "INVALID_AUTH_HEADER_FORMAT"
+	ErrInvUnsHeaderFormat                      = "INVALID_UNSUPPORTED_HEADER_FORMAT"
+	ErrInvCredentials                          = "INVALID_CREDENTIALS"
+	ErrInvToken                                = "INVALID_TOKEN"
+	ErrInvUserEmail                            = "INVALID_USER_EMAIL"
+	ErrInvUserRegistrationNumber               = "INVALID_USER_REGISTRATION_NUMBER"
+	ErrUserNotFound                            = "USER_NOT_FOUND"
+	ErrUserEmailAlreadyRegistered              = "USER_EMAIL_ALREADY_REGISTERED"
+	ErrUserRegistrationNumberAlreadyRegistered = "USER_REGISTRATION_NUMBER_ALREADY_REGISTERED"
+)
+
 type TinyUserResponse struct {
 	ID                 string `json:"id"`
 	Name               string `json:"name"`

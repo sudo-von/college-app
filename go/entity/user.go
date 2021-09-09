@@ -1,6 +1,10 @@
 package entity
 
-import "time"
+import (
+	"errors"
+	"strings"
+	"time"
+)
 
 type TinyUser struct {
 	ID                 string
@@ -39,4 +43,26 @@ type UpdateUserPayload struct {
 	BirthDate          time.Time
 	Email              string
 	RegistrationNumber string
+}
+
+func (up *UserPayload) ValidateRegistrationNumber() error {
+	validRegistrationNumber := false
+	if len(strings.Replace(up.RegistrationNumber, " ", "", -1)) != 8 {
+		validRegistrationNumber = true
+	}
+	if !validRegistrationNumber {
+		return errors.New("invalid registration_number")
+	}
+	return nil
+}
+
+func (uup *UpdateUserPayload) ValidateRegistrationNumber() error {
+	validRegistrationNumber := false
+	if len(strings.Replace(uup.RegistrationNumber, " ", "", -1)) != 8 {
+		validRegistrationNumber = true
+	}
+	if !validRegistrationNumber {
+		return errors.New("invalid registration_number")
+	}
+	return nil
 }
