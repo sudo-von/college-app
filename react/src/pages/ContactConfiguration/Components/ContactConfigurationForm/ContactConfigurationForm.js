@@ -6,7 +6,7 @@ import { Formik } from 'formik'
 import Input from 'src/components/Input'
 import Button from 'src/components/Button'
 /* Services. */
-import { getContactByUserID, sendContactByUserID, updateContactByUserID } from 'src/services/contact.service'
+import { getContactByUserID, sendContactByUserID, updateContactByID } from 'src/services/contact.service'
 /* Contexts. */
 import { useAuth } from 'src/providers/auth.provider'
 
@@ -25,16 +25,17 @@ const ContactConfigurationForm = () => {
                 const response = await getContactByUserID(userID)
                 setContact(response)
             }catch(error){
-                Alert.alert('¡Ha ocurrido un error!', error.message)
+                Alert.alert('¡Parece que aún no has registrado un contacto!', error.message)
             }
         }
         searchContact(user_id)
     },[])
 
     const updateContact = async (data) => {
+        console.log(contact.id)
         try{
             setLoading(true)
-            const response = await updateContactByUserID(user_id, data)
+            const response = await updateContactByID(contact.id, data)
             Alert.alert(response, 'El usuario ha sido actualizado con éxito.')
         }catch(error){
             Alert.alert('¡Ha ocurrido un error!', error.message)
@@ -76,7 +77,7 @@ const ContactConfigurationForm = () => {
                 }
                 return errors
             }}
-            onSubmit={contact ? updateContact : sendContact }
+            onSubmit={!Object.values(contact).some(v => v) ? sendContact : updateContact }
             enableReinitialize
         >
             {({ handleChange, handleBlur, handleSubmit, errors, values }) => (

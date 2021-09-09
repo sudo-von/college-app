@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, View, Alert } from 'react-native'
+import { StyleSheet, Alert } from 'react-native'
 /* React native paper. */
-import {Dialog, Portal, Provider } from 'react-native-paper'
+import {Dialog, Portal } from 'react-native-paper'
 /* Custom components. */
 import Small from 'src/components/Small'
 import Button from 'src/components/Button'
+import Fab from 'src/components/Fab'
 import SliderInput from 'src/components/SliderInput'
 /* Services. */
 import { getMood, sendMood } from 'src/services/mood.service'
@@ -38,6 +39,11 @@ const Mood = ({ initialMoodValue, minimumValue, maximumValue, minimumText, maxim
     <Portal>
       <Dialog visible={showMood}>
         <Dialog.Content>
+          <Fab
+            small
+            icon='close-thick'
+            onPress={() => setShowMood(false)}
+          />
           <Dialog.Title style={styles.title}>¿Cómo te sientes el día de hoy?</Dialog.Title>
           <Small style={styles.small}>Nos importas mucho y nos gustaría saber cómo te sientes el día de hoy.</Small>
           <Small style={styles.small}>Usa el slider de abajo para contárnoslo.</Small>
@@ -58,7 +64,14 @@ const Mood = ({ initialMoodValue, minimumValue, maximumValue, minimumText, maxim
 }
 
 const styles = StyleSheet.create({
+  fab: {
+    position: 'absolute',
+    margin: 15,
+    right: 0,
+    top: 0
+  },
   title: {
+    marginTop: 50,
     fontSize: 24,
     textAlign: 'center',
     fontWeight: 'bold'
