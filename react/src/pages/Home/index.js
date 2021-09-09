@@ -56,7 +56,7 @@ const Home = () => {
                 <Title><Bold>¡Hola {user_name}!</Bold></Title>
                 <Small>Mantente al día con las últimas{'\n'}noticias visitando la página de tu escuela.</Small>
             </View>
-            { routes && routes.map(({ url, title, icon, color, backgroundColor }, index) =>
+            { routes && routes.map(({ url, title, icon, color, backgroundColor, ...rest }, index) =>
                 <NavigationBadge
                     key={`${url}-${title}-${index}`}
                     url={url}
@@ -64,6 +64,7 @@ const Home = () => {
                     icon={icon}
                     color={color}
                     backgroundColor={backgroundColor}
+                    {...rest}
                 />
             )}
         </Container>
