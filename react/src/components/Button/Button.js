@@ -1,8 +1,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 /* React native paper. */
-import { Button } from 'react-native-paper'
-import { useTheme } from '@react-navigation/native'
+import { Button, useTheme } from 'react-native-paper'
 
 const CustomButton = ({ loading, loadingMessage, children, ...rest}) => {
     const { colors } = useTheme()
