@@ -1,13 +1,15 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Image } from 'react-native'
 /* React navigation. */
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer'
 /* Custom components. */
-import Logo from 'src/components/Logo'
 import Header from 'src/components/Header'
+/* Contexts. */
+import { useAuth } from 'src/providers/auth.provider'
 
 const DrawerContent = (props) => {
-    const logo = require('../../../../assets/gopher.png')
+    const { authState } = useAuth()
+    const { user : { university_name, university_profile_picture } } = authState
     return (
         <DrawerContentScrollView {...props}>
             <DrawerItem
@@ -15,10 +17,10 @@ const DrawerContent = (props) => {
                     (
                         <View>
                             <View style={styles.view}>
-                                <Logo source={logo}/>
+                                <Image style={styles.image} source={{ uri: university_profile_picture }}/>
                             </View>
                             <Header
-                                title='Facultad de electrones'
+                                title={university_name}
                                 subtitle='Universidad Autónoma de Gojs'
                             />
                         </View>
@@ -38,6 +40,11 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 16,
         marginTop: 10
+    },
+    image: {
+        width: 180,
+        height: 180,
+        resizeMode: 'contain'
     }
 })
 
