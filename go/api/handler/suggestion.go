@@ -2,7 +2,6 @@ package handler
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -41,13 +40,13 @@ func (c *SuggestionController) Create(w http.ResponseWriter, r *http.Request) {
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
-		CheckError(entity.NewErrorInternalServer(fmt.Errorf("SuggestionController > Create: %w", err)), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
 	var data presenter.SuggestionPayload
 	if err := render.Bind(r, &data); err != nil {
-		CheckError(entity.NewErrorBadRequest(fmt.Errorf("SuggestionController > Create: %w", err)), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
@@ -59,7 +58,7 @@ func (c *SuggestionController) Create(w http.ResponseWriter, r *http.Request) {
 
 	err := c.SuggestionService.CreateSuggestion(newSuggestion)
 	if err != nil {
-		CheckError(fmt.Errorf("SuggestionController > Create > CreateSuggestion: %w", err), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
