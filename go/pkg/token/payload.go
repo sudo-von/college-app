@@ -14,17 +14,12 @@ var (
 )
 
 type Payload struct {
-	ID         uuid.UUID         `json:"id"`
-	User       UserPayload       `json:"user"`
-	University UniversityPayload `json:"university"`
-	UserName   string            `json:"user_name"`
-	IssuedAt   time.Time         `json:"issued_at"`
-	ExpiredAt  time.Time         `json:"expired_at"`
-}
-
-type UserPayload struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID                       uuid.UUID `json:"id"`
+	UserID                   string    `json:"user_id"`
+	UserName                 string    `json:"user_name"`
+	UniversityProfilePicture string    `json:"university_profile_picture"`
+	IssuedAt                 time.Time `json:"issued_at"`
+	ExpiredAt                time.Time `json:"expired_at"`
 }
 
 type UniversityPayload struct {
@@ -38,21 +33,13 @@ func NewPayload(user *entity.User, duration time.Duration) (*Payload, error) {
 	if err != nil {
 		return nil, err
 	}
-	userPayload := UserPayload{
-		ID:   user.ID,
-		Name: user.Name,
-	}
-	universityPayload := UniversityPayload{
-		ID:             user.University.ID,
-		Name:           user.University.Name,
-		ProfilePicture: user.University.ProfilePicture,
-	}
 	payload := &Payload{
-		ID:         id,
-		User:       userPayload,
-		University: universityPayload,
-		IssuedAt:   time.Now(),
-		ExpiredAt:  time.Now().Add(time.Minute * duration),
+		ID:                       id,
+		UserID:                   user.ID,
+		UserName:                 user.Name,
+		UniversityProfilePicture: user.University.ProfilePicture,
+		IssuedAt:                 time.Now(),
+		ExpiredAt:                time.Now().Add(time.Minute * duration),
 	}
 	return payload, nil
 }
