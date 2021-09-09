@@ -12,10 +12,10 @@ var (
 )
 
 type UserMoodResponse struct {
-	ID           string `json:"id"`
-	UserID       string `json:"user_id"`
-	Mood         int    `json:"mood"`
-	CreationDate string `json:"creation_date"`
+	ID           string  `json:"id"`
+	UserID       string  `json:"user_id"`
+	Mood         float64 `json:"mood"`
+	CreationDate string  `json:"creation_date"`
 }
 
 func (ur *UserMoodResponse) Render(w http.ResponseWriter, r *http.Request) error {
@@ -32,7 +32,7 @@ func ToUserMoodPresenter(um entity.UserMood) UserMoodResponse {
 }
 
 type UserMoodPayload struct {
-	Mood int `json:"mood"`
+	Mood float64 `json:"mood"`
 }
 
 func (ump *UserMoodPayload) validate() (err error) {

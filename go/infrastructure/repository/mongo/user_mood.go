@@ -13,14 +13,14 @@ import (
 type UserMoodModel struct {
 	ID           bson.ObjectId `bson:"_id"`
 	UserID       bson.ObjectId `bson:"user_id"`
-	Mood         int           `bson:"mood"`
+	Mood         float64       `bson:"mood"`
 	CreationDate time.Time     `bson:"creation_date"`
 }
 
 type UserMoodPayload struct {
 	ID           bson.ObjectId `bson:"_id"`
 	UserID       bson.ObjectId `bson:"user_id"`
-	Mood         int           `bson:"mood"`
+	Mood         float64       `bson:"mood"`
 	CreationDate time.Time     `bson:"creation_date"`
 }
 
