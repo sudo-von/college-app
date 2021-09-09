@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Linking} from 'react-native'
+import React, { useEffect } from 'react'
+import { Linking, Alert } from 'react-native'
 /* Contexts. */
 import { useAuth } from 'src/providers/auth.provider'
 /* React native paper. */
@@ -35,7 +35,8 @@ const PanicButton = () => {
                     Alert.alert('¡Ha ocurrido un error', 'Algo ha salido mal al abrir whatsapp...')
                 }
             }catch(error){
-                Alert.alert('¡Parece que aún no has registrado un contacto!', error.message)
+                Alert.alert('¡Aún no has registrado un contacto!', error.message)
+                navigation.navigate('/')
             }
         }
         searchContact(user_id)
