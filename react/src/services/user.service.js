@@ -2,9 +2,15 @@
 import base64 from 'react-native-base64'
 /* Helpers. */
 import axios from 'src/helpers/axios-helper'
+import { authorizationRequestInterceptor, authorizationerrorResponseInterceptor } from 'src/helpers/interceptor-helper'
 import { setToken, decodeToken } from 'src/helpers/auth-helper'
 /* Constants. */
 import { LOGIN, SIGNUP, USERS } from 'src/constants/endpoints'
+
+/* Add interceptors to the axios instance. */
+axios.interceptors.request.use(config => authorizationRequestInterceptor(config), error => Promise.reject(error))
+axios.interceptors.response.use(response => response, error => authorizationerrorResponseInterceptor(error))
+
 
 export {
     login,

@@ -1,7 +1,12 @@
 /* Helpers. */
 import axios from 'src/helpers/axios-helper'
+import { authorizationRequestInterceptor, authorizationerrorResponseInterceptor } from 'src/helpers/interceptor-helper'
 /* Constants. */
 import { CONTACT, USERS } from 'src/constants/endpoints'
+
+/* Add interceptors to the axios instance. */
+axios.interceptors.request.use(config => authorizationRequestInterceptor(config), error => Promise.reject(error))
+axios.interceptors.response.use(response => response, error => authorizationerrorResponseInterceptor(error))
 
 export {
     getContactByUserID,
