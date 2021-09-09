@@ -19,7 +19,7 @@ const routes = [
         backgroundColor: '#e6f3ff'
     },
     {
-        url: '/panic-button-configuration',
+        url: '/contact-configuration',
         title: 'Configuración de contacto',
         icon: 'whatsapp',
         color: '#49E286',

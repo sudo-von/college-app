@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 /* Routes. */
 import Configuration from 'src/pages/Configuration'
 import AccountConfiguration from 'src/pages/AccountConfiguration'
+import ContactConfiguration from 'src/pages/ContactConfiguration'
 /* React native paper. */
 import { useTheme } from 'react-native-paper'
 
@@ -22,6 +23,12 @@ const routes = [
         title: 'Configuración de la cuenta',
         name: '/account-configuration',
         component: AccountConfiguration,
+        options: {}
+    },
+    {
+        title: 'Configuración de contacto',
+        name: '/contact-configuration',
+        component: ContactConfiguration,
         options: {}
     }
 ]
