@@ -34,15 +34,17 @@ func BasicAuth(uses *user.Service) func(http.Handler) http.Handler {
 			if ok {
 				user, err := uses.AuthenticateUser(email, password)
 				if err != nil {
-					http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+					err := errors.New("invalid credentials")
+					render.Render(w, r, presenter.ErrorUnauthorizedResponse(err, presenter.ErrInvCredentials))
 					return
 				}
 				ctx := context.WithValue(r.Context(), ContextKeyUser, user)
 				next.ServeHTTP(w, r.WithContext(ctx))
 				return
 			}
-			w.Header().Set("WWW-Authenticate", `Basic realm="restricted", charset="UTF-8"`)
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			err := errors.New("unauthorized user")
+			render.Render(w, r, presenter.ErrorUnauthorizedResponse(err, presenter.ErrUnauthorizedUser))
+			return
 		})
 	}
 }
@@ -54,28 +56,28 @@ func IsAuthorized(uses token.Service) func(http.Handler) http.Handler {
 			authorizationHeader := r.Header.Get("Authorization")
 			if len(authorizationHeader) == 0 {
 				err := errors.New("authorization header is not provided")
-				render.Render(w, r, presenter.ErrorUnauthorizedResponse(err))
+				render.Render(w, r, presenter.ErrorUnauthorizedResponse(err, presenter.ErrAuthHeaderNotProvided))
 				return
 			}
 
 			fields := strings.Fields(authorizationHeader)
 			if len(fields) != 2 {
 				err := errors.New("invalid authorization header format")
-				render.Render(w, r, presenter.ErrorUnauthorizedResponse(err))
+				render.Render(w, r, presenter.ErrorUnauthorizedResponse(err, presenter.ErrInvAuthHeaderFormat))
 				return
 			}
 
 			authorizationType := fields[0]
 			if authorizationType != "Bearer" {
 				err := fmt.Errorf("unsupported authorization type %s", authorizationType)
-				render.Render(w, r, presenter.ErrorUnauthorizedResponse(err))
+				render.Render(w, r, presenter.ErrorUnauthorizedResponse(err, presenter.ErrInvUnsHeaderFormat))
 				return
 			}
 
 			accessToken := fields[1]
 			payload, err := uses.VerifyToken(accessToken)
 			if err != nil {
-				render.Render(w, r, presenter.ErrorUnauthorizedResponse(err))
+				render.Render(w, r, presenter.ErrorUnauthorizedResponse(err, presenter.ErrInvToken))
 				return
 			}
 

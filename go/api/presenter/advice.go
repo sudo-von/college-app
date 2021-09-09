@@ -7,6 +7,11 @@ import (
 	"strings"
 )
 
+var (
+	ErrAdvivceNotFound = "ADVICE_NOT_FOUND"
+	ErrInvAdviceDate   = "INVALID_ADVICE_DATE"
+)
+
 type AdviceList struct {
 	Total   int              `json:"total"`
 	Advices []AdviceResponse `json:"results"`

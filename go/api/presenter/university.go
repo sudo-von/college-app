@@ -6,6 +6,11 @@ import (
 	"net/http"
 )
 
+var (
+	ErrUniversityNotFound = "UNIVERSITY_NOT_FOUND"
+	ErrInvClassroom       = "INVALID_CLASSROOM"
+)
+
 type TinyUniversityList struct {
 	Total            int                      `json:"total"`
 	TinyUniversities []TinyUniversityResponse `json:"results"`

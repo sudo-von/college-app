@@ -2,9 +2,8 @@ package user_mood
 
 import (
 	"errors"
-	"fmt"
+	"freelancer/college-app/go/api/presenter"
 	"freelancer/college-app/go/entity"
-	"time"
 )
 
 type Service struct {
@@ -19,49 +18,32 @@ func NewService(userMoodRepository UserMoodRepository) *Service {
 
 func (s *Service) GetUserMoodByUserID(userID, requestedUserID string, userMoodFilters entity.UserMoodFilters) (*entity.UserMood, error) {
 
-	// Checks permissions.
-	hasPermission := false
-	if userID == requestedUserID {
-		hasPermission = true
-	}
-	if !hasPermission {
-		return nil, entity.NewErrorUnauthorized(errors.New("user has no permission to see this user"))
-	}
-
 	userMood, err := s.userMoodRepository.GetUserMoodByUserID(requestedUserID, userMoodFilters)
 	if err != nil {
 		if err.Error() == "not found" {
-			return nil, entity.NewErrorNotFound(fmt.Errorf("GetUserMoodByUserID: %w", errors.New("mood not found")))
+			return nil, entity.NewErrorNotFound(err, presenter.ErrUserMoodNotFound)
 		}
-		return nil, entity.NewErrorInternalServer(fmt.Errorf("GetUserMoodByUserID: %w", err))
+		return nil, entity.NewErrorInternalServer(err, presenter.ErrIntServError)
 	}
-
 	return userMood, nil
 }
 
-func (s *Service) CreateUserMood(newUserMood entity.UserMoodPayload) error {
+func (s *Service) CreateUserMood(newUserMood entity.UserMoodPayload, userMoodFilters entity.UserMoodFilters) error {
 
-	// Checks if mood is a valid number in the specified range
-	validMood := false
-	if newUserMood.Mood >= 1 && newUserMood.Mood <= 5 {
-		validMood = true
-	}
-	if !validMood {
-		return entity.NewErrorConflict(errors.New("invalid mood, not in range from 1 to 5"))
+	// Checks if given mood is in the valid range.
+	err := newUserMood.ValidateMood()
+	if err != nil {
+		return entity.NewErrorConflict(err, presenter.ErrInvMood)
 	}
 	// Checks if the user mood has already been registered today.
-	currentDate := time.Now().In(time.Local)
-	userMoodFilters := entity.UserMoodFilters{
-		CreationDate: &currentDate,
-	}
-	_, err := s.GetUserMoodByUserID(newUserMood.UserID, newUserMood.UserID, userMoodFilters)
+	_, err = s.GetUserMoodByUserID(newUserMood.UserID, newUserMood.UserID, userMoodFilters)
 	if err == nil {
-		return entity.NewErrorConflict(fmt.Errorf("GetUserMoodByUserID: %w", errors.New("user mood has already been registered today")))
+		return entity.NewErrorConflict(errors.New("user mood has already been registered today"), presenter.ErrUserMoodAlreadyRegistered)
 	}
 	// Stores new user mood.
 	err = s.userMoodRepository.CreateUserMood(newUserMood)
 	if err != nil {
-		return entity.NewErrorInternalServer(fmt.Errorf("CreateUserMood: %w", err))
+		return entity.NewErrorInternalServer(err, presenter.ErrIntServError)
 	}
 	return nil
 }
