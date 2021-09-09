@@ -6,7 +6,7 @@ import { CONTACT, USERS } from 'src/constants/endpoints'
 export {
     getContactByUserID,
     sendContactByUserID,
-    updateContactByUserID
+    updateContactByID
 }
 
 const getContactByUserID = async (userID) => {
@@ -19,17 +19,17 @@ const getContactByUserID = async (userID) => {
     }
 }
 
-const sendContactByUserID = async (userID, user) => {
+const sendContactByUserID = async (userID, contact) => {
     try{
-        await protectedAxios.post(`${CONTACT}${USERS}/${userID}`, user)
+        await protectedAxios.post(`${CONTACT}${USERS}/${userID}`, contact)
     }catch(error){
         throw new Error(error.message)
     }
 }
 
-const updateContactByUserID = async (userID, user) => {
+const updateContactByID = async (contactID, contact) => {
     try{
-        await protectedAxios.patch(`${CONTACT}${USERS}/${userID}`, user)
+        await protectedAxios.patch(`${CONTACT}/${contactID}`, contact)
     }catch(error){
         throw new Error(error.message)
     }

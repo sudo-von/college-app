@@ -1,5 +1,7 @@
 /* Helpers. */
 import { protectedAxios } from 'src/helpers/axios-helper'
+/* Constants. */
+import { SUGGESTION } from 'src/constants/endpoints'
 
 export {
     sendSuggestion,

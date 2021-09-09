@@ -1,5 +1,7 @@
 /* Helpers. */
 import { publicAxios } from 'src/helpers/axios-helper'
+/* Constants. */
+import { UNIVERSITY } from 'src/constants/endpoints'
 
 export {
     getUniversities

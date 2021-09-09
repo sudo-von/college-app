@@ -8,7 +8,7 @@ export const ERRORS = {
     },
     /* CONTACT_ERRORS. */
     'CONTACT_NOT_FOUND': {
-        'esp': 'El contacto que estás buscando no fue encontrado.'
+        'esp': 'Registra un contacto de confianza para poder utilizar el botón de pánico.'
     },
     'CONTACT_ALREADY_REGISTERED': {
         'esp': 'Tu usuario ya cuenta con un contacto registrado.'
