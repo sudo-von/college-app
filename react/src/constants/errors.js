@@ -1,77 +1,70 @@
-export const ADVICE_ERRORS = {
-    "ADVICE_NOT_FOUND": {
-        "esp" : "La asesoría que estás buscando no fue encontrada."
+export const ERRORS = {
+    /* ADVICE_ERRORS. */
+    'ADVICE_NOT_FOUND': {
+        'esp' : 'La asesoría que estás buscando no fue encontrada.'
     },
-    "INVALID_ADVICE_DATE": {
-        "esp": "La fecha de la asesoría no puede ser menor a la fecha actual."
-    }
-}
-
-export const CONTACT_ERRORS = {
-    "CONTACT_NOT_FOUND": {
-        "esp": "El contacto que estás buscando no fue encontrado."
+    'INVALID_ADVICE_DATE': {
+        'esp': 'La fecha de la asesoría no puede ser menor a la fecha actual.'
     },
-    "CONTACT_ALREADY_REGISTERED": {
-        "esp": "Tu usuario ya cuenta con un contacto registrado."
+    /* CONTACT_ERRORS. */
+    'CONTACT_NOT_FOUND': {
+        'esp': 'El contacto que estás buscando no fue encontrado.'
     },
-    "INVALID_CONTACT_NUMBER": {
-        "esp": "El número de teléfono de tu contacto es inválido."
-    }
-}
-
-export const UNIVERSITY_ERRORS = {
-    "UNIVERSITY_NOT_FOUND": {
-        "esp": "La universidad que estás buscando no fue encontrada."
+    'CONTACT_ALREADY_REGISTERED': {
+        'esp': 'Tu usuario ya cuenta con un contacto registrado.'
     },
-    "INVALID_CLASSROOM": {
-        "esp": "El salón proporcionado no pertenece a tu universidad."
-    }
-}
-
-export const USER_ERRORS = {
-    "UNAUTHORIZED_USER" : {
-        "esp": "El usuario no cuenta con los permisos necesarios para realizar esta acción."
+    'INVALID_CONTACT_NUMBER': {
+        'esp': 'El número de teléfono de tu contacto es inválido.'
     },
-    "AUTH_HEADER_NOT_PROVIDED" : {
-        "esp": "El encabezado de autorización no fue proporcionado."
+    /* UNIVERSITY_ERRORS. */
+    'UNIVERSITY_NOT_FOUND': {
+        'esp': 'La universidad que estás buscando no fue encontrada.'
     },
-    "INVALID_AUTH_HEADER_FORMAT" : {
-        "esp": "El formato del encabezado de autorización es inválido."
+    'INVALID_CLASSROOM': {
+        'esp': 'El salón proporcionado no pertenece a tu universidad.'
     },
-    "INVALID_UNSUPPORTED_HEADER_FORMAT" : {
-        "esp": "El formato del encabezado de autorización no es soportado."
+    /* USER_ERRORS. */
+    'UNAUTHORIZED_USER' : {
+        'esp': 'El usuario no cuenta con los permisos necesarios para realizar esta acción.'
     },
-    "INVALID_CREDENTIALS" : {
-        "esp": "Credenciales incorrectas."
+    'AUTH_HEADER_NOT_PROVIDED' : {
+        'esp': 'El encabezado de autorización no fue proporcionado.'
     },
-    "INVALID_TOKEN" : {
-        "esp": "El token es inválido o ha expirado."
+    'INVALID_AUTH_HEADER_FORMAT' : {
+        'esp': 'El formato del encabezado de autorización es inválido.'
     },
-    "INVALID_USER_EMAIL" : {
-        "esp": "El correo proporcionado es inválido."
+    'INVALID_UNSUPPORTED_HEADER_FORMAT' : {
+        'esp': 'El formato del encabezado de autorización no es soportado.'
     },
-    "INVALID_USER_REGISTRATION_NUMBER" : {
-        "esp": "La matrícula proporcionada es inválida."
+    'INVALID_CREDENTIALS' : {
+        'esp': 'Credenciales incorrectas.'
     },
-    "USER_NOT_FOUND" : {
-        "esp": "El usuario que estás buscando no fue encontrado."
+    'INVALID_TOKEN' : {
+        'esp': 'El token es inválido o ha expirado.'
     },
-    "USER_EMAIL_ALREADY_REGISTERED" : {
-        "esp": "El correo que deseas utilizar no está disponible."
+    'INVALID_USER_EMAIL' : {
+        'esp': 'El correo proporcionado es inválido.'
     },
-    "USER_REGISTRATION_NUMBER_ALREADY_REGISTERED" : {
-        "esp": "La matrícula que deseas utilizar no está disponible."
-    }
-}
-
-export const USER_MOOD_ERRORS = {
-    "USER_MOOD_NOT_FOUND": {
-        "esp": "El estado de ánimo no ha sido encontrado."
+    'INVALID_USER_REGISTRATION_NUMBER' : {
+        'esp': 'La matrícula proporcionada es inválida.'
     },
-    "USER_MOOD_ALREADY_REGISTERED": {
-        "esp": "El estado de ánimo ya ha sido registrado."
+    'USER_NOT_FOUND' : {
+        'esp': 'El usuario que estás buscando no fue encontrado.'
     },
-    "INVALID_MOOD_VALUE" : {
-        "esp" : "El estado de ánimo no se encuentra en el rango válido."
+    'USER_EMAIL_ALREADY_REGISTERED' : {
+        'esp': 'El correo que deseas utilizar no está disponible.'
+    },
+    'USER_REGISTRATION_NUMBER_ALREADY_REGISTERED' : {
+        'esp': 'La matrícula que deseas utilizar no está disponible.'
+    },
+    /* USER_MOOD_ERRORS. */
+    'USER_MOOD_NOT_FOUND': {
+        'esp': 'El estado de ánimo no ha sido encontrado.'
+    },
+    'USER_MOOD_ALREADY_REGISTERED': {
+        'esp': 'El estado de ánimo ya ha sido registrado.'
+    },
+    'INVALID_MOOD_VALUE' : {
+        'esp' : 'El estado de ánimo no se encuentra en el rango válido.'
     }
 }

@@ -5,7 +5,6 @@ import { publicAxios, protectedAxios } from 'src/helpers/axios-helper'
 import { setToken, decodeToken } from 'src/helpers/auth-helper'
 /* Constants. */
 import { LOGIN, SIGNUP, USERS } from 'src/constants/endpoints'
-import { USER_ERRORS } from 'src/constants/errors'
 
 export {
     login,
@@ -26,7 +25,7 @@ const login = async ({ email, password }) => {
         const user = await decodeToken(response.headers.authorization)
         return user
     }catch(error){
-        throw new Error(USER_ERRORS[error.response.data.code]['esp'])
+        throw new Error(error.message)
     }
 }
 
@@ -36,7 +35,7 @@ const signup = async (user) => {
         await protectedAxios.post(SIGNUP, user)
         return "¡Registro éxitoso!"
     }catch(error){
-        throw new Error(USER_ERRORS[error.response.data.code]['esp'])
+        throw new Error(error.message)
     }
 }
 
@@ -46,7 +45,7 @@ const getUserByID = async (userID) => {
         const user = await response.data
         return user
     }catch(error){
-        throw new Error(USER_ERRORS[error.response.data.code]['esp'])
+        throw new Error(error.message)
     }
 }
 
@@ -54,6 +53,6 @@ const updateUserByID = async (userID, user) => {
     try{
         await protectedAxios.patch(`${USERS}/${userID}`, user)
     }catch(error){
-        throw new Error(USER_ERRORS[error.response.data.code]['esp'])
+        throw new Error(error.message)
     }
 }

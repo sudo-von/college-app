@@ -2,7 +2,6 @@
 import { protectedAxios } from 'src/helpers/axios-helper'
 /* Constants. */
 import { MOOD } from 'src/constants/endpoints'
-import { USER_MOOD_ERRORS } from 'src/constants/errors'
 
 export {
     getMood,
@@ -15,7 +14,7 @@ const getMood = async (userID) => {
         const mood = await protectedAxios.get(`${MOOD}/users/${userID}`)
         return mood.data
     }catch(error){
-        throw new Error(USER_MOOD_ERRORS[error.response.data.code]['esp'])
+        throw new Error(error.message)
     }
 }
 
@@ -24,6 +23,6 @@ const sendMood = async (mood) => {
     try{
         await protectedAxios.post(`${MOOD}`, mood)
     }catch(error){
-        throw new Error(USER_MOOD_ERRORS[error.response.data.code]['esp'])
+        throw new Error(error.message)
     }
 }

@@ -2,7 +2,6 @@ package handler
 
 import (
 	"errors"
-	"fmt"
 	"freelancer/college-app/go/api/middleware"
 	"freelancer/college-app/go/api/presenter"
 	"freelancer/college-app/go/entity"
@@ -104,7 +103,7 @@ func (c *AdviceController) Create(w http.ResponseWriter, r *http.Request) {
 
 	err = c.AdviceService.CreateAdvice(newAdvice)
 	if err != nil {
-		CheckError(fmt.Errorf("AdviceController > Create > CreateAdvice: %w", err), w, r)
+		CheckError(err, w, r)
 		return
 	}
 

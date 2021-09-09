@@ -46,6 +46,8 @@ const SuggestionForm = () => {
                         onBlur={handleBlur('suggestion')}
                         value={values.suggestion}
                         error={errors.suggestion}
+                        multiline={true}
+                        numberOfLines={5}
                     />
                     <Button 
                         loading={loading} 

@@ -6,7 +6,7 @@ import { Formik } from 'formik'
 import Input from 'src/components/Input'
 import Button from 'src/components/Button'
 /* Services. */
-import { getContactByUserID, updateContactByUserID } from 'src/services/contact.service'
+import { getContactByUserID, sendContactByUserID, updateContactByUserID } from 'src/services/contact.service'
 /* Contexts. */
 import { useAuth } from 'src/providers/auth.provider'
 
@@ -14,8 +14,8 @@ const ContactConfigurationForm = () => {
 
     /* Destructuring user properties. */
     const { authState } = useAuth()
-    const { user : { user_id } } = authState
-    const [ contact, setContact ] = useState({ contact_name: 'Vona', contact_number: '8662047280', message: 'aaa'})
+    const { user_id } = authState.user
+    const [ contact, setContact ] = useState({ contact_name: '', contact_number: '', message: '' })
     const [ loading, setLoading ] = useState(false)
 
     /* Fetchs contact data and then reinitialize form values. */
@@ -31,14 +31,26 @@ const ContactConfigurationForm = () => {
         searchContact(user_id)
     },[])
 
-    const onSubmit = async (data) => {
+    const updateContact = async (data) => {
         try{
             setLoading(true)
             const response = await updateContactByUserID(user_id, data)
-            setLoading(false)
             Alert.alert(response, 'El usuario ha sido actualizado con éxito.')
         }catch(error){
             Alert.alert('¡Ha ocurrido un error!', error.message)
+        }finally{
+            setLoading(false)
+        }
+    }
+
+    const sendContact = async (data) => {
+        try{
+            setLoading(true)
+            const response = await sendContactByUserID(user_id, data)
+            Alert.alert(response, 'El contacto ha sido guardado con éxito.')
+        }catch(error){
+            Alert.alert('¡Ha ocurrido un error!', error.message)
+        }finally{
             setLoading(false)
         }
     }
@@ -64,7 +76,7 @@ const ContactConfigurationForm = () => {
                 }
                 return errors
             }}
-            onSubmit={onSubmit}
+            onSubmit={contact ? updateContact : sendContact }
             enableReinitialize
         >
             {({ handleChange, handleBlur, handleSubmit, errors, values }) => (

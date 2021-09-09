@@ -2,7 +2,6 @@ package handler
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -50,7 +49,7 @@ func (c *ContactController) Show(w http.ResponseWriter, r *http.Request) {
 
 	contact, err := c.ContactService.GetContactByUserID(userID, requestedUserID)
 	if err != nil {
-		CheckError(fmt.Errorf("ContactController > Show > GetContactByUserID: %w", err), w, r)
+		CheckError(err, w, r)
 		return
 	}
 

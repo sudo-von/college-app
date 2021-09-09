@@ -1,6 +1,7 @@
 import axios from 'axios'
 /* Constants. */
 import { API_URL } from 'src/constants/endpoints'
+import { ERRORS } from 'src/constants/errors'
 /* Helpers. */
 import { getToken, deleteToken } from './auth-helper'
 /* Refs. */
@@ -32,11 +33,17 @@ protectedAxios.interceptors.request.use(async config => {
 }, error => Promise.reject(error))
 
 protectedAxios.interceptors.response.use(response => response, async error => {
-    if (error.response.status === 401){
-        await deleteToken()
-        navigate('/logout')
+    if (error?.response){
+        if (error.response?.status === 401){
+            await deleteToken()
+            navigate('/logout')
+        }else if(error.response.data?.code){
+            if(Object.prototype.hasOwnProperty.call(ERRORS, error.response.data.code)){
+                throw new Error(ERRORS[error.response.data.code]['esp'])
+            }
+        }
     }
-    return Promise.reject(error)
+    throw new Error("Intenta de nuevo más tarde...")
 })
 
 export {
