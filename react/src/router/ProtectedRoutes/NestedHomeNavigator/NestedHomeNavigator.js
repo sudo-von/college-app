@@ -3,6 +3,7 @@ import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 /* Routes. */
 import Home from 'src/pages/Home'
+import PanicButton from 'src/pages/PanicButton'
 import Suggestions from 'src/pages/Suggestions'
 /* React native paper. */
 import { useTheme } from 'react-native-paper'
@@ -14,6 +15,14 @@ const routes = [
         title: 'Inicio',
         name: '/',
         component: Home,
+        options: {
+            header: () => null
+        }
+    },
+    {
+        title: 'Botón de pánico',
+        name: '/panic-button',
+        component: PanicButton,
         options: {
             header: () => null
         }
