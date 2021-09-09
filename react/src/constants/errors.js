@@ -1,3 +1,15 @@
+export const CONTACT_ERRORS = {
+    "CONTACT_NOT_FOUND": {
+        "esp": "El contacto que estás buscando no fue encontrado."
+    },
+    "CONTACT_ALREADY_REGISTERED": {
+        "esp": "Tu usuario ya cuenta con un contacto registrado."
+    },
+    "INVALID_CONTACT_NUMBER": {
+        "esp": "El número de teléfono de tu contacto es inválido."
+    }
+}
+
 export const UNIVERSITY_ERRORS = {
     "UNIVERSITY_NOT_FOUND": {
         "esp": "La universidad que estás buscando no fue encontrada."
