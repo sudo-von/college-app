@@ -111,7 +111,7 @@ func (c *UserController) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	signedToken, err := c.TokenService.CreateToken(user.ID, user.Name, 15)
+	signedToken, err := c.TokenService.CreateToken(user, 15)
 	if err != nil {
 		CheckError(err, w, r)
 		return

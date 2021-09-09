@@ -81,7 +81,7 @@ func IsAuthorized(uses token.Service) func(http.Handler) http.Handler {
 				return
 			}
 
-			ctx := context.WithValue(r.Context(), ContextKeyUserID, payload.UserID)
+			ctx := context.WithValue(r.Context(), ContextKeyUserID, payload.User.ID)
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	}

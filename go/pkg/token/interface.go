@@ -1,8 +1,11 @@
 package token
 
-import "time"
+import (
+	"freelancer/college-app/go/entity"
+	"time"
+)
 
 type Service interface {
-	CreateToken(userID, userName string, duration time.Duration) (string, error)
+	CreateToken(user *entity.User, duration time.Duration) (string, error)
 	VerifyToken(token string) (*Payload, error)
 }

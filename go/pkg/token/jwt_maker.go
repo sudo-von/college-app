@@ -3,6 +3,7 @@ package token
 import (
 	"errors"
 	"fmt"
+	"freelancer/college-app/go/entity"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -22,9 +23,9 @@ func NewJWTMaker(secretKey string) (Service, error) {
 	return &jwtMaker, nil
 }
 
-func (maker *JWTMaker) CreateToken(userID, userName string, duration time.Duration) (string, error) {
+func (maker *JWTMaker) CreateToken(user *entity.User, duration time.Duration) (string, error) {
 
-	payload, err := NewPayload(userID, userName, duration)
+	payload, err := NewPayload(user, duration)
 	if err != nil {
 		return "", err
 	}
