@@ -7,6 +7,12 @@ import (
 	"strings"
 )
 
+var (
+	ErrContactNotFound          = "CONTACT_NOT_FOUND"
+	ErrContactAlreadyRegistered = "CONTACT_ALREADY_REGISTERED"
+	ErrInvContactNumber         = "INVALID_CONTACT_NUMBER"
+)
+
 type ContactResponse struct {
 	ID            string `json:"id"`
 	UserID        string `json:"user_id"`

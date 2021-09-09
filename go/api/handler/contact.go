@@ -43,7 +43,7 @@ func (c *ContactController) Show(w http.ResponseWriter, r *http.Request) {
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
-		CheckError(entity.NewErrorInternalServer(fmt.Errorf("ContactController > Show: %w", err)), w, r)
+		CheckError(err, w, r)
 		return
 	}
 	requestedUserID := chi.URLParam(r, "id")
@@ -65,14 +65,14 @@ func (c *ContactController) Create(w http.ResponseWriter, r *http.Request) {
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
-		CheckError(entity.NewErrorInternalServer(fmt.Errorf("ContactController > Create: %w", err)), w, r)
+		CheckError(err, w, r)
 		return
 	}
 	requestedUserID := chi.URLParam(r, "id")
 
 	var data presenter.ContactPayload
 	if err := render.Bind(r, &data); err != nil {
-		CheckError(entity.NewErrorBadRequest(fmt.Errorf("ContactController > Create: %w", err)), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
@@ -86,7 +86,7 @@ func (c *ContactController) Create(w http.ResponseWriter, r *http.Request) {
 
 	err := c.ContactService.CreateContact(userID, requestedUserID, newContact)
 	if err != nil {
-		CheckError(fmt.Errorf("ContactController > Create > CreateContact: %w", err), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
@@ -100,14 +100,14 @@ func (c *ContactController) Update(w http.ResponseWriter, r *http.Request) {
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
-		CheckError(entity.NewErrorInternalServer(fmt.Errorf("ContactController > Update: %w", err)), w, r)
+		CheckError(err, w, r)
 		return
 	}
 	contactID := chi.URLParam(r, "id")
 
 	var data presenter.UpdateContactPayload
 	if err := render.Bind(r, &data); err != nil {
-		CheckError(entity.NewErrorBadRequest(fmt.Errorf("ContactController > Update: %w", err)), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
@@ -119,7 +119,7 @@ func (c *ContactController) Update(w http.ResponseWriter, r *http.Request) {
 
 	err := c.ContactService.UpdateContactByID(userID, contactID, newContact)
 	if err != nil {
-		CheckError(fmt.Errorf("ContactController > Create > UpdateContactByID: %w", err), w, r)
+		CheckError(err, w, r)
 		return
 	}
 
