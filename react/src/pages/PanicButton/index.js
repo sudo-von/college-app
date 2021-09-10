@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Linking, Alert } from 'react-native'
 /* Contexts. */
 import { useAuth } from 'src/providers/auth.provider'
@@ -12,35 +12,54 @@ import Small from 'src/components/Small'
 import { getContactByUserID } from 'src/services/contact.service'
 /* React navigation. */
 import { useNavigation } from '@react-navigation/native'
+/* Geolocation. */
+import * as Location from 'expo-location'
 
 const PanicButton = () => {
 
-    /* Destructuring user properties. */
     const { authState } = useAuth()
     const { user_id } = authState.user
     const navigation = useNavigation()
 
-    /* Fetchs contact data and open whatsapp with. */
     useEffect(() => {
-        const searchContact = async (userID) => {
+        const sendMessage = async (userID) => {
             try{
-                const response = await getContactByUserID(userID)
-                const url = `https://wa.me/${response.contact_number}?text=${encodeURI(response.message)}, esta es mi ubicación:`
-                const supported = await Linking.canOpenURL(url)
+                /* Gets contact info. */
+                const { contact_number, message } = await getContactByUserID(userID)
+                /* Gets the formatted google maps url. */
+                const { coords } = await getLocation()
+                const { latitude, longitude } = coords
+                const google_maps_url = `https://www.google.com/maps?q=${latitude},${longitude}`
+                const whapp_web_url = `https://wa.me/${contact_number}?text=${encodeURI(message)}, esta es mi ubicación: ${google_maps_url}`
+                /* Tries to send the message. */
+                const supported = await Linking.canOpenURL(whapp_web_url)
                 if (supported) {
-                    console.log(url)
-                    await Linking.openURL(url)
+                    await Linking.openURL(whapp_web_url)
                     navigation.navigate('/')
                 } else {
-                    Alert.alert('¡Ha ocurrido un error', 'Algo ha salido mal al abrir whatsapp...')
+                    throw new Error('No ha sido posible acceder a la URL.')
                 }
             }catch(error){
-                Alert.alert('¡Aún no has registrado un contacto!', error.message)
+                Alert.alert('¡Ha ocurrido un error!', error.message)
                 navigation.navigate('/')
             }
         }
-        searchContact(user_id)
+        sendMessage(user_id)
     },[])
+
+
+    const getLocation = async () => {
+        try{
+            let { status } = await Location.requestForegroundPermissionsAsync()
+            if (status !== 'granted') {
+                throw new Error('Considera habilitar el permiso de ubicación, sin este permiso el botón de pánico no podrá mandar tu ubicación.')
+            }
+            let location = await Location.getCurrentPositionAsync({ accuracy: 1 })
+            return location
+        }catch(error){
+            throw new Error(error.message)
+        }
+    }
 
 
     return (
