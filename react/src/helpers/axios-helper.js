@@ -19,6 +19,22 @@ const config = {
 const publicAxios = axios.create(config)
 const protectedAxios = axios.create(config)
 
+/* Public interceptors. */
+publicAxios.interceptors.response.use(response => response, error => {
+    if (error?.response){
+        if(error.response.data?.code){
+            if(Object.prototype.hasOwnProperty.call(ERRORS, error.response.data.code)){
+                throw new Error(ERRORS[error.response.data.code])
+            }
+            console.warn(`Response code: [${error.response.data.code}] has not been implemented in the client.`)
+            throw new Error(ERRORS['ERROR_NOT_IMPLEMENTED'])
+        }
+        console.warn(`Response code: [${error.response.data}] has not been implemented in the server.`)
+        throw new Error(ERRORS['ERROR_NOT_IMPLEMENTED'])
+    }
+    throw new Error(ERRORS['UNKNOWN_ERROR'])
+})
+
 /* Protected interceptors. */
 protectedAxios.interceptors.request.use(async config => {
     try{
@@ -34,16 +50,23 @@ protectedAxios.interceptors.request.use(async config => {
 
 protectedAxios.interceptors.response.use(response => response, async error => {
     if (error?.response){
-        if (error.response?.status === 401){
-            await deleteToken()
-            navigate('/logout')
-        }else if(error.response.data?.code){
-            if(Object.prototype.hasOwnProperty.call(ERRORS, error.response.data.code)){
-                throw new Error(ERRORS[error.response.data.code]['esp'])
+        if (error?.response){
+            if (error.response?.status === 401){
+                await deleteToken()
+                navigate('/logout')
             }
+            if(error.response.data?.code){
+                if(Object.prototype.hasOwnProperty.call(ERRORS, error.response.data.code)){
+                    throw new Error(ERRORS[error.response.data.code])
+                }
+                console.warn(`Response code: [${error.response.data.code}] has not been implemented in the client.`)
+                throw new Error(ERRORS['ERROR_NOT_IMPLEMENTED'])
+            }
+            console.warn(`Response code: [${error.response.data}] has not been implemented in the server.`)
+            throw new Error(ERRORS['ERROR_NOT_IMPLEMENTED'])
         }
     }
-    throw new Error("Intenta de nuevo más tarde...")
+    throw new Error(ERRORS['UNKNOWN_ERROR'])
 })
 
 export {

@@ -25,12 +25,13 @@ const PanicButton = () => {
         const sendMessage = async (userID) => {
             try{
                 /* Gets contact info. */
-                const { contact_number, message } = await getContactByUserID(userID)
+                const { contact_name, contact_number, message } = await getContactByUserID(userID)
                 /* Gets the formatted google maps url. */
                 const { coords } = await getLocation()
                 const { latitude, longitude } = coords
+                const formated_message = encodeURI(`¡Hola ${contact_name}! ${message}`)
                 const google_maps_url = `https://www.google.com/maps?q=${latitude},${longitude}`
-                const whapp_web_url = `https://wa.me/${contact_number}?text=${encodeURI(message)}, esta es mi ubicación: ${google_maps_url}`
+                const whapp_web_url = `https://wa.me/${contact_number}?text=${formated_message}, esta es mi ubicación: ${google_maps_url}`
                 /* Tries to send the message. */
                 const supported = await Linking.canOpenURL(whapp_web_url)
                 if (supported) {
