@@ -18,6 +18,7 @@ const SuggestionForm = () => {
             resetForm()
             Alert.alert('¡Increíble!', 'Tu sugerencia ha sido enviada con éxito.')
         }catch(error){
+            console.log(error)
             Alert.alert('¡Ha ocurrido un error!', error.message)
         }finally{
             setLoading(false)

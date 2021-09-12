@@ -9,7 +9,7 @@ import Center from 'src/components/Center'
 import LoginForm from './Components/LoginForm'
 
 const Login = () => {
-    const logo = require('../../../assets/gopher.png')
+    const logo = require('../../../assets/logo.png')
     return (
         <Container>
             <Center>
@@ -19,7 +19,7 @@ const Login = () => {
                 />
             </Center>
             <Header 
-                title='Universidad Autónoma de Gojs'
+                title='Universidad Autónoma de Von'
                 subtitle='"Siempre parece imposible, hasta que se hace".'
             />
             <LoginForm/>

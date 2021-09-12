@@ -160,7 +160,7 @@ const SignupForm = () => {
 
 const styles = StyleSheet.create({
     button: {
-        marginVertical: 40
+        marginVertical: 20
     }
 })
 
