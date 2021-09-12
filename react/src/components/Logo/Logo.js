@@ -1,30 +1,32 @@
 import React from 'react'
 import { StyleSheet, View, Image } from 'react-native'
+/* React native paper. */
+import { useTheme } from 'react-native-paper'
 
-const Logo = ({ source, style }) => {
+const Logo = ({ source, size }) => {
+    const { colors } = useTheme()
     return (
-        <View style={styles(style).view}>
+        <View style={styles({ size, colors}).view}>
             <Image
-                style={styles(style).image}
+                style={styles({ size, colors}).image}
                 source={source}
             />
         </View>
     )
 }
 
-
-const styles = (style) => StyleSheet.create({ 
+const styles = ({ size, colors }) => StyleSheet.create({ 
     view: {
-        width: style ? style.width : 180,
-        height: style ? style.height : 180,
         borderRadius: 100,
-        backgroundColor: '#4C9DAF',
+        width: size ? size : 180,
+        height: size ? size : 180,
+        backgroundColor: colors.primary,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
     },
     image: {
-        width: style ? style.width-15 : 150,
+        width: size ? size-35 : 145,
         resizeMode: 'contain'
     }
 })

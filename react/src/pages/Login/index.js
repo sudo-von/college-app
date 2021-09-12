@@ -13,7 +13,10 @@ const Login = () => {
     return (
         <Container>
             <Center>
-                <Logo source={logo}/>
+                <Logo 
+                    source={logo}
+                    size={160}
+                />
             </Center>
             <Header 
                 title='Universidad Autónoma de Gojs'
