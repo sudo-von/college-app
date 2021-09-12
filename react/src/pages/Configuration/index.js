@@ -26,7 +26,7 @@ const routes = [
 ]
 
 const Configuration = () => 
-    <Container style={styles.container}>
+    <Container justifyContent='flex-start'>
         <View style={styles.view}>
             <Title><Bold>¡Bienvenido al{'\n'}panel de configuración!</Bold></Title>
             <Small>Modifica tu información en cualquier momento.</Small>
@@ -44,9 +44,6 @@ const Configuration = () =>
     </Container>
 
 const styles = StyleSheet.create({
-    container: {
-        justifyContent: 'flex-start'
-    },
     view: {
         marginVertical: 40,
     }

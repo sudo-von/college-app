@@ -43,7 +43,7 @@ const Home = () => {
     const { user_name, user_id } = user
 
     return (
-        <Container style={styles.container}>
+        <Container justifyContent='flex-start'>
             <Mood 
                 initialMoodValue={5}
                 minimumValue={0}
@@ -72,9 +72,6 @@ const Home = () => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        justifyContent: 'flex-start'
-    },
     view: {
         marginVertical: 40,
     },

@@ -36,7 +36,7 @@ const AccountConfiguration = () => {
     },[])
 
     return (
-        <Container style={styles.container}>
+        <Container justifyContent='flex-start'>
             <View style={styles.view}>
                 <Title><Bold>¡Manten actualizados{'\n'}tus datos en todo momento!</Bold></Title>
                 <Small>Modifica tu información personal para estar al día.</Small>
@@ -50,9 +50,6 @@ const AccountConfiguration = () => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        justifyContent: 'flex-start'
-    },
     view: {
         marginVertical: 40,
     }

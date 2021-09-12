@@ -11,7 +11,7 @@ import { Title } from 'react-native-paper'
 const ContactConfiguration = () =>
     <SafeAreaView>
         <ScrollView>
-            <Container style={styles.container}>
+            <Container justifyContent='flex-start'>
                 <View style={styles.view}>
                     <Title><Bold>¡Es importante mantener informados a tus seres queridos!</Bold></Title>
                     <Small>Modifica tu información de contacto para alertar a tus seres queridos en cualquier momento.</Small>
@@ -22,9 +22,6 @@ const ContactConfiguration = () =>
      </SafeAreaView>
 
 const styles = StyleSheet.create({
-    container: {
-        justifyContent: 'flex-start'
-    },
     view: {
         marginVertical: 40,
     }
