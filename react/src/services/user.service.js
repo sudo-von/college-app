@@ -1,5 +1,5 @@
 /* Base64. */
-import base64 from 'react-native-base64'
+import { Base64 } from 'js-base64'
 /* Helpers. */
 import { publicAxios, protectedAxios } from 'src/helpers/axios-helper'
 import { setToken, decodeToken } from 'src/helpers/auth-helper'
@@ -18,7 +18,7 @@ const login = async ({ email, password }) => {
     try{
         const response = await publicAxios.post(LOGIN,{},{
             "headers": { 
-                'Authorization': "Basic " + base64.encode(`${email}:${password}`)
+                'Authorization': "Basic " + Base64.encode(`${email}:${password}`)
             }
         })
         await setToken(response.headers.authorization)
