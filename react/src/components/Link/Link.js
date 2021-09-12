@@ -3,21 +3,23 @@ import { StyleSheet } from 'react-native'
 /* React navigation. */
 import { Link } from '@react-navigation/native'
 /* React native paper. */
-import { Caption } from 'react-native-paper'
+import { useTheme, Caption } from 'react-native-paper'
 
-const CustomLink = ({ url, children }) =>
-    <Link
-        to={{ screen: url }}
-        underlayColor="#f0f4f7"
-    >
-        <Caption style={styles.signup}>{children}</Caption>
-    </Link>
+const CustomLink = ({ url, children }) => {
+    const { colors } = useTheme()
+    return(
+        <Link to={{ screen: url }}>
+            <Caption style={styles({ colors }).signup}>
+                {children}
+            </Caption>
+        </Link>
+    )
+}
 
-const styles = StyleSheet.create({
+const styles = ({ colors }) => StyleSheet.create({
     signup: {
-        fontSize: 14,
-        color: '#4C9DAF',
-        lineHeight: 13
+        fontSize: 16,
+        color: colors.primary
     }
 })
 
