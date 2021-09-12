@@ -7,35 +7,21 @@ import Input from 'src/components/Input'
 import Datepicker from 'src/components/Datepicker'
 import Button from 'src/components/Button'
 /* Services. */
-import { getUserByID, updateUserByID } from 'src/services/user.service'
+import { updateUserByID } from 'src/services/user.service'
+/* HOCS. */
+import withLoading from 'src/hocs/withLoading'
 /* Contexts. */
 import { useAuth } from 'src/providers/auth.provider'
 
-const AccountConfigurationForm = () => {
+const AccountConfigurationForm = ({ user }) => {
 
-    /* Destructuring user properties. */
-    const { authState, authDispatch } = useAuth()
-    const { user : { user_id } } = authState
-    const [ user, setUser ] = useState({ name: '', birth_date: '', email: '', registration_number: ''})
+    const { authDispatch } = useAuth()
     const [ loading, setLoading ] = useState(false)
-
-    /* Fetchs user data and then reinitialize form values. */
-    useEffect(() => {
-        const searchUser = async (userID) => {
-            try{
-                const response = await getUserByID(userID)
-                setUser(response)
-            }catch(error){
-                Alert.alert('¡Ha ocurrido un error!', error.message)
-            }
-        }
-        searchUser(user_id)
-    },[])
-
+    
     const onSubmit = async (data) => {
         try{
             setLoading(true)
-            const response = await updateUserByID(user_id, data)
+            const response = await updateUserByID(user.id, data)
             setLoading(false)
             Alert.alert(response, 'El usuario ha sido actualizado con éxito.')
             authDispatch({ type: 'update', user: { name : data.name }})
@@ -127,4 +113,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default AccountConfigurationForm
+export default withLoading(AccountConfigurationForm, 'Cargando información...')

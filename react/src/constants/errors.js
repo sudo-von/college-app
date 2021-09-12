@@ -27,6 +27,7 @@ export const ERRORS = {
     'USER_MOOD_NOT_FOUND': 'El estado de ánimo no ha sido encontrado.',
     'USER_MOOD_ALREADY_REGISTERED': 'El estado de ánimo ya ha sido registrado.',
     /* General errors. */
+    'INTERNAL_SERVER_ERROR' : 'Lo sentimos, intenta de nuevo más tarde...',
     'ERROR_NOT_IMPLEMENTED' : 'Algo salió mal, contacta al administrador...',
     'UNKNOWN_ERROR' : 'Lo sentimos, intenta de nuevo más tarde...'
 }   

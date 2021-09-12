@@ -23,13 +23,11 @@ const SuggestionForm = () => {
             setLoading(false)
         }
     }
-
         
     return (
         <Formik 
             initialValues={{ suggestion: '' }} 
-            validate={values => {
-                const { suggestion } = values
+            validate={({suggestion}) => {
                 const errors = {}
                 if(!suggestion){
                     errors.suggestion = 'Sugerencia requerida'

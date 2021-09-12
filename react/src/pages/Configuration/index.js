@@ -7,8 +7,6 @@ import Bold from 'src/components/Bold'
 import NavigationBadge from 'src/components/NavigationBadge'
 /* React native paper. */
 import { Title } from 'react-native-paper'
-/* Contexts. */
-import { useAuth } from 'src/providers/auth.provider'
 
 const routes = [
     {
@@ -27,32 +25,23 @@ const routes = [
     }
 ]
 
-const Configuration = () => {
-
-    /* Destructuring user properties. */
-    const { authState } = useAuth()
-    const { user } = authState
-    const { user_name, user_id } = user
-
-    return (
-        <Container style={styles.container}>
-            <View style={styles.view}>
-                <Title><Bold>¡Bienvenido al{'\n'}panel de configuración!</Bold></Title>
-                <Small>Modifica tu información en cualquier momento.</Small>
-            </View>
-            { routes && routes.map(({ url, title, icon, color, backgroundColor }, index) =>
-                <NavigationBadge
-                    key={`${url}-${title}-${index}`}
-                    url={url}
-                    title={title}
-                    icon={icon}
-                    color={color}
-                    backgroundColor={backgroundColor}
-                />
-            )}
-        </Container>
-    )
-}
+const Configuration = () => 
+    <Container style={styles.container}>
+        <View style={styles.view}>
+            <Title><Bold>¡Bienvenido al{'\n'}panel de configuración!</Bold></Title>
+            <Small>Modifica tu información en cualquier momento.</Small>
+        </View>
+        { routes && routes.map(({ url, title, icon, color, backgroundColor }, index) =>
+            <NavigationBadge
+                key={`${url}-${title}-${index}`}
+                url={url}
+                title={title}
+                icon={icon}
+                color={color}
+                backgroundColor={backgroundColor}
+            />
+        )}
+    </Container>
 
 const styles = StyleSheet.create({
     container: {

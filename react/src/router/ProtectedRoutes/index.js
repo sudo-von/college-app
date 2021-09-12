@@ -39,7 +39,9 @@ const routes = [
         component: Logout,
         title: 'Cerrar sesión',
         icon: 'logout',
-        options: {} 
+        options: {
+            header: () => null
+        } 
     },
 ]
 
