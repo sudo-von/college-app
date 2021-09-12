@@ -1,6 +1,8 @@
 import React from 'react'
+import { StyleSheet, Text } from 'react-native'
 /* React navigation. */
 import { createDrawerNavigator } from '@react-navigation/drawer'
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native'
 /* Custom components. */
 import DrawerContent from './DrawerContent'
 /* Routes. */
@@ -13,6 +15,24 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import NestedHomeNavigator from './NestedHomeNavigator'
 import NestedConfigurationNavigator from './NestedConfigurationNavigator'
 
+const getHeaderTitle = (route) => {
+  const routeName = getFocusedRouteNameFromRoute(route)
+  switch (routeName) {
+    case '/':
+        return 'Inicio'
+    case '/panic-button':
+        return 'Botón de pánico'
+    case '/suggestions':
+        return 'Sugerencias'
+    case '/configuration-home':
+        return 'Configuración'
+    case '/contact-configuration':
+        return 'Configuración de contacto'
+    case '/account-configuration':
+        return 'Configuración de la cuenta'
+  }
+}
+
 const Drawer = createDrawerNavigator()
 
 const routes = [
@@ -21,27 +41,21 @@ const routes = [
         component: NestedHomeNavigator,
         title: 'Inicio',
         icon: 'home',
-        options: {
-            header: () => null
-        } 
+        options: {} 
     },
     {
         name: '/configuration',
         component: NestedConfigurationNavigator,
         title: 'Configuración',
         icon: 'cog',
-        options: {
-            header: () => null
-        } 
+        options: {} 
     },
     {
         name: '/logout',
         component: Logout,
         title: 'Cerrar sesión',
         icon: 'logout',
-        options: {
-            header: () => null
-        } 
+        options: {} 
     },
 ]
 
@@ -66,7 +80,7 @@ const ProtectedRoutes = () => {
                     key={`${name}-${index}`}
                     name={name}
                     component={component} 
-                    options={{ 
+                    options={({route}) => ({ 
                         title,
                         drawerIcon: ({focused, size}) => (
                             <MaterialCommunityIcons
@@ -75,8 +89,9 @@ const ProtectedRoutes = () => {
                             color={focused ? '#7cc' : '#ccc'}
                             />
                         ),
+                        headerTitle: getHeaderTitle(route),
                         ...options
-                    }}
+                    })}
                 />
             )}
         </Drawer.Navigator>

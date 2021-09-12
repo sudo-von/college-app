@@ -31,7 +31,9 @@ const routes = [
         title: 'Sugerencias',
         name: '/suggestions',
         component: Suggestions,
-        options: {}
+        options: {
+            header: () => null
+        }
     }
 ]
 

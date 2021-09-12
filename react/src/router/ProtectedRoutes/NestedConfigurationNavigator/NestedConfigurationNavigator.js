@@ -23,13 +23,17 @@ const routes = [
         title: 'Configuración de la cuenta',
         name: '/account-configuration',
         component: AccountConfiguration,
-        options: {}
+        options: {
+            header: () => null
+        }
     },
     {
         title: 'Configuración de contacto',
         name: '/contact-configuration',
         component: ContactConfiguration,
-        options: {}
+        options: {
+            header: () => null
+        }
     }
 ]
 
@@ -39,8 +43,11 @@ const NestedConfigurationNavigator = () => {
         <Stack.Navigator
             screenOptions={{
                 headerMode: 'screen',
-                headerTintColor: colors.background,
-                headerStyle: { backgroundColor: colors.primary },
+                headerTintColor: 'black',
+                headerStyle: { 
+                    backgroundColor: 'transparent',
+                },
+                headerShadowVisible: false
             }}
             >
             { routes && routes.map(({ title, name, component, options }, index) =>
