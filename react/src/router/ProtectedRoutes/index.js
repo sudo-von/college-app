@@ -1,8 +1,7 @@
 import React from 'react'
-import { StyleSheet, Text } from 'react-native'
 /* React navigation. */
 import { createDrawerNavigator } from '@react-navigation/drawer'
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 /* Custom components. */
 import DrawerContent from './DrawerContent'
 /* Routes. */
@@ -14,24 +13,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 /* Nested routers. */
 import NestedHomeNavigator from './NestedHomeNavigator'
 import NestedConfigurationNavigator from './NestedConfigurationNavigator'
-
-const getHeaderTitle = (route) => {
-  const routeName = getFocusedRouteNameFromRoute(route)
-  switch (routeName) {
-    case '/':
-        return 'Inicio'
-    case '/panic-button':
-        return 'Botón de pánico'
-    case '/suggestions':
-        return 'Sugerencias'
-    case '/configuration-home':
-        return 'Configuración'
-    case '/contact-configuration':
-        return 'Configuración de contacto'
-    case '/account-configuration':
-        return 'Configuración de la cuenta'
-  }
-}
+/* Helpers. */
+import { getHeaderButton, getHeaderTitle } from 'src/helpers/react-navigation-helper'
 
 const Drawer = createDrawerNavigator()
 
@@ -60,22 +43,29 @@ const routes = [
 ]
 
 const ProtectedRoutes = () => {
+
+    /* Handles drawer theme. */
     const { colors } = useTheme()
+    const screenOptions = {
+        headerStyle:{
+            backgroundColor: colors.primary,
+        },
+        headerTintColor: colors.background,
+        drawerStyle: {
+            backgroundColor: colors.background
+        },
+        drawerActiveBackgroundColor: colors.transparency,
+        drawerActiveTintColor: colors.primary,
+        drawerInactiveTintColor: colors.accent,
+    }
+    const navigations = useNavigation()
+
     return(
         <Drawer.Navigator 
-            screenOptions={{
-                drawerStyle: {
-                    backgroundColor: colors.background,
-                },
-                drawerActiveBackgroundColor: colors.transparency,
-                headerStyle:{
-                    backgroundColor: colors.primary,
-                },
-                headerTintColor: colors.background,
-            }}
+            screenOptions={screenOptions}
             drawerContent={(props) => <DrawerContent {...props}/>}
         >
-            { routes && routes.map(({ name, component, title, icon, options}, index) =>
+            { routes && routes.map(({ name, component, title, icon, options }, index) =>
                 <Drawer.Screen 
                     key={`${name}-${index}`}
                     name={name}
@@ -84,13 +74,14 @@ const ProtectedRoutes = () => {
                         title,
                         drawerIcon: ({focused, size}) => (
                             <MaterialCommunityIcons
-                            name={icon}
-                            size={size}
-                            color={focused ? '#7cc' : '#ccc'}
+                                name={icon}
+                                size={size}
+                                color={focused ? colors.primary : colors.accent }
                             />
                         ),
                         headerTitle: getHeaderTitle(route),
-                        ...options
+                        headerLeft: () => getHeaderButton(navigations, route),
+                        ...options,
                     })}
                 />
             )}
