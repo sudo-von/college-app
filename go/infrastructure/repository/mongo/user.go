@@ -18,6 +18,7 @@ type UserModel struct {
 	Password           string          `bson:"password"`
 	RegistrationNumber string          `bson:"registration_number"`
 	Status             string          `bson:"status"`
+	Role               string          `bson:"role"`
 	University         UniversityModel `bson:"university"`
 	CreationDate       time.Time       `bson:"creation_date"`
 }
@@ -39,6 +40,7 @@ type UserPayloadModel struct {
 	RegistrationNumber string        `bson:"registration_number"`
 	Password           string        `bson:"password"`
 	Status             string        `bson:"status"`
+	Role               string        `bson:"role"`
 	UniversityID       bson.ObjectId `bson:"university_id"`
 	CreationDate       time.Time     `bson:"creation_date"`
 }
@@ -68,6 +70,7 @@ func toUserPayloadModel(userPayload entity.UserPayload) UserPayloadModel {
 		Password:           userPayload.Password,
 		Status:             userPayload.Status,
 		UniversityID:       universityID,
+		Role:               userPayload.Role,
 		CreationDate:       userPayload.CreationDate,
 	}
 }
@@ -100,6 +103,7 @@ func toEntityUser(user UserModel) entity.User {
 		RegistrationNumber: user.RegistrationNumber,
 		Status:             user.Status,
 		University:         university,
+		Role:               user.Role,
 		CreationDate:       user.CreationDate,
 	}
 }
