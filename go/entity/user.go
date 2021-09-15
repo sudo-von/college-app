@@ -6,6 +6,11 @@ import (
 	"time"
 )
 
+var (
+	StudentRole = "student"
+	AdminRole   = "admin"
+)
+
 type TinyUser struct {
 	ID                 string
 	Name               string
@@ -22,6 +27,7 @@ type User struct {
 	Password           string
 	RegistrationNumber string
 	Status             string
+	Role               string
 	University         University
 	CreationDate       time.Time
 }
@@ -35,6 +41,7 @@ type UserPayload struct {
 	Password           string
 	UniversityID       string
 	Status             string
+	Role               string
 	CreationDate       time.Time
 }
 
@@ -43,6 +50,17 @@ type UpdateUserPayload struct {
 	BirthDate          time.Time
 	Email              string
 	RegistrationNumber string
+}
+
+func (u *User) ValidateRequestedUser(requestedUserID string) error {
+	validRequestedUser := false
+	if requestedUserID == u.ID || u.Role == AdminRole {
+		validRequestedUser = true
+	}
+	if !validRequestedUser {
+		return errors.New("user has not authorization to request another user's resource")
+	}
+	return nil
 }
 
 func (up *UserPayload) ValidateRegistrationNumber() error {
