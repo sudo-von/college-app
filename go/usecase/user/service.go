@@ -24,14 +24,24 @@ func NewService(userRepository UserRepository, universityRepository university.U
 
 func (s *Service) GetTinyUserByID(userID, requestedUserID string) (*entity.TinyUser, error) {
 
-	user, err := s.userRepository.GetTinyUserByID(requestedUserID)
+	user, err := s.userRepository.GetUserByID(userID)
+	if err != nil {
+		return nil, entity.NewErrorInternalServer(err, presenter.ErrIntServError)
+	}
+
+	err = user.ValidateRequestedUser(requestedUserID)
+	if err != nil {
+		return nil, entity.NewErrorUnauthorized(err, presenter.ErrInsufficientPermissions)
+	}
+
+	tinyUser, err := s.userRepository.GetTinyUserByID(requestedUserID)
 	if err != nil {
 		if err.Error() == "not found" {
 			return nil, entity.NewErrorNotFound(err, presenter.ErrUserNotFound)
 		}
 		return nil, entity.NewErrorInternalServer(err, presenter.ErrIntServError)
 	}
-	return user, nil
+	return tinyUser, nil
 
 }
 
@@ -81,17 +91,22 @@ func (s *Service) CreateUser(newUser entity.UserPayload) error {
 
 func (s *Service) UpdateTinyUser(userID, requestedUserID string, newUser entity.UpdateUserPayload) error {
 
-	// Gets old user.
-	oldUser, err := s.userRepository.GetUserByID(requestedUserID)
+	user, err := s.userRepository.GetUserByID(userID)
 	if err != nil {
-		if err.Error() == "not found" {
-			return entity.NewErrorNotFound(err, presenter.ErrUserNotFound)
-		}
 		return entity.NewErrorInternalServer(err, presenter.ErrIntServError)
 	}
 
-	// Checks if the new email has the correct format and then checks if it's already in use.
-	if oldUser.Email != newUser.Email {
+	err = user.ValidateRequestedUser(requestedUserID)
+	if err != nil {
+		return entity.NewErrorUnauthorized(err, presenter.ErrInsufficientPermissions)
+	}
+
+	requestedUser, err := s.userRepository.GetUserByID(requestedUserID)
+	if err != nil {
+		return entity.NewErrorInternalServer(err, presenter.ErrIntServError)
+	}
+
+	if requestedUser.Email != newUser.Email {
 		err := checkmail.ValidateFormat(newUser.Email)
 		if err != nil {
 			return entity.NewErrorConflict(errors.New("invalid email"), presenter.ErrInvUserEmail)
@@ -102,8 +117,7 @@ func (s *Service) UpdateTinyUser(userID, requestedUserID string, newUser entity.
 		}
 	}
 
-	// Checks if the new registration number has the correct format and then checks if it's already in use.
-	if oldUser.RegistrationNumber != newUser.RegistrationNumber {
+	if requestedUser.RegistrationNumber != newUser.RegistrationNumber {
 		err = newUser.ValidateRegistrationNumber()
 		if err != nil {
 			return entity.NewErrorConflict(err, presenter.ErrInvUserRegistrationNumber)
@@ -116,15 +130,15 @@ func (s *Service) UpdateTinyUser(userID, requestedUserID string, newUser entity.
 
 	// Creates a new user payload and then replaces the old one.
 	updatedUser := entity.UserPayload{
-		ID:                 oldUser.ID,
+		ID:                 requestedUser.ID,
 		Name:               newUser.Name,
 		BirthDate:          newUser.BirthDate,
 		Email:              newUser.Email,
 		RegistrationNumber: newUser.RegistrationNumber,
-		Password:           oldUser.Password,
-		UniversityID:       oldUser.University.ID,
-		Status:             oldUser.Status,
-		CreationDate:       oldUser.CreationDate,
+		Password:           requestedUser.Password,
+		UniversityID:       requestedUser.University.ID,
+		Status:             requestedUser.Status,
+		CreationDate:       requestedUser.CreationDate,
 	}
 
 	err = s.userRepository.UpdateUser(updatedUser)
@@ -143,7 +157,7 @@ func (s *Service) AuthenticateUser(email, password string) (*entity.User, error)
 		}
 		return nil, entity.NewErrorInternalServer(err, presenter.ErrIntServError)
 	}
-	// Compares passwords.
+
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
 		return nil, entity.NewErrorUnauthorized(errors.New("invalid credentials"), presenter.ErrInvCredentials)

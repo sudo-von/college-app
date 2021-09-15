@@ -79,7 +79,6 @@ func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
 		CheckError(err, w, r)
 		return
 	}
-
 	newUser := entity.UserPayload{
 		Name:               data.Name,
 		BirthDate:          birthDate.In(time.Local),
@@ -97,11 +96,10 @@ func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	render.Status(r, http.StatusOK)
+	render.Status(r, http.StatusCreated)
 }
 
-//Authenticate a user if credentials are right.
+//Login authenticates a user if credentials are right.
 func (c *UserController) Login(w http.ResponseWriter, r *http.Request) {
 
 	user, ok := r.Context().Value(middleware.ContextKeyUser).(*entity.User)
@@ -144,7 +142,6 @@ func (c *UserController) UpdateTinyUser(w http.ResponseWriter, r *http.Request) 
 		CheckError(err, w, r)
 		return
 	}
-
 	newUser := entity.UpdateUserPayload{
 		Name:               data.Name,
 		BirthDate:          birthDate,
@@ -158,6 +155,5 @@ func (c *UserController) UpdateTinyUser(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
 	render.Status(r, http.StatusOK)
 }
