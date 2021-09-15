@@ -42,7 +42,7 @@ func ListenAndServe(services Services) {
 	r.Use(cors.Handler)
 	// Token.
 
-	// Http hanlders.
+	// Http handlers.
 	r.Mount("/advices", handler.NewAdviceController(services.AdviceService, services.TokenService).Routes())
 	r.Mount("/contacts", handler.NewContactController(services.ContactService, services.TokenService).Routes())
 	r.Mount("/suggestions", handler.NewSuggestionController(services.SuggestionService, services.TokenService).Routes())
@@ -52,6 +52,6 @@ func ListenAndServe(services Services) {
 
 	// Start http server.
 	if err := http.ListenAndServe(":4000", r); err != nil {
-		log.Panic("[ListenAndServe] error: %w", err.Error())
+		log.Panic("[router] ListenAndServe error: %w", err.Error())
 	}
 }
