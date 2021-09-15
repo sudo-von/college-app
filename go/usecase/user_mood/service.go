@@ -4,19 +4,32 @@ import (
 	"errors"
 	"freelancer/college-app/go/api/presenter"
 	"freelancer/college-app/go/entity"
+	"freelancer/college-app/go/usecase/user"
 )
 
 type Service struct {
+	userRepository     user.UserRepository
 	userMoodRepository UserMoodRepository
 }
 
-func NewService(userMoodRepository UserMoodRepository) *Service {
+func NewService(userRepository user.UserRepository, userMoodRepository UserMoodRepository) *Service {
 	return &Service{
+		userRepository,
 		userMoodRepository,
 	}
 }
 
 func (s *Service) GetUserMoodByUserID(userID, requestedUserID string, userMoodFilters entity.UserMoodFilters) (*entity.UserMood, error) {
+
+	user, err := s.userRepository.GetUserByID(userID)
+	if err != nil {
+		return nil, entity.NewErrorInternalServer(err, presenter.ErrIntServError)
+	}
+
+	err = user.ValidateRequestedUser(requestedUserID)
+	if err != nil {
+		return nil, entity.NewErrorUnauthorized(err, presenter.ErrInsufficientPermissions)
+	}
 
 	userMood, err := s.userMoodRepository.GetUserMoodByUserID(requestedUserID, userMoodFilters)
 	if err != nil {
@@ -25,6 +38,7 @@ func (s *Service) GetUserMoodByUserID(userID, requestedUserID string, userMoodFi
 		}
 		return nil, entity.NewErrorInternalServer(err, presenter.ErrIntServError)
 	}
+
 	return userMood, nil
 }
 
