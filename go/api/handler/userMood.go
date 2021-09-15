@@ -77,7 +77,6 @@ func (c *UserMoodController) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Checks if the user mood has already been registered today.
 	currentDate := time.Now().In(time.Local)
 	userMoodFilters := entity.UserMoodFilters{
 		CreationDate: &currentDate,
@@ -96,5 +95,5 @@ func (c *UserMoodController) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	render.Status(r, http.StatusOK)
+	render.Status(r, http.StatusCreated)
 }
