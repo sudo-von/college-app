@@ -10,6 +10,7 @@ import (
 var (
 	ErrUnauthorizedUser                        = "UNAUTHORIZED_USER"
 	ErrAuthHeaderNotProvided                   = "AUTH_HEADER_NOT_PROVIDED"
+	ErrInsufficientPermissions                 = "INSUFFICIENT_PERMISSIONS"
 	ErrInvAuthHeaderFormat                     = "INVALID_AUTH_HEADER_FORMAT"
 	ErrInvUnsHeaderFormat                      = "INVALID_UNSUPPORTED_HEADER_FORMAT"
 	ErrInvCredentials                          = "INVALID_CREDENTIALS"
