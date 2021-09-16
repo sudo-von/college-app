@@ -14,6 +14,10 @@ import (
 	"log"
 )
 
+// @title chi-swagger example APIsSS
+// @version 1.0
+// @description chi-swagger example APIs
+// @BasePath /
 func main() {
 
 	// Handles MongoDB connection.

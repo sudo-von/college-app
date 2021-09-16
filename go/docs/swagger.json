@@ -1,0 +1,14 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Official documentation to consume the API.",
+        "title": "College-app API",
+        "contact": {
+            "name": "Jesús 'VoN' Rodríguez",
+            "url": "https://www.linkedin.com/in/jes%C3%BAs-%C3%A1ngel-rodr%C3%ADguez-mart%C3%ADnez-84991a1b4/",
+            "email": "sudo.von.contact@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {}
+}

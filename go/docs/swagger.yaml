@@ -1,0 +1,10 @@
+info:
+  contact:
+    email: sudo.von.contact@gmail.com
+    name: Jesús 'VoN' Rodríguez
+    url: https://www.linkedin.com/in/jes%C3%BAs-%C3%A1ngel-rodr%C3%ADguez-mart%C3%ADnez-84991a1b4/
+  description: Official documentation to consume the API.
+  title: College-app API
+  version: 1.0.0
+paths: {}
+swagger: "2.0"

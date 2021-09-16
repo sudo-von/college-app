@@ -13,10 +13,12 @@ import (
 	"log"
 	"net/http"
 
-	chimiddleware "github.com/go-chi/chi/middleware"
+	_ "freelancer/college-app/go/docs"
 
 	"github.com/go-chi/chi"
+	chimiddleware "github.com/go-chi/chi/middleware"
 	"github.com/go-chi/render"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 type Services struct {
@@ -29,18 +31,28 @@ type Services struct {
 	TokenService      token.Service
 }
 
+// @title College-app API
+// @version 1.0.0
+// @description Official documentation to consume the API.
+
+// @contact.name Jesús 'VoN' Rodríguez
+// @contact.url https://www.linkedin.com/in/jes%C3%BAs-%C3%A1ngel-rodr%C3%ADguez-mart%C3%ADnez-84991a1b4/
+// @contact.email sudo.von.contact@gmail.com
 func ListenAndServe(services Services) {
-	// Router.
+
 	r := chi.NewRouter()
 	// Middleware configuration.
 	r.Use(chimiddleware.Logger)
 	r.Use(chimiddleware.Recoverer)
 	r.Use(chimiddleware.URLFormat)
 	r.Use(render.SetContentType(render.ContentTypeJSON))
+
 	// CORS configuration.
 	cors := middleware.Cors()
 	r.Use(cors.Handler)
-	// Token.
+
+	// Documentation.
+	r.Mount("/swagger", httpSwagger.WrapHandler)
 
 	// Http handlers.
 	r.Mount("/advices", handler.NewAdviceController(services.AdviceService, services.TokenService).Routes())
