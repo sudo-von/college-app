@@ -43,7 +43,7 @@ func main() {
 	userService := user.NewService(userRepository, universityRepository)
 	universityService := university.NewService(universityRepository)
 	suggestionService := suggestion.NewService(suggestionRepository)
-	contactService := contact.NewService(contactRepository)
+	contactService := contact.NewService(userRepository, contactRepository)
 	userMoodService := user_mood.NewService(userRepository, userMoodRepository)
 	adviceService := advice.NewService(adviceRepository, userRepository, universityRepository)
 

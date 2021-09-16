@@ -34,14 +34,14 @@ func (s *Service) GetTinyUserByID(userID, requestedUserID string) (*entity.TinyU
 		return nil, entity.NewErrorUnauthorized(err, presenter.ErrInsufficientPermissions)
 	}
 
-	tinyUser, err := s.userRepository.GetTinyUserByID(requestedUserID)
+	requestedUser, err := s.userRepository.GetTinyUserByID(requestedUserID)
 	if err != nil {
 		if err.Error() == "not found" {
 			return nil, entity.NewErrorNotFound(err, presenter.ErrUserNotFound)
 		}
 		return nil, entity.NewErrorInternalServer(err, presenter.ErrIntServError)
 	}
-	return tinyUser, nil
+	return requestedUser, nil
 
 }
 

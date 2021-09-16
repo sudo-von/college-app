@@ -4,32 +4,32 @@ import (
 	"errors"
 	"freelancer/college-app/go/api/presenter"
 	"freelancer/college-app/go/entity"
+	"freelancer/college-app/go/usecase/user"
 )
 
 type Service struct {
+	userRepository    user.UserRepository
 	contactRepository ContactRepository
 }
 
-func NewService(contactRepository ContactRepository) *Service {
+func NewService(userRepository user.UserRepository, contactRepository ContactRepository) *Service {
 	return &Service{
+		userRepository,
 		contactRepository,
 	}
 }
 
-func (s *Service) GetContactByID(userID, contactID string) (*entity.Contact, error) {
+func (s *Service) GetContactByUserID(userID, requestedUserID string) (*entity.Contact, error) {
 
-	contact, err := s.contactRepository.GetContactByID(contactID)
+	user, err := s.userRepository.GetUserByID(userID)
 	if err != nil {
-		if err.Error() == "not found" {
-			return nil, entity.NewErrorNotFound(err, presenter.ErrContactNotFound)
-		}
 		return nil, entity.NewErrorInternalServer(err, presenter.ErrIntServError)
 	}
 
-	return contact, nil
-}
-
-func (s *Service) GetContactByUserID(userID, requestedUserID string) (*entity.Contact, error) {
+	err = user.ValidateRequestedUser(requestedUserID)
+	if err != nil {
+		return nil, entity.NewErrorUnauthorized(err, presenter.ErrInsufficientPermissions)
+	}
 
 	contact, err := s.contactRepository.GetContactByUserID(requestedUserID)
 	if err != nil {
@@ -44,8 +44,18 @@ func (s *Service) GetContactByUserID(userID, requestedUserID string) (*entity.Co
 
 func (s *Service) CreateContact(userID, requestedUserID string, newContact entity.ContactPayload) error {
 
+	user, err := s.userRepository.GetUserByID(userID)
+	if err != nil {
+		return entity.NewErrorInternalServer(err, presenter.ErrIntServError)
+	}
+
+	err = user.ValidateRequestedUser(requestedUserID)
+	if err != nil {
+		return entity.NewErrorUnauthorized(err, presenter.ErrInsufficientPermissions)
+	}
+
 	// Validates contact number.
-	err := newContact.ValidateNumber()
+	err = newContact.ValidateNumber()
 	if err != nil {
 		return entity.NewErrorConflict(err, presenter.ErrInvContactNumber)
 	}
@@ -66,13 +76,23 @@ func (s *Service) CreateContact(userID, requestedUserID string, newContact entit
 
 func (s *Service) UpdateContactByID(userID, contactID string, newContact entity.UpdateContactPayload) error {
 
+	user, err := s.userRepository.GetUserByID(userID)
+	if err != nil {
+		return entity.NewErrorInternalServer(err, presenter.ErrIntServError)
+	}
+
 	// Gets old contact.
-	oldContact, err := s.GetContactByID(userID, contactID)
+	oldContact, err := s.contactRepository.GetContactByID(contactID)
 	if err != nil {
 		if err.Error() == "not found" {
 			return entity.NewErrorNotFound(err, presenter.ErrContactNotFound)
 		}
 		return entity.NewErrorInternalServer(err, presenter.ErrIntServError)
+	}
+
+	err = user.ValidateRequestedUser(oldContact.UserID)
+	if err != nil {
+		return entity.NewErrorUnauthorized(err, presenter.ErrInsufficientPermissions)
 	}
 
 	// If both contact numbers are different, checks if the new contact number is valid.

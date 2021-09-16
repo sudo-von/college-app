@@ -89,8 +89,7 @@ func (c *ContactController) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	render.Status(r, http.StatusOK)
+	render.Status(r, http.StatusCreated)
 }
 
 // Update updates a contact given the user id from the context.
@@ -122,6 +121,5 @@ func (c *ContactController) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
 	render.Status(r, http.StatusOK)
 }
