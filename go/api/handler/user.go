@@ -87,6 +87,7 @@ func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
 		Password:           data.Password,
 		UniversityID:       data.UniversityID,
 		Status:             entity.ActiveStatus,
+		Role:               entity.StudentRole,
 		CreationDate:       time.Now().In(time.Local),
 	}
 
