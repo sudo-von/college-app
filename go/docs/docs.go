@@ -26,7 +26,96 @@ var doc = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/users-mood": {
+            "post": {
+                "description": "Create user's mood for the current day.",
+                "tags": [
+                    "users-mood"
+                ],
+                "summary": "Create user's mood",
+                "operationId": "create-user-mood-for-current-day",
+                "parameters": [
+                    {
+                        "description": "User's mood for the current day.",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.UserMoodPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/users-mood/users/{id}": {
+            "get": {
+                "description": "Get user's mood given its id for the current day.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users-mood"
+                ],
+                "summary": "Show user's mood",
+                "operationId": "get-user-mood-by-user-id-for-current-day",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User's id.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.UserMoodResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "presenter.UserMoodPayload": {
+            "type": "object",
+            "properties": {
+                "mood": {
+                    "type": "number",
+                    "example": 5
+                }
+            }
+        },
+        "presenter.UserMoodResponse": {
+            "type": "object",
+            "properties": {
+                "creation_date": {
+                    "type": "string",
+                    "example": "2021-04-17"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622be"
+                },
+                "mood": {
+                    "type": "number",
+                    "example": 10
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "613aab4d8a6ef50007e622bd"
+                }
+            }
+        }
+    }
 }`
 
 type swaggerInfo struct {

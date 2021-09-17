@@ -1,3 +1,25 @@
+definitions:
+  presenter.UserMoodPayload:
+    properties:
+      mood:
+        example: 5
+        type: number
+    type: object
+  presenter.UserMoodResponse:
+    properties:
+      creation_date:
+        example: "2021-04-17"
+        type: string
+      id:
+        example: 613aab578a6ef50007e622be
+        type: string
+      mood:
+        example: 10
+        type: number
+      user_id:
+        example: 613aab4d8a6ef50007e622bd
+        type: string
+    type: object
 info:
   contact:
     email: sudo.von.contact@gmail.com
@@ -6,5 +28,42 @@ info:
   description: Official documentation to consume the API.
   title: College-app API
   version: 1.0.0
-paths: {}
+paths:
+  /users-mood:
+    post:
+      description: Create user's mood for the current day.
+      operationId: create-user-mood-for-current-day
+      parameters:
+      - description: User's mood for the current day.
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/presenter.UserMoodPayload'
+      responses:
+        "201":
+          description: ""
+      summary: Create user's mood
+      tags:
+      - users-mood
+  /users-mood/users/{id}:
+    get:
+      description: Get user's mood given its id for the current day.
+      operationId: get-user-mood-by-user-id-for-current-day
+      parameters:
+      - description: User's id.
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.UserMoodResponse'
+      summary: Show user's mood
+      tags:
+      - users-mood
 swagger: "2.0"

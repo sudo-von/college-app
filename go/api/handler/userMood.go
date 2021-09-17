@@ -35,7 +35,15 @@ func (c *UserMoodController) Routes() chi.Router {
 	return r
 }
 
-// Show returns a user mood given the user id from the context.
+// Show godoc
+// @tags users-mood
+// @summary Show user's mood
+// @description Get user's mood given its id for the current day.
+// @id get-user-mood-by-user-id-for-current-day
+// @produce json
+// @success 200 {object} presenter.UserMoodResponse
+// @param id path int true "User's id."
+// @router /users-mood/users/{id} [get]
 func (c *UserMoodController) Show(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
@@ -61,7 +69,13 @@ func (c *UserMoodController) Show(w http.ResponseWriter, r *http.Request) {
 	render.Render(w, r, &response)
 }
 
-// Create stores a new user mood.
+// @tags users-mood
+// @summary Create user's mood
+// @description Create user's mood for the current day.
+// @id create-user-mood-for-current-day
+// @param payload body presenter.UserMoodPayload true "User's mood for the current day."
+// @success 201
+// @router /users-mood [post]
 func (c *UserMoodController) Create(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
