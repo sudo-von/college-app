@@ -29,6 +29,6 @@ func CheckError(err error, w http.ResponseWriter, r *http.Request) {
 	case *entity.ErrorInternalServer:
 		render.Render(w, r, presenter.ErrorInternalServerResponse(errorType.Message, errorType.Code))
 	default:
-		render.Render(w, r, presenter.ErrorInternalServerResponse(err.(*entity.ErrorInternalServer).Message, err.(*entity.ErrorInternalServer).Code))
+		render.Render(w, r, presenter.ErrorInternalServerResponse(err, presenter.ErrIntServError))
 	}
 }

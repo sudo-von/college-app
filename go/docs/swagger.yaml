@@ -2,25 +2,34 @@ definitions:
   presenter.TinyUserResponse:
     properties:
       birth_date:
+        example: "1997-04-17"
         type: string
       email:
+        example: sudo.von.contact@gmail.com
         type: string
       id:
+        example: 613aab4d8a6ef50007e622bd
         type: string
       name:
+        example: Sudo Von
         type: string
       registration_number:
+        example: "16190770"
         type: string
     type: object
   presenter.UpdateUserPayload:
     properties:
       birth_date:
+        example: "1997-04-17"
         type: string
       email:
+        example: sudo.von.contact@gmail.com
         type: string
       name:
+        example: Sudo Von
         type: string
       registration_number:
+        example: "16190770"
         type: string
     type: object
   presenter.UserMoodPayload:
@@ -47,16 +56,22 @@ definitions:
   presenter.UserPayload:
     properties:
       birth_date:
+        example: "1997-04-17"
         type: string
       email:
+        example: sudo.von.contact@gmail.com
         type: string
       name:
+        example: Sudo Von
         type: string
       password:
+        example: "123456"
         type: string
       registration_number:
+        example: "16190770"
         type: string
       university_id:
+        example: 61366c06d3f6379af212aeb5
         type: string
     type: object
 info:
@@ -73,7 +88,7 @@ paths:
       description: Create user.
       operationId: create-user
       parameters:
-      - description: User information.
+      - description: User that wants to be stored.
         in: body
         name: payload
         required: true
@@ -137,7 +152,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -145,10 +160,12 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/presenter.TinyUserResponse'
+      security:
+      - BearerJWT: []
       summary: Show user.
       tags:
       - users
-    post:
+    patch:
       description: Update user.
       operationId: update-user
       parameters:
@@ -156,16 +173,18 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
-      - description: User information.
+        type: string
+      - description: User information that wants to be updated.
         in: body
-        name: payload
+        name: updatePayload
         required: true
         schema:
           $ref: '#/definitions/presenter.UpdateUserPayload'
       responses:
         "200":
           description: ""
+      security:
+      - BearerJWT: []
       summary: Update user.
       tags:
       - users
@@ -177,8 +196,12 @@ paths:
         "200":
           description: ""
           headers:
-            Token:
-              description: Bearer <Token>
+            Access-Control-Allow-Headers:
+              description: Authorization.
+              type: string
+            Authorization:
+              description: Bearer jwt that must be used as Api Key in the Authorize
+                section.
               type: string
       security:
       - BasicAuth: []

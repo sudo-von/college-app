@@ -46,10 +46,11 @@ func (c *UserController) Routes() chi.Router {
 // @tags users
 // @summary Show user.
 // @description Show basic user information.
+// @security BearerJWT
 // @id get-tiny-user
 // @produce json
 // @success 200 {object} presenter.TinyUserResponse
-// @param id path int true "User's id."
+// @param id path string true "User's id."
 // @router /users/{id} [get]
 func (c *UserController) GetTinyUser(w http.ResponseWriter, r *http.Request) {
 
@@ -76,7 +77,7 @@ func (c *UserController) GetTinyUser(w http.ResponseWriter, r *http.Request) {
 // @summary Create user.
 // @description Create user.
 // @id create-user
-// @param payload body presenter.UserPayload true "User information."
+// @param payload body presenter.UserPayload true "User that wants to be stored."
 // @produce json
 // @success 201
 // @router /users [post]
@@ -111,7 +112,7 @@ func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	render.Status(r, http.StatusCreated)
+	w.WriteHeader(http.StatusCreated)
 }
 
 // @tags authentication
@@ -120,7 +121,8 @@ func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
 // @id login
 // @security BasicAuth
 // @success 200
-// @header 200 {string} Token "Bearer <Token>"
+// @header 200 {string} Authorization "Bearer jwt that must be used as Api Key in the Authorize section."
+// @header 200 {string} Access-Control-Allow-Headers "Authorization."
 // @router /users/login [post]
 func (c *UserController) Login(w http.ResponseWriter, r *http.Request) {
 
@@ -145,11 +147,12 @@ func (c *UserController) Login(w http.ResponseWriter, r *http.Request) {
 // @tags users
 // @summary Update user.
 // @description Update user.
+// @security BearerJWT
 // @id update-user
-// @param id path int true "User's id."
-// @param payload body presenter.UpdateUserPayload true "User information."
+// @param id path string true "User's id."
+// @param updatePayload body presenter.UpdateUserPayload true "User information that wants to be updated."
 // @success 200
-// @router /users/{id} [post]
+// @router /users/{id} [PATCH]
 func (c *UserController) UpdateTinyUser(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
@@ -184,5 +187,5 @@ func (c *UserController) UpdateTinyUser(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	render.Status(r, http.StatusOK)
+	w.WriteHeader(http.StatusOK)
 }

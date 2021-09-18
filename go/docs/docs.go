@@ -40,7 +40,7 @@ var doc = `{
                 "operationId": "create-user",
                 "parameters": [
                     {
-                        "description": "User information.",
+                        "description": "User that wants to be stored.",
                         "name": "payload",
                         "in": "body",
                         "required": true,
@@ -139,9 +139,13 @@ var doc = `{
                     "200": {
                         "description": "",
                         "headers": {
-                            "Token": {
+                            "Access-Control-Allow-Headers": {
                                 "type": "string",
-                                "description": "Bearer \u003cToken\u003e"
+                                "description": "Authorization."
+                            },
+                            "Authorization": {
+                                "type": "string",
+                                "description": "Bearer jwt that must be used as Api Key in the Authorize section."
                             }
                         }
                     }
@@ -150,6 +154,11 @@ var doc = `{
         },
         "/users/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
                 "description": "Show basic user information.",
                 "produces": [
                     "application/json"
@@ -161,7 +170,7 @@ var doc = `{
                 "operationId": "get-tiny-user",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "User's id.",
                         "name": "id",
                         "in": "path",
@@ -177,7 +186,12 @@ var doc = `{
                     }
                 }
             },
-            "post": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
                 "description": "Update user.",
                 "tags": [
                     "users"
@@ -186,15 +200,15 @@ var doc = `{
                 "operationId": "update-user",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "User's id.",
                         "name": "id",
                         "in": "path",
                         "required": true
                     },
                     {
-                        "description": "User information.",
-                        "name": "payload",
+                        "description": "User information that wants to be updated.",
+                        "name": "updatePayload",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -215,19 +229,24 @@ var doc = `{
             "type": "object",
             "properties": {
                 "birth_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "1997-04-17"
                 },
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "sudo.von.contact@gmail.com"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "613aab4d8a6ef50007e622bd"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Sudo Von"
                 },
                 "registration_number": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "16190770"
                 }
             }
         },
@@ -235,16 +254,20 @@ var doc = `{
             "type": "object",
             "properties": {
                 "birth_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "1997-04-17"
                 },
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "sudo.von.contact@gmail.com"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Sudo Von"
                 },
                 "registration_number": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "16190770"
                 }
             }
         },
@@ -282,22 +305,28 @@ var doc = `{
             "type": "object",
             "properties": {
                 "birth_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "1997-04-17"
                 },
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "sudo.von.contact@gmail.com"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Sudo Von"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "123456"
                 },
                 "registration_number": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "16190770"
                 },
                 "university_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "61366c06d3f6379af212aeb5"
                 }
             }
         }

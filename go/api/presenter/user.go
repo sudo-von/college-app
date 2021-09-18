@@ -23,11 +23,11 @@ var (
 )
 
 type TinyUserResponse struct {
-	ID                 string `json:"id"`
-	Name               string `json:"name"`
-	BirthDate          string `json:"birth_date"`
-	Email              string `json:"email"`
-	RegistrationNumber string `json:"registration_number"`
+	ID                 string `json:"id" example:"613aab4d8a6ef50007e622bd"`
+	Name               string `json:"name" example:"Sudo Von"`
+	BirthDate          string `json:"birth_date" example:"1997-04-17"`
+	Email              string `json:"email" example:"sudo.von.contact@gmail.com"`
+	RegistrationNumber string `json:"registration_number" example:"16190770"`
 }
 
 func (ur *TinyUserResponse) Render(w http.ResponseWriter, r *http.Request) error {
@@ -45,12 +45,12 @@ func ToTinyPresenterUser(user entity.TinyUser) TinyUserResponse {
 }
 
 type UserPayload struct {
-	Name               string `json:"name"`
-	BirthDate          string `json:"birth_date"`
-	Email              string `json:"email"`
-	RegistrationNumber string `json:"registration_number"`
-	Password           string `json:"password"`
-	UniversityID       string `json:"university_id"`
+	Name               string `json:"name" example:"Sudo Von"`
+	BirthDate          string `json:"birth_date" example:"1997-04-17"`
+	Email              string `json:"email" example:"sudo.von.contact@gmail.com"`
+	RegistrationNumber string `json:"registration_number" example:"16190770"`
+	Password           string `json:"password" example:"123456"`
+	UniversityID       string `json:"university_id" example:"61366c06d3f6379af212aeb5"`
 }
 
 func (up *UserPayload) validate() (err error) {
@@ -83,10 +83,10 @@ func (up *UserPayload) Bind(r *http.Request) error {
 }
 
 type UpdateUserPayload struct {
-	Name               string `json:"name"`
-	BirthDate          string `json:"birth_date"`
-	Email              string `json:"email"`
-	RegistrationNumber string `json:"registration_number"`
+	Name               string `json:"name" example:"Sudo Von"`
+	BirthDate          string `json:"birth_date" example:"1997-04-17"`
+	Email              string `json:"email" example:"sudo.von.contact@gmail.com"`
+	RegistrationNumber string `json:"registration_number" example:"16190770"`
 }
 
 func (uup *UpdateUserPayload) validate() (err error) {
