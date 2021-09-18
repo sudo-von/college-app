@@ -1,4 +1,28 @@
 definitions:
+  presenter.TinyUserResponse:
+    properties:
+      birth_date:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      registration_number:
+        type: string
+    type: object
+  presenter.UpdateUserPayload:
+    properties:
+      birth_date:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      registration_number:
+        type: string
+    type: object
   presenter.UserMoodPayload:
     properties:
       mood:
@@ -20,6 +44,21 @@ definitions:
         example: 613aab4d8a6ef50007e622bd
         type: string
     type: object
+  presenter.UserPayload:
+    properties:
+      birth_date:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      registration_number:
+        type: string
+      university_id:
+        type: string
+    type: object
 info:
   contact:
     email: sudo.von.contact@gmail.com
@@ -29,6 +68,25 @@ info:
   title: College-app API
   version: 1.0.0
 paths:
+  /users:
+    post:
+      description: Create user.
+      operationId: create-user
+      parameters:
+      - description: User information.
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/presenter.UserPayload'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ""
+      summary: Create user.
+      tags:
+      - users
   /users-mood:
     post:
       description: Create user's mood for the current day.
@@ -43,6 +101,8 @@ paths:
       responses:
         "201":
           description: ""
+      security:
+      - BearerJWT: []
       summary: Create user's mood
       tags:
       - users-mood
@@ -55,7 +115,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -63,7 +123,73 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/presenter.UserMoodResponse'
+      security:
+      - BearerJWT: []
       summary: Show user's mood
       tags:
       - users-mood
+  /users/{id}:
+    get:
+      description: Show basic user information.
+      operationId: get-tiny-user
+      parameters:
+      - description: User's id.
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.TinyUserResponse'
+      summary: Show user.
+      tags:
+      - users
+    post:
+      description: Update user.
+      operationId: update-user
+      parameters:
+      - description: User's id.
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User information.
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/presenter.UpdateUserPayload'
+      responses:
+        "200":
+          description: ""
+      summary: Update user.
+      tags:
+      - users
+  /users/login:
+    post:
+      description: Log in to the app to consume the data.
+      operationId: login
+      responses:
+        "200":
+          description: ""
+          headers:
+            Token:
+              description: Bearer <Token>
+              type: string
+      security:
+      - BasicAuth: []
+      summary: Login.
+      tags:
+      - authentication
+securityDefinitions:
+  BasicAuth:
+    type: basic
+  BearerJWT:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

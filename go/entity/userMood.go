@@ -32,7 +32,7 @@ func (ump *UserMoodPayload) ValidateMood() error {
 		validMood = true
 	}
 	if !validMood {
-		return fmt.Errorf("invalid mood, not in range from %d to %d", minValue, maxValue)
+		return fmt.Errorf("invalid mood, not in range from %.2f to %.2f", minValue, maxValue)
 	}
 	return nil
 }

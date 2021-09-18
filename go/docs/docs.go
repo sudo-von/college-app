@@ -27,8 +27,42 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/users": {
+            "post": {
+                "description": "Create user.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Create user.",
+                "operationId": "create-user",
+                "parameters": [
+                    {
+                        "description": "User information.",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.UserPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/users-mood": {
             "post": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
                 "description": "Create user's mood for the current day.",
                 "tags": [
                     "users-mood"
@@ -55,6 +89,11 @@ var doc = `{
         },
         "/users-mood/users/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
                 "description": "Get user's mood given its id for the current day.",
                 "produces": [
                     "application/json"
@@ -66,7 +105,7 @@ var doc = `{
                 "operationId": "get-user-mood-by-user-id-for-current-day",
                 "parameters": [
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "User's id.",
                         "name": "id",
                         "in": "path",
@@ -82,9 +121,133 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/users/login": {
+            "post": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "description": "Log in to the app to consume the data.",
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Login.",
+                "operationId": "login",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {
+                            "Token": {
+                                "type": "string",
+                                "description": "Bearer \u003cToken\u003e"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "description": "Show basic user information.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Show user.",
+                "operationId": "get-tiny-user",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User's id.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.TinyUserResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Update user.",
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update user.",
+                "operationId": "update-user",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "User's id.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "User information.",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.UpdateUserPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "presenter.TinyUserResponse": {
+            "type": "object",
+            "properties": {
+                "birth_date": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "registration_number": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.UpdateUserPayload": {
+            "type": "object",
+            "properties": {
+                "birth_date": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "registration_number": {
+                    "type": "string"
+                }
+            }
+        },
         "presenter.UserMoodPayload": {
             "type": "object",
             "properties": {
@@ -114,6 +277,39 @@ var doc = `{
                     "example": "613aab4d8a6ef50007e622bd"
                 }
             }
+        },
+        "presenter.UserPayload": {
+            "type": "object",
+            "properties": {
+                "birth_date": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "registration_number": {
+                    "type": "string"
+                },
+                "university_id": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
+        },
+        "BearerJWT": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

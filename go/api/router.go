@@ -38,6 +38,13 @@ type Services struct {
 // @contact.name Jesús 'VoN' Rodríguez
 // @contact.url https://www.linkedin.com/in/jes%C3%BAs-%C3%A1ngel-rodr%C3%ADguez-mart%C3%ADnez-84991a1b4/
 // @contact.email sudo.von.contact@gmail.com
+
+// @securityDefinitions.basic BasicAuth
+
+// @securityDefinitions.apiKey BearerJWT
+// @in header
+// @name Authorization
+// @tokenUrl http://localhost.com:4000/users/login
 func ListenAndServe(services Services) {
 
 	r := chi.NewRouter()

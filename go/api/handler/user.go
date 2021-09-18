@@ -43,7 +43,14 @@ func (c *UserController) Routes() chi.Router {
 	return r
 }
 
-// Show returns a user given its id from the context.
+// @tags users
+// @summary Show user.
+// @description Show basic user information.
+// @id get-tiny-user
+// @produce json
+// @success 200 {object} presenter.TinyUserResponse
+// @param id path int true "User's id."
+// @router /users/{id} [get]
 func (c *UserController) GetTinyUser(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
@@ -65,7 +72,14 @@ func (c *UserController) GetTinyUser(w http.ResponseWriter, r *http.Request) {
 	render.Render(w, r, &response)
 }
 
-// Create stores a new user.
+// @tags users
+// @summary Create user.
+// @description Create user.
+// @id create-user
+// @param payload body presenter.UserPayload true "User information."
+// @produce json
+// @success 201
+// @router /users [post]
 func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
 
 	var data presenter.UserPayload
@@ -100,7 +114,14 @@ func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
 	render.Status(r, http.StatusCreated)
 }
 
-//Login authenticates a user if credentials are right.
+// @tags authentication
+// @summary Login.
+// @description Log in to the app to consume the data.
+// @id login
+// @security BasicAuth
+// @success 200
+// @header 200 {string} Token "Bearer <Token>"
+// @router /users/login [post]
 func (c *UserController) Login(w http.ResponseWriter, r *http.Request) {
 
 	user, ok := r.Context().Value(middleware.ContextKeyUser).(*entity.User)
@@ -121,7 +142,14 @@ func (c *UserController) Login(w http.ResponseWriter, r *http.Request) {
 	render.Status(r, http.StatusOK)
 }
 
-// UpdateTinyUser updates a user given its id from the context.
+// @tags users
+// @summary Update user.
+// @description Update user.
+// @id update-user
+// @param id path int true "User's id."
+// @param payload body presenter.UpdateUserPayload true "User information."
+// @success 200
+// @router /users/{id} [post]
 func (c *UserController) UpdateTinyUser(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
