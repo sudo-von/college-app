@@ -34,7 +34,13 @@ func (c *UniversityController) Routes() chi.Router {
 	return r
 }
 
-// List renders a list of tiny universities.
+// @tags universities
+// @summary Show universities.
+// @description Show basic universities information.
+// @id show-universities
+// @produce json
+// @success 200 {object} presenter.TinyUniversityList
+// @router /universities [get]
 func (c *UniversityController) List(w http.ResponseWriter, r *http.Request) {
 
 	list, total, err := c.UniversityService.GetTinyUniversities()
