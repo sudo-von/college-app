@@ -121,7 +121,46 @@ info:
   title: College-app API
   version: 1.0.0
 paths:
-  /suggestion:
+  /contacts/{id}:
+    patch:
+      description: Update contact given its ID.
+      operationId: update-contact-by-id
+      responses:
+        "200":
+          description: ""
+      security:
+      - BearerJWT: []
+      summary: Update contact.
+      tags:
+      - contacts
+  /contacts/users/{id}:
+    get:
+      description: Show contact given the user ID.
+      operationId: show-contact-by-user-id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: json
+      security:
+      - BearerJWT: []
+      summary: Show contact by user ID.
+      tags:
+      - contacts
+    post:
+      description: Create contact for a specific user given its ID.
+      operationId: create-contact-by-user-id
+      responses:
+        "201":
+          description: ""
+      security:
+      - BearerJWT: []
+      summary: Create contact.
+      tags:
+      - contacts
+  /suggestions:
     post:
       description: Create suggestion.
       operationId: create-suggestion

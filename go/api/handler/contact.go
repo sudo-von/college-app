@@ -36,7 +36,14 @@ func (c *ContactController) Routes() chi.Router {
 	return r
 }
 
-// Show returns a contact given the user id from the context.
+// @tags contacts
+// @summary Show contact by user ID.
+// @description Show contact given the user ID.
+// @security BearerJWT
+// @id show-contact-by-user-id
+// @produce json
+// @success 200 {json} presenter.ContactResponse
+// @router /contacts/users/{id} [get]
 func (c *ContactController) Show(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
@@ -58,7 +65,13 @@ func (c *ContactController) Show(w http.ResponseWriter, r *http.Request) {
 	render.Render(w, r, &response)
 }
 
-// Create stores a new user.
+// @tags contacts
+// @summary Create contact.
+// @description Create contact for a specific user given its ID.
+// @security BearerJWT
+// @id create-contact-by-user-id
+// @success 201
+// @router /contacts/users/{id} [post]
 func (c *ContactController) Create(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
@@ -89,10 +102,16 @@ func (c *ContactController) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	render.Status(r, http.StatusCreated)
+	w.WriteHeader(http.StatusCreated)
 }
 
-// Update updates a contact given the user id from the context.
+// @tags contacts
+// @summary Update contact.
+// @description Update contact given its ID.
+// @security BearerJWT
+// @id update-contact-by-id
+// @success 200
+// @router /contacts/{id} [patch]
 func (c *ContactController) Update(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
@@ -121,5 +140,5 @@ func (c *ContactController) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	render.Status(r, http.StatusOK)
+	w.WriteHeader(http.StatusOK)
 }

@@ -41,7 +41,7 @@ func (c *SuggestionController) Routes() chi.Router {
 // @id create-suggestion
 // @produce json
 // @success 201
-// @router /suggestion [post]
+// @router /suggestions [post]
 func (c *SuggestionController) Create(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)

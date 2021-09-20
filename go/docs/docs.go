@@ -27,7 +27,71 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/suggestion": {
+        "/contacts/users/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Show contact given the user ID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "contacts"
+                ],
+                "summary": "Show contact by user ID.",
+                "operationId": "show-contact-by-user-id",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "json"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Create contact for a specific user given its ID.",
+                "tags": [
+                    "contacts"
+                ],
+                "summary": "Create contact.",
+                "operationId": "create-contact-by-user-id",
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/contacts/{id}": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Update contact given its ID.",
+                "tags": [
+                    "contacts"
+                ],
+                "summary": "Update contact.",
+                "operationId": "update-contact-by-id",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/suggestions": {
             "post": {
                 "security": [
                     {
