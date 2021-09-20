@@ -11,6 +11,29 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/suggestion": {
+            "post": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Create suggestion.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "suggestions"
+                ],
+                "summary": "Create suggestion.",
+                "operationId": "create-suggestion",
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/universities": {
             "get": {
                 "description": "List basic universities information.",

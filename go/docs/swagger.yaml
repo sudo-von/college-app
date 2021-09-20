@@ -121,6 +121,20 @@ info:
   title: College-app API
   version: 1.0.0
 paths:
+  /suggestion:
+    post:
+      description: Create suggestion.
+      operationId: create-suggestion
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ""
+      security:
+      - BearerJWT: []
+      summary: Create suggestion.
+      tags:
+      - suggestions
   /universities:
     get:
       description: List basic universities information.

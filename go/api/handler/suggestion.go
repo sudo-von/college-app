@@ -34,7 +34,14 @@ func (c *SuggestionController) Routes() chi.Router {
 	return r
 }
 
-// Create stores a new suggestion.
+// @tags suggestions
+// @summary Create suggestion.
+// @description Create suggestion.
+// @security BearerJWT
+// @id create-suggestion
+// @produce json
+// @success 201
+// @router /suggestion [post]
 func (c *SuggestionController) Create(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
@@ -62,6 +69,5 @@ func (c *SuggestionController) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	render.Status(r, http.StatusOK)
+	w.WriteHeader(http.StatusCreated)
 }
