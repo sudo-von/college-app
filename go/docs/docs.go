@@ -27,6 +27,62 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/universities": {
+            "get": {
+                "description": "List basic universities information.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "universities"
+                ],
+                "summary": "List universities.",
+                "operationId": "list-universities",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.TinyUniversityList"
+                        }
+                    }
+                }
+            }
+        },
+        "/universities/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Show basic university information.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "universities"
+                ],
+                "summary": "Show university.",
+                "operationId": "show-university",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "University id.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.UniversityResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "post": {
                 "description": "Create user.",
@@ -225,6 +281,45 @@ var doc = `{
         }
     },
     "definitions": {
+        "presenter.ClassroomResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.TinyUniversityList": {
+            "type": "object",
+            "properties": {
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.TinyUniversityResponse"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "presenter.TinyUniversityResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "profile_picture": {
+                    "type": "string"
+                }
+            }
+        },
         "presenter.TinyUserResponse": {
             "type": "object",
             "properties": {
@@ -247,6 +342,26 @@ var doc = `{
                 "registration_number": {
                     "type": "string",
                     "example": "16190770"
+                }
+            }
+        },
+        "presenter.UniversityResponse": {
+            "type": "object",
+            "properties": {
+                "classrooms": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.ClassroomResponse"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "profile_picture": {
+                    "type": "string"
                 }
             }
         },

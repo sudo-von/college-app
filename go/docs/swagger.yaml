@@ -1,4 +1,29 @@
 definitions:
+  presenter.ClassroomResponse:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  presenter.TinyUniversityList:
+    properties:
+      results:
+        items:
+          $ref: '#/definitions/presenter.TinyUniversityResponse'
+        type: array
+      total:
+        type: integer
+    type: object
+  presenter.TinyUniversityResponse:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      profile_picture:
+        type: string
+    type: object
   presenter.TinyUserResponse:
     properties:
       birth_date:
@@ -15,6 +40,19 @@ definitions:
         type: string
       registration_number:
         example: "16190770"
+        type: string
+    type: object
+  presenter.UniversityResponse:
+    properties:
+      classrooms:
+        items:
+          $ref: '#/definitions/presenter.ClassroomResponse'
+        type: array
+      id:
+        type: string
+      name:
+        type: string
+      profile_picture:
         type: string
     type: object
   presenter.UpdateUserPayload:
@@ -83,6 +121,42 @@ info:
   title: College-app API
   version: 1.0.0
 paths:
+  /universities:
+    get:
+      description: List basic universities information.
+      operationId: list-universities
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.TinyUniversityList'
+      summary: List universities.
+      tags:
+      - universities
+  /universities/{id}:
+    get:
+      description: Show basic university information.
+      operationId: show-university
+      parameters:
+      - description: University id.
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.UniversityResponse'
+      security:
+      - BearerJWT: []
+      summary: Show university.
+      tags:
+      - universities
   /users:
     post:
       description: Create user.

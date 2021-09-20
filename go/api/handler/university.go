@@ -35,9 +35,9 @@ func (c *UniversityController) Routes() chi.Router {
 }
 
 // @tags universities
-// @summary Show universities.
-// @description Show basic universities information.
-// @id show-universities
+// @summary List universities.
+// @description List basic universities information.
+// @id list-universities
 // @produce json
 // @success 200 {object} presenter.TinyUniversityList
 // @router /universities [get]
@@ -62,7 +62,15 @@ func (c *UniversityController) List(w http.ResponseWriter, r *http.Request) {
 	render.Render(w, r, &res)
 }
 
-// ShowUniversity renders a university given its id.
+// @tags universities
+// @summary Show university.
+// @description Show basic university information.
+// @security BearerJWT
+// @id show-university
+// @produce json
+// @success 200 {object} presenter.UniversityResponse
+// @param id path string true "University id."
+// @router /universities/{id} [get]
 func (c *UniversityController) ShowUniversity(w http.ResponseWriter, r *http.Request) {
 
 	universityID := chi.URLParam(r, "id")
