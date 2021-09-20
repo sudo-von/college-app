@@ -38,6 +38,7 @@ func (c *SuggestionController) Routes() chi.Router {
 // @summary Create suggestion.
 // @description Create suggestion.
 // @security BearerJWT
+// @param updatePayload body presenter.SuggestionPayload true "Suggestion that wants to be stored."
 // @id create-suggestion
 // @produce json
 // @success 201

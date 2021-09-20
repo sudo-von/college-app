@@ -64,6 +64,17 @@ var doc = `{
                 ],
                 "summary": "Create contact.",
                 "operationId": "create-contact-by-user-id",
+                "parameters": [
+                    {
+                        "description": "Contact that wants to be stored.",
+                        "name": "updatePayload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.ContactPayload"
+                        }
+                    }
+                ],
                 "responses": {
                     "201": {
                         "description": ""
@@ -118,6 +129,17 @@ var doc = `{
                 ],
                 "summary": "Create suggestion.",
                 "operationId": "create-suggestion",
+                "parameters": [
+                    {
+                        "description": "Suggestion that wants to be stored.",
+                        "name": "updatePayload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.SuggestionPayload"
+                        }
+                    }
+                ],
                 "responses": {
                     "201": {
                         "description": ""
@@ -386,6 +408,28 @@ var doc = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.ContactPayload": {
+            "type": "object",
+            "properties": {
+                "contact_name": {
+                    "type": "string"
+                },
+                "contact_number": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.SuggestionPayload": {
+            "type": "object",
+            "properties": {
+                "suggestion": {
                     "type": "string"
                 }
             }
