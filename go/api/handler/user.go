@@ -149,7 +149,7 @@ func (c *UserController) Login(w http.ResponseWriter, r *http.Request) {
 // @description Update user.
 // @security BearerJWT
 // @id update-user
-// @param id path string true "User's id."
+// @param id path string true "User ID"
 // @param updatePayload body presenter.UpdateUserPayload true "User information that wants to be updated."
 // @success 200
 // @router /users/{id} [PATCH]

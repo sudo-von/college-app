@@ -55,6 +55,15 @@ definitions:
       profile_picture:
         type: string
     type: object
+  presenter.UpdateContactPayload:
+    properties:
+      contact_name:
+        type: string
+      contact_number:
+        type: string
+      message:
+        type: string
+    type: object
   presenter.UpdateUserPayload:
     properties:
       birth_date:
@@ -125,6 +134,13 @@ paths:
     patch:
       description: Update contact given its ID.
       operationId: update-contact-by-id
+      parameters:
+      - description: Contact information that wants to be updated.
+        in: body
+        name: updatePayload
+        required: true
+        schema:
+          $ref: '#/definitions/presenter.UpdateContactPayload'
       responses:
         "200":
           description: ""
@@ -232,7 +248,7 @@ paths:
   /users-mood:
     post:
       description: Create user's mood for the current day.
-      operationId: create-user-mood-for-current-day
+      operationId: create-user-mood
       parameters:
       - description: User's mood for the current day.
         in: body
@@ -250,10 +266,10 @@ paths:
       - users-mood
   /users-mood/users/{id}:
     get:
-      description: Get user's mood given its id for the current day.
-      operationId: get-user-mood-by-user-id-for-current-day
+      description: Get user's mood given its ID for the current day.
+      operationId: get-user-mood-by-user-id
       parameters:
-      - description: User's id.
+      - description: User ID
         in: path
         name: id
         required: true
@@ -296,7 +312,7 @@ paths:
       description: Update user.
       operationId: update-user
       parameters:
-      - description: User's id.
+      - description: User ID
         in: path
         name: id
         required: true

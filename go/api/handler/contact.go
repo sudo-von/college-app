@@ -110,6 +110,7 @@ func (c *ContactController) Create(w http.ResponseWriter, r *http.Request) {
 // @description Update contact given its ID.
 // @security BearerJWT
 // @id update-contact-by-id
+// @param updatePayload body presenter.UpdateContactPayload true "Contact information that wants to be updated."
 // @success 200
 // @router /contacts/{id} [patch]
 func (c *ContactController) Update(w http.ResponseWriter, r *http.Request) {

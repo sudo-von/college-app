@@ -84,6 +84,17 @@ var doc = `{
                 ],
                 "summary": "Update contact.",
                 "operationId": "update-contact-by-id",
+                "parameters": [
+                    {
+                        "description": "Contact information that wants to be updated.",
+                        "name": "updatePayload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.UpdateContactPayload"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": ""
@@ -211,7 +222,7 @@ var doc = `{
                     "users-mood"
                 ],
                 "summary": "Create user's mood",
-                "operationId": "create-user-mood-for-current-day",
+                "operationId": "create-user-mood",
                 "parameters": [
                     {
                         "description": "User's mood for the current day.",
@@ -237,7 +248,7 @@ var doc = `{
                         "BearerJWT": []
                     }
                 ],
-                "description": "Get user's mood given its id for the current day.",
+                "description": "Get user's mood given its ID for the current day.",
                 "produces": [
                     "application/json"
                 ],
@@ -245,11 +256,11 @@ var doc = `{
                     "users-mood"
                 ],
                 "summary": "Show user's mood",
-                "operationId": "get-user-mood-by-user-id-for-current-day",
+                "operationId": "get-user-mood-by-user-id",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "User's id.",
+                        "description": "User ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -344,7 +355,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "User's id.",
+                        "description": "User ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -448,6 +459,20 @@ var doc = `{
                     "type": "string"
                 },
                 "profile_picture": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.UpdateContactPayload": {
+            "type": "object",
+            "properties": {
+                "contact_name": {
+                    "type": "string"
+                },
+                "contact_number": {
+                    "type": "string"
+                },
+                "message": {
                     "type": "string"
                 }
             }
