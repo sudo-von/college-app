@@ -199,7 +199,7 @@ paths:
             $ref: '#/definitions/presenter.AdviceList'
       security:
       - BearerJWT: []
-      summary: List advices
+      summary: List advices.
       tags:
       - advices
     post:
@@ -219,7 +219,7 @@ paths:
           description: ""
       security:
       - BearerJWT: []
-      summary: Create advice
+      summary: Create advice.
       tags:
       - advices
   /advices/{id}:
@@ -227,7 +227,7 @@ paths:
       description: Delete advice given its ID.
       operationId: delete-advice
       parameters:
-      - description: Advice ID
+      - description: Advice ID.
         in: path
         name: id
         required: true
@@ -244,6 +244,11 @@ paths:
       description: Update advice given its ID.
       operationId: update-advice
       parameters:
+      - description: Advice ID.
+        in: path
+        name: id
+        required: true
+        type: string
       - description: Advice information that wants to be updated.
         in: body
         name: updatePayload
@@ -255,7 +260,7 @@ paths:
           description: ""
       security:
       - BearerJWT: []
-      summary: Update advice
+      summary: Update advice.
       tags:
       - advices
   /contacts/{id}:
@@ -263,6 +268,11 @@ paths:
       description: Update contact given its ID.
       operationId: update-contact-by-id
       parameters:
+      - description: Contact ID.
+        in: path
+        name: id
+        required: true
+        type: string
       - description: Contact information that wants to be updated.
         in: body
         name: updatePayload
@@ -281,6 +291,12 @@ paths:
     get:
       description: Show contact given the user ID.
       operationId: show-contact-by-user-id
+      parameters:
+      - description: User ID.
+        in: path
+        name: id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -299,10 +315,15 @@ paths:
       parameters:
       - description: Contact that wants to be stored.
         in: body
-        name: updatePayload
+        name: payload
         required: true
         schema:
           $ref: '#/definitions/presenter.ContactPayload'
+      - description: User ID.
+        in: path
+        name: id
+        required: true
+        type: string
       responses:
         "201":
           description: ""
@@ -318,7 +339,7 @@ paths:
       parameters:
       - description: Suggestion that wants to be stored.
         in: body
-        name: updatePayload
+        name: payload
         required: true
         schema:
           $ref: '#/definitions/presenter.SuggestionPayload'
@@ -351,7 +372,7 @@ paths:
       description: Show basic university information.
       operationId: show-university
       parameters:
-      - description: University id.
+      - description: University ID.
         in: path
         name: id
         required: true
@@ -373,14 +394,12 @@ paths:
       description: Create user.
       operationId: create-user
       parameters:
-      - description: User that wants to be stored.
+      - description: User information that wants to be stored.
         in: body
         name: payload
         required: true
         schema:
           $ref: '#/definitions/presenter.UserPayload'
-      produces:
-      - application/json
       responses:
         "201":
           description: ""
@@ -403,7 +422,7 @@ paths:
           description: ""
       security:
       - BearerJWT: []
-      summary: Create user's mood
+      summary: Create user's mood.
       tags:
       - users-mood
   /users-mood/users/{id}:
@@ -411,7 +430,7 @@ paths:
       description: Get user's mood given its ID for the current day.
       operationId: get-user-mood-by-user-id
       parameters:
-      - description: User ID
+      - description: User ID.
         in: path
         name: id
         required: true
@@ -425,7 +444,7 @@ paths:
             $ref: '#/definitions/presenter.UserMoodResponse'
       security:
       - BearerJWT: []
-      summary: Show user's mood
+      summary: Show user's mood.
       tags:
       - users-mood
   /users/{id}:
@@ -433,7 +452,7 @@ paths:
       description: Show basic user information.
       operationId: get-tiny-user
       parameters:
-      - description: User's id.
+      - description: User ID.
         in: path
         name: id
         required: true
@@ -451,7 +470,7 @@ paths:
       tags:
       - users
     patch:
-      description: Update user.
+      description: Update user information.
       operationId: update-user
       parameters:
       - description: User ID
@@ -475,7 +494,7 @@ paths:
       - users
   /users/login:
     post:
-      description: Log in to the app to consume the data.
+      description: Gets Bearer token.
       operationId: login
       responses:
         "200":

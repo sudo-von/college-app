@@ -36,13 +36,13 @@ func (c *UserMoodController) Routes() chi.Router {
 }
 
 // @tags users-mood
-// @summary Show user's mood
+// @summary Show user's mood.
 // @description Get user's mood given its ID for the current day.
 // @security BearerJWT
 // @id get-user-mood-by-user-id
 // @produce json
 // @success 200 {object} presenter.UserMoodResponse
-// @param id path string true "User ID"
+// @param id path string true "User ID."
 // @router /users-mood/users/{id} [get]
 func (c *UserMoodController) Show(w http.ResponseWriter, r *http.Request) {
 
@@ -70,7 +70,7 @@ func (c *UserMoodController) Show(w http.ResponseWriter, r *http.Request) {
 }
 
 // @tags users-mood
-// @summary Create user's mood
+// @summary Create user's mood.
 // @description Create user's mood for the current day.
 // @security BearerJWT
 // @id create-user-mood

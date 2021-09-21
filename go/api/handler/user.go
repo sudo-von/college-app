@@ -50,7 +50,7 @@ func (c *UserController) Routes() chi.Router {
 // @id get-tiny-user
 // @produce json
 // @success 200 {object} presenter.TinyUserResponse
-// @param id path string true "User's id."
+// @param id path string true "User ID."
 // @router /users/{id} [get]
 func (c *UserController) GetTinyUser(w http.ResponseWriter, r *http.Request) {
 
@@ -77,8 +77,7 @@ func (c *UserController) GetTinyUser(w http.ResponseWriter, r *http.Request) {
 // @summary Create user.
 // @description Create user.
 // @id create-user
-// @param payload body presenter.UserPayload true "User that wants to be stored."
-// @produce json
+// @param payload body presenter.UserPayload true "User information that wants to be stored."
 // @success 201
 // @router /users [post]
 func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
@@ -117,7 +116,7 @@ func (c *UserController) Create(w http.ResponseWriter, r *http.Request) {
 
 // @tags authentication
 // @summary Login.
-// @description Log in to the app to consume the data.
+// @description Gets Bearer token.
 // @id login
 // @security BasicAuth
 // @success 200
@@ -146,7 +145,7 @@ func (c *UserController) Login(w http.ResponseWriter, r *http.Request) {
 
 // @tags users
 // @summary Update user.
-// @description Update user.
+// @description Update user information.
 // @security BearerJWT
 // @id update-user
 // @param id path string true "User ID"

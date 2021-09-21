@@ -15,7 +15,7 @@ type UserMoodResponse struct {
 	ID           string  `json:"id" example:"613aab578a6ef50007e622be"`
 	UserID       string  `json:"user_id" example:"613aab4d8a6ef50007e622bd"`
 	Mood         float64 `json:"mood" example:"10"`
-	CreationDate string  `json:"creation_date" example:"2021-04-17"`
+	CreationDate string  `json:"creation_date" example:"2021-10-10"`
 }
 
 func (ur *UserMoodResponse) Render(w http.ResponseWriter, r *http.Request) error {

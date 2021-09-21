@@ -7,7 +7,7 @@ import (
 )
 
 type SuggestionPayload struct {
-	Suggestion string `json:"suggestion"`
+	Suggestion string `json:"suggestion" name:"I would like to..."`
 }
 
 func (sp *SuggestionPayload) validate() (err error) {

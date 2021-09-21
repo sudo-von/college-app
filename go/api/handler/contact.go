@@ -41,6 +41,7 @@ func (c *ContactController) Routes() chi.Router {
 // @description Show contact given the user ID.
 // @security BearerJWT
 // @id show-contact-by-user-id
+// @param id path string true "User ID."
 // @produce json
 // @success 200 {json} presenter.ContactResponse
 // @router /contacts/users/{id} [get]
@@ -69,7 +70,8 @@ func (c *ContactController) Show(w http.ResponseWriter, r *http.Request) {
 // @summary Create contact.
 // @description Create contact for a specific user given its ID.
 // @security BearerJWT
-// @param updatePayload body presenter.ContactPayload true "Contact that wants to be stored."
+// @param payload body presenter.ContactPayload true "Contact that wants to be stored."
+// @param id path string true "User ID."
 // @id create-contact-by-user-id
 // @success 201
 // @router /contacts/users/{id} [post]
@@ -111,6 +113,7 @@ func (c *ContactController) Create(w http.ResponseWriter, r *http.Request) {
 // @description Update contact given its ID.
 // @security BearerJWT
 // @id update-contact-by-id
+// @param id path string true "Contact ID."
 // @param updatePayload body presenter.UpdateContactPayload true "Contact information that wants to be updated."
 // @success 200
 // @router /contacts/{id} [patch]

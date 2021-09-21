@@ -69,7 +69,7 @@ func (c *UniversityController) List(w http.ResponseWriter, r *http.Request) {
 // @id show-university
 // @produce json
 // @success 200 {object} presenter.UniversityResponse
-// @param id path string true "University id."
+// @param id path string true "University ID."
 // @router /universities/{id} [get]
 func (c *UniversityController) ShowUniversity(w http.ResponseWriter, r *http.Request) {
 

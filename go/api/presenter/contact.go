@@ -14,11 +14,11 @@ var (
 )
 
 type ContactResponse struct {
-	ID            string `json:"id"`
-	UserID        string `json:"user_id"`
-	ContactName   string `json:"contact_name"`
-	ContactNumber string `json:"contact_number"`
-	Message       string `json:"message"`
+	ID            string `json:"id" example:"613aab578a6ef50007e622be"`
+	UserID        string `json:"user_id" example:"613aab578a6ef50007e622bd"`
+	ContactName   string `json:"contact_name" example:"VoN"`
+	ContactNumber string `json:"contact_number" example:"528661234567"`
+	Message       string `json:"message" example:"Hi, i need..."`
 }
 
 func (ur *ContactResponse) Render(w http.ResponseWriter, r *http.Request) error {
@@ -36,9 +36,9 @@ func ToContactPresenter(contact entity.Contact) ContactResponse {
 }
 
 type ContactPayload struct {
-	ContactName   string `json:"contact_name"`
-	ContactNumber string `json:"contact_number"`
-	Message       string `json:"message"`
+	ContactName   string `json:"contact_name" example:"VoN"`
+	ContactNumber string `json:"contact_number" example:"528661234567"`
+	Message       string `json:"message" example:"Hi, i need..."`
 }
 
 func (cp *ContactPayload) validate() (err error) {
@@ -62,9 +62,9 @@ func (cp *ContactPayload) Bind(r *http.Request) error {
 }
 
 type UpdateContactPayload struct {
-	ContactName   string `json:"contact_name"`
-	ContactNumber string `json:"contact_number"`
-	Message       string `json:"message"`
+	ContactName   string `json:"contact_name" example:"VoN"`
+	ContactNumber string `json:"contact_number" example:"528661234567"`
+	Message       string `json:"message" example:"Hi, i need..."`
 }
 
 func (ucp *UpdateContactPayload) validate() (err error) {

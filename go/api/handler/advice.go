@@ -37,7 +37,7 @@ func (c *AdviceController) Routes() chi.Router {
 }
 
 // @tags advices
-// @summary List advices
+// @summary List advices.
 // @description List advices.
 // @security BearerJWT
 // @id list-advices
@@ -78,13 +78,13 @@ func (c *AdviceController) List(w http.ResponseWriter, r *http.Request) {
 }
 
 // @tags advices
-// @summary Create advice
+// @summary Create advice.
 // @description Create advice.
 // @security BearerJWT
 // @id create-advice
+// @success 201
 // @param payload body presenter.AdvicePayload true "Advice that wants to be stored."
 // @produce json
-// @success 201
 // @router /advices [post]
 func (c *AdviceController) Create(w http.ResponseWriter, r *http.Request) {
 
@@ -126,12 +126,13 @@ func (c *AdviceController) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 // @tags advices
-// @summary Update advice
+// @summary Update advice.
 // @description Update advice given its ID.
 // @security BearerJWT
 // @id update-advice
-// @param updatePayload body presenter.UpdateAdvicePayload true "Advice information that wants to be updated."
 // @success 200
+// @param id path string true "Advice ID."
+// @param updatePayload body presenter.UpdateAdvicePayload true "Advice information that wants to be updated."
 // @router /advices/{id} [patch]
 func (c *AdviceController) Update(w http.ResponseWriter, r *http.Request) {
 
@@ -176,7 +177,7 @@ func (c *AdviceController) Update(w http.ResponseWriter, r *http.Request) {
 // @security BearerJWT
 // @id delete-advice
 // @success 200
-// @param id path string true "Advice ID"
+// @param id path string true "Advice ID."
 // @router /advices/{id} [delete]
 func (c *AdviceController) Delete(w http.ResponseWriter, r *http.Request) {
 

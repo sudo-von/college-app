@@ -12,7 +12,7 @@ var (
 )
 
 type TinyUniversityList struct {
-	Total            int                      `json:"total"`
+	Total            int                      `json:"total" example:"10"`
 	TinyUniversities []TinyUniversityResponse `json:"results"`
 }
 
@@ -21,9 +21,9 @@ func (tul *TinyUniversityList) Render(w http.ResponseWriter, r *http.Request) er
 }
 
 type TinyUniversityResponse struct {
-	ID             string `json:"id"`
-	Name           string `json:"name"`
-	ProfilePicture string `json:"profile_picture"`
+	ID             string `json:"id" example:"613aab578a6ef50007e622be"`
+	Name           string `json:"name" example:"VoN"`
+	ProfilePicture string `json:"profile_picture" example:"Url"`
 }
 
 func (ur *TinyUniversityResponse) Render(w http.ResponseWriter, r *http.Request) error {
@@ -39,15 +39,15 @@ func ToTinyUniversityPresenter(university entity.TinyUniversity) TinyUniversityR
 }
 
 type UniversityResponse struct {
-	ID             string              `json:"id"`
-	Name           string              `json:"name"`
-	ProfilePicture string              `json:"profile_picture"`
+	ID             string              `json:"id" example:"613aab578a6ef50007e622be"`
+	Name           string              `json:"name" example:"VoN"`
+	ProfilePicture string              `json:"profile_picture" example:"Url"`
 	Classrooms     []ClassroomResponse `json:"classrooms"`
 }
 
 type ClassroomResponse struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID   string `json:"id" example:"613aab578a6ef50007e622be"`
+	Name string `json:"name" example:"VoN"`
 }
 
 func (ur *UniversityResponse) Render(w http.ResponseWriter, r *http.Request) error {

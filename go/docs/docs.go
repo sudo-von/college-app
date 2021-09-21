@@ -41,7 +41,7 @@ var doc = `{
                 "tags": [
                     "advices"
                 ],
-                "summary": "List advices",
+                "summary": "List advices.",
                 "operationId": "list-advices",
                 "responses": {
                     "200": {
@@ -65,7 +65,7 @@ var doc = `{
                 "tags": [
                     "advices"
                 ],
-                "summary": "Create advice",
+                "summary": "Create advice.",
                 "operationId": "create-advice",
                 "parameters": [
                     {
@@ -101,7 +101,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Advice ID",
+                        "description": "Advice ID.",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -123,9 +123,16 @@ var doc = `{
                 "tags": [
                     "advices"
                 ],
-                "summary": "Update advice",
+                "summary": "Update advice.",
                 "operationId": "update-advice",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Advice ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "description": "Advice information that wants to be updated.",
                         "name": "updatePayload",
@@ -159,6 +166,15 @@ var doc = `{
                 ],
                 "summary": "Show contact by user ID.",
                 "operationId": "show-contact-by-user-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -183,12 +199,19 @@ var doc = `{
                 "parameters": [
                     {
                         "description": "Contact that wants to be stored.",
-                        "name": "updatePayload",
+                        "name": "payload",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/presenter.ContactPayload"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "User ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -212,6 +235,13 @@ var doc = `{
                 "summary": "Update contact.",
                 "operationId": "update-contact-by-id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Contact ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "description": "Contact information that wants to be updated.",
                         "name": "updatePayload",
@@ -248,7 +278,7 @@ var doc = `{
                 "parameters": [
                     {
                         "description": "Suggestion that wants to be stored.",
-                        "name": "updatePayload",
+                        "name": "payload",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -303,7 +333,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "University id.",
+                        "description": "University ID.",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -322,9 +352,6 @@ var doc = `{
         "/users": {
             "post": {
                 "description": "Create user.",
-                "produces": [
-                    "application/json"
-                ],
                 "tags": [
                     "users"
                 ],
@@ -332,7 +359,7 @@ var doc = `{
                 "operationId": "create-user",
                 "parameters": [
                     {
-                        "description": "User that wants to be stored.",
+                        "description": "User information that wants to be stored.",
                         "name": "payload",
                         "in": "body",
                         "required": true,
@@ -359,7 +386,7 @@ var doc = `{
                 "tags": [
                     "users-mood"
                 ],
-                "summary": "Create user's mood",
+                "summary": "Create user's mood.",
                 "operationId": "create-user-mood",
                 "parameters": [
                     {
@@ -393,12 +420,12 @@ var doc = `{
                 "tags": [
                     "users-mood"
                 ],
-                "summary": "Show user's mood",
+                "summary": "Show user's mood.",
                 "operationId": "get-user-mood-by-user-id",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "User ID",
+                        "description": "User ID.",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -421,7 +448,7 @@ var doc = `{
                         "BasicAuth": []
                     }
                 ],
-                "description": "Log in to the app to consume the data.",
+                "description": "Gets Bearer token.",
                 "tags": [
                     "authentication"
                 ],
@@ -463,7 +490,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "User's id.",
+                        "description": "User ID.",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -484,7 +511,7 @@ var doc = `{
                         "BearerJWT": []
                     }
                 ],
-                "description": "Update user.",
+                "description": "Update user information.",
                 "tags": [
                     "users"
                 ],
