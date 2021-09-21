@@ -564,7 +564,7 @@ var doc = `{
             "properties": {
                 "advice_date": {
                     "type": "string",
-                    "example": "1997-04-17"
+                    "example": "1997-04-17 15:04"
                 },
                 "classroom_id": {
                     "type": "string",
@@ -581,7 +581,7 @@ var doc = `{
             "properties": {
                 "advice_date": {
                     "type": "string",
-                    "example": "2021-10-10"
+                    "example": "2021-10-10 15:04"
                 },
                 "classroom": {
                     "$ref": "#/definitions/presenter.ClassroomResponse"
@@ -752,7 +752,7 @@ var doc = `{
             "properties": {
                 "advice_date": {
                     "type": "string",
-                    "example": "1997-04-17"
+                    "example": "1997-04-17 15:04"
                 },
                 "classroom_id": {
                     "type": "string",
