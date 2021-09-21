@@ -554,7 +554,8 @@ var doc = `{
                     }
                 },
                 "total": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 10
                 }
             }
         },
@@ -562,13 +563,16 @@ var doc = `{
             "type": "object",
             "properties": {
                 "advice_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "1997-04-17"
                 },
                 "classroom_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622be"
                 },
                 "subject": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Chemistry"
                 }
             }
         },
@@ -576,19 +580,23 @@ var doc = `{
             "type": "object",
             "properties": {
                 "advice_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2021-10-10"
                 },
                 "classroom": {
                     "$ref": "#/definitions/presenter.ClassroomResponse"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622be"
                 },
                 "students_number": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 2
                 },
                 "subject": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Chemistry"
                 },
                 "user": {
                     "$ref": "#/definitions/presenter.TinyUserResponse"
@@ -599,10 +607,12 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622be"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "VoN"
                 }
             }
         },
@@ -610,13 +620,16 @@ var doc = `{
             "type": "object",
             "properties": {
                 "contact_name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "VoN"
                 },
                 "contact_number": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "528661234567"
                 },
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Hi, i need..."
                 }
             }
         },
@@ -638,7 +651,8 @@ var doc = `{
                     }
                 },
                 "total": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 10
                 }
             }
         },
@@ -646,13 +660,16 @@ var doc = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622be"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "VoN"
                 },
                 "profile_picture": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Url"
                 }
             }
         },
@@ -691,13 +708,16 @@ var doc = `{
                     }
                 },
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622be"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "VoN"
                 },
                 "profile_picture": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Url"
                 }
             }
         },
@@ -705,13 +725,16 @@ var doc = `{
             "type": "object",
             "properties": {
                 "advice_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "1997-04-17"
                 },
                 "classroom_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622be"
                 },
                 "subject": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Chemistry"
                 }
             }
         },
@@ -719,13 +742,16 @@ var doc = `{
             "type": "object",
             "properties": {
                 "contact_name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "VoN"
                 },
                 "contact_number": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "528661234567"
                 },
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Hi, i need..."
                 }
             }
         },
@@ -764,7 +790,7 @@ var doc = `{
             "properties": {
                 "creation_date": {
                     "type": "string",
-                    "example": "2021-04-17"
+                    "example": "2021-10-10"
                 },
                 "id": {
                     "type": "string",

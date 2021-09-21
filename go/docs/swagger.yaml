@@ -6,28 +6,36 @@ definitions:
           $ref: '#/definitions/presenter.AdviceResponse'
         type: array
       total:
+        example: 10
         type: integer
     type: object
   presenter.AdvicePayload:
     properties:
       advice_date:
+        example: "1997-04-17"
         type: string
       classroom_id:
+        example: 613aab578a6ef50007e622be
         type: string
       subject:
+        example: Chemistry
         type: string
     type: object
   presenter.AdviceResponse:
     properties:
       advice_date:
+        example: "2021-10-10"
         type: string
       classroom:
         $ref: '#/definitions/presenter.ClassroomResponse'
       id:
+        example: 613aab578a6ef50007e622be
         type: string
       students_number:
+        example: 2
         type: integer
       subject:
+        example: Chemistry
         type: string
       user:
         $ref: '#/definitions/presenter.TinyUserResponse'
@@ -35,17 +43,22 @@ definitions:
   presenter.ClassroomResponse:
     properties:
       id:
+        example: 613aab578a6ef50007e622be
         type: string
       name:
+        example: VoN
         type: string
     type: object
   presenter.ContactPayload:
     properties:
       contact_name:
+        example: VoN
         type: string
       contact_number:
+        example: "528661234567"
         type: string
       message:
+        example: Hi, i need...
         type: string
     type: object
   presenter.SuggestionPayload:
@@ -60,15 +73,19 @@ definitions:
           $ref: '#/definitions/presenter.TinyUniversityResponse'
         type: array
       total:
+        example: 10
         type: integer
     type: object
   presenter.TinyUniversityResponse:
     properties:
       id:
+        example: 613aab578a6ef50007e622be
         type: string
       name:
+        example: VoN
         type: string
       profile_picture:
+        example: Url
         type: string
     type: object
   presenter.TinyUserResponse:
@@ -96,28 +113,37 @@ definitions:
           $ref: '#/definitions/presenter.ClassroomResponse'
         type: array
       id:
+        example: 613aab578a6ef50007e622be
         type: string
       name:
+        example: VoN
         type: string
       profile_picture:
+        example: Url
         type: string
     type: object
   presenter.UpdateAdvicePayload:
     properties:
       advice_date:
+        example: "1997-04-17"
         type: string
       classroom_id:
+        example: 613aab578a6ef50007e622be
         type: string
       subject:
+        example: Chemistry
         type: string
     type: object
   presenter.UpdateContactPayload:
     properties:
       contact_name:
+        example: VoN
         type: string
       contact_number:
+        example: "528661234567"
         type: string
       message:
+        example: Hi, i need...
         type: string
     type: object
   presenter.UpdateUserPayload:
@@ -144,7 +170,7 @@ definitions:
   presenter.UserMoodResponse:
     properties:
       creation_date:
-        example: "2021-04-17"
+        example: "2021-10-10"
         type: string
       id:
         example: 613aab578a6ef50007e622be
