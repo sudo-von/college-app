@@ -1,4 +1,37 @@
 definitions:
+  presenter.AdviceList:
+    properties:
+      results:
+        items:
+          $ref: '#/definitions/presenter.AdviceResponse'
+        type: array
+      total:
+        type: integer
+    type: object
+  presenter.AdvicePayload:
+    properties:
+      advice_date:
+        type: string
+      classroom_id:
+        type: string
+      subject:
+        type: string
+    type: object
+  presenter.AdviceResponse:
+    properties:
+      advice_date:
+        type: string
+      classroom:
+        $ref: '#/definitions/presenter.ClassroomResponse'
+      id:
+        type: string
+      students_number:
+        type: integer
+      subject:
+        type: string
+      user:
+        $ref: '#/definitions/presenter.TinyUserResponse'
+    type: object
   presenter.ClassroomResponse:
     properties:
       id:
@@ -67,6 +100,15 @@ definitions:
       name:
         type: string
       profile_picture:
+        type: string
+    type: object
+  presenter.UpdateAdvicePayload:
+    properties:
+      advice_date:
+        type: string
+      classroom_id:
+        type: string
+      subject:
         type: string
     type: object
   presenter.UpdateContactPayload:
@@ -144,6 +186,78 @@ info:
   title: College-app API
   version: 1.0.0
 paths:
+  /advices:
+    get:
+      description: List advices.
+      operationId: list-advices
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.AdviceList'
+      security:
+      - BearerJWT: []
+      summary: List advices
+      tags:
+      - advices
+    post:
+      description: Create advice.
+      operationId: create-advice
+      parameters:
+      - description: Advice that wants to be stored.
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/presenter.AdvicePayload'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ""
+      security:
+      - BearerJWT: []
+      summary: Create advice
+      tags:
+      - advices
+  /advices/{id}:
+    delete:
+      description: Delete advice given its ID.
+      operationId: delete-advice
+      parameters:
+      - description: Advice ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+      security:
+      - BearerJWT: []
+      summary: Delete advice.
+      tags:
+      - advices
+    patch:
+      description: Update advice given its ID.
+      operationId: update-advice
+      parameters:
+      - description: Advice information that wants to be updated.
+        in: body
+        name: updatePayload
+        required: true
+        schema:
+          $ref: '#/definitions/presenter.UpdateAdvicePayload'
+      responses:
+        "200":
+          description: ""
+      security:
+      - BearerJWT: []
+      summary: Update advice
+      tags:
+      - advices
   /contacts/{id}:
     patch:
       description: Update contact given its ID.

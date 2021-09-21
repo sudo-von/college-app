@@ -36,7 +36,14 @@ func (c *AdviceController) Routes() chi.Router {
 	return r
 }
 
-// List returns a list of advices given a university.
+// @tags advices
+// @summary List advices
+// @description List advices.
+// @security BearerJWT
+// @id list-advices
+// @produce json
+// @success 200 {object} presenter.AdviceList
+// @router /advices [get]
 func (c *AdviceController) List(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
@@ -70,7 +77,15 @@ func (c *AdviceController) List(w http.ResponseWriter, r *http.Request) {
 	render.Render(w, r, &res)
 }
 
-// Create stores a new advice.
+// @tags advices
+// @summary Create advice
+// @description Create advice.
+// @security BearerJWT
+// @id create-advice
+// @param payload body presenter.AdvicePayload true "Advice that wants to be stored."
+// @produce json
+// @success 201
+// @router /advices [post]
 func (c *AdviceController) Create(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
@@ -107,11 +122,17 @@ func (c *AdviceController) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	render.Status(r, http.StatusOK)
+	w.WriteHeader(http.StatusCreated)
 }
 
-// Update updates an advice given its id.
+// @tags advices
+// @summary Update advice
+// @description Update advice given its ID.
+// @security BearerJWT
+// @id update-advice
+// @param updatePayload body presenter.UpdateAdvicePayload true "Advice information that wants to be updated."
+// @success 200
+// @router /advices/{id} [patch]
 func (c *AdviceController) Update(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
@@ -146,11 +167,17 @@ func (c *AdviceController) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	render.Status(r, http.StatusOK)
+	w.WriteHeader(http.StatusOK)
 }
 
-// Delete disables an advice given its id.
+// @tags advices
+// @summary Delete advice.
+// @description Delete advice given its ID.
+// @security BearerJWT
+// @id delete-advice
+// @success 200
+// @param id path string true "Advice ID"
+// @router /advices/{id} [delete]
 func (c *AdviceController) Delete(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
@@ -167,6 +194,5 @@ func (c *AdviceController) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	render.Status(r, http.StatusAccepted)
+	w.WriteHeader(http.StatusOK)
 }

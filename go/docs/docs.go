@@ -27,6 +27,122 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/advices": {
+            "get": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "List advices.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advices"
+                ],
+                "summary": "List advices",
+                "operationId": "list-advices",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.AdviceList"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Create advice.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advices"
+                ],
+                "summary": "Create advice",
+                "operationId": "create-advice",
+                "parameters": [
+                    {
+                        "description": "Advice that wants to be stored.",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.AdvicePayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/advices/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Delete advice given its ID.",
+                "tags": [
+                    "advices"
+                ],
+                "summary": "Delete advice.",
+                "operationId": "delete-advice",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Advice ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Update advice given its ID.",
+                "tags": [
+                    "advices"
+                ],
+                "summary": "Update advice",
+                "operationId": "update-advice",
+                "parameters": [
+                    {
+                        "description": "Advice information that wants to be updated.",
+                        "name": "updatePayload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.UpdateAdvicePayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/contacts/users/{id}": {
             "get": {
                 "security": [
@@ -401,6 +517,57 @@ var doc = `{
         }
     },
     "definitions": {
+        "presenter.AdviceList": {
+            "type": "object",
+            "properties": {
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.AdviceResponse"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "presenter.AdvicePayload": {
+            "type": "object",
+            "properties": {
+                "advice_date": {
+                    "type": "string"
+                },
+                "classroom_id": {
+                    "type": "string"
+                },
+                "subject": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.AdviceResponse": {
+            "type": "object",
+            "properties": {
+                "advice_date": {
+                    "type": "string"
+                },
+                "classroom": {
+                    "$ref": "#/definitions/presenter.ClassroomResponse"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "students_number": {
+                    "type": "integer"
+                },
+                "subject": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/presenter.TinyUserResponse"
+                }
+            }
+        },
         "presenter.ClassroomResponse": {
             "type": "object",
             "properties": {
@@ -503,6 +670,20 @@ var doc = `{
                     "type": "string"
                 },
                 "profile_picture": {
+                    "type": "string"
+                }
+            }
+        },
+        "presenter.UpdateAdvicePayload": {
+            "type": "object",
+            "properties": {
+                "advice_date": {
+                    "type": "string"
+                },
+                "classroom_id": {
+                    "type": "string"
+                },
+                "subject": {
                     "type": "string"
                 }
             }
