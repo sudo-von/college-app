@@ -555,7 +555,7 @@ var doc = `{
                 },
                 "total": {
                     "type": "integer",
-                    "example": 10
+                    "example": 1
                 }
             }
         },
@@ -637,7 +637,8 @@ var doc = `{
             "type": "object",
             "properties": {
                 "suggestion": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "I would like to..."
                 }
             }
         },

@@ -13,7 +13,7 @@ var (
 )
 
 type AdviceList struct {
-	Total   int              `json:"total" example:"10"`
+	Total   int              `json:"total" example:"1"`
 	Advices []AdviceResponse `json:"results"`
 }
 

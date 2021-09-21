@@ -6,7 +6,7 @@ definitions:
           $ref: '#/definitions/presenter.AdviceResponse'
         type: array
       total:
-        example: 10
+        example: 1
         type: integer
     type: object
   presenter.AdvicePayload:
@@ -64,6 +64,7 @@ definitions:
   presenter.SuggestionPayload:
     properties:
       suggestion:
+        example: I would like to...
         type: string
     type: object
   presenter.TinyUniversityList:
