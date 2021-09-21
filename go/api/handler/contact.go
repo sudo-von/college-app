@@ -70,8 +70,8 @@ func (c *ContactController) Show(w http.ResponseWriter, r *http.Request) {
 // @summary Create contact.
 // @description Create contact for a specific user given its ID.
 // @security BearerJWT
-// @param payload body presenter.ContactPayload true "Contact that wants to be stored."
 // @param id path string true "User ID."
+// @param payload body presenter.ContactPayload true "Contact that wants to be stored."
 // @id create-contact-by-user-id
 // @success 201
 // @router /contacts/users/{id} [post]

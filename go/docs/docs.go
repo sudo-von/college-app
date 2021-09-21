@@ -198,6 +198,13 @@ var doc = `{
                 "operationId": "create-contact-by-user-id",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "User ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "Contact that wants to be stored.",
                         "name": "payload",
                         "in": "body",
@@ -205,13 +212,6 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/presenter.ContactPayload"
                         }
-                    },
-                    {
-                        "type": "string",
-                        "description": "User ID.",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
                     }
                 ],
                 "responses": {
