@@ -179,7 +179,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "json"
+                            "$ref": "#/definitions/presenter.ContactResponse"
                         }
                     }
                 }
@@ -630,6 +630,31 @@ var doc = `{
                 "message": {
                     "type": "string",
                     "example": "Hi, i need..."
+                }
+            }
+        },
+        "presenter.ContactResponse": {
+            "type": "object",
+            "properties": {
+                "contact_name": {
+                    "type": "string",
+                    "example": "VoN"
+                },
+                "contact_number": {
+                    "type": "string",
+                    "example": "528661234567"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622be"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Hi, i need..."
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622bd"
                 }
             }
         },

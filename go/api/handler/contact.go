@@ -43,7 +43,7 @@ func (c *ContactController) Routes() chi.Router {
 // @id show-contact-by-user-id
 // @param id path string true "User ID."
 // @produce json
-// @success 200 {json} presenter.ContactResponse
+// @success 200 {object} presenter.ContactResponse
 // @router /contacts/users/{id} [get]
 func (c *ContactController) Show(w http.ResponseWriter, r *http.Request) {
 

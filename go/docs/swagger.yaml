@@ -61,6 +61,24 @@ definitions:
         example: Hi, i need...
         type: string
     type: object
+  presenter.ContactResponse:
+    properties:
+      contact_name:
+        example: VoN
+        type: string
+      contact_number:
+        example: "528661234567"
+        type: string
+      id:
+        example: 613aab578a6ef50007e622be
+        type: string
+      message:
+        example: Hi, i need...
+        type: string
+      user_id:
+        example: 613aab578a6ef50007e622bd
+        type: string
+    type: object
   presenter.SuggestionPayload:
     properties:
       suggestion:
@@ -330,7 +348,7 @@ paths:
         "200":
           description: OK
           schema:
-            type: json
+            $ref: '#/definitions/presenter.ContactResponse'
       security:
       - BearerJWT: []
       summary: Show contact by user ID.
