@@ -330,6 +330,24 @@ paths:
       summary: Update advice.
       tags:
       - advices
+  /advices/{id}/students-number:
+    patch:
+      description: Update the number of students who will attend the advice.
+      operationId: update-advice-students-number
+      parameters:
+      - description: Advice ID.
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+      security:
+      - BearerJWT: []
+      summary: Update advice students number.
+      tags:
+      - advices
   /contacts/{id}:
     patch:
       description: Update contact given its ID.

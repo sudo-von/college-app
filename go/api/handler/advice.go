@@ -34,6 +34,7 @@ func (c *AdviceController) Routes() chi.Router {
 	r.Get("/{id}", c.Show)
 	r.Patch("/{id}", c.Update)
 	r.Delete("/{id}", c.Delete)
+	r.Patch("/{id}/students-number", c.UpdateAdviceStudentsNumber)
 	return r
 }
 
@@ -221,6 +222,33 @@ func (c *AdviceController) Delete(w http.ResponseWriter, r *http.Request) {
 	adviceID := chi.URLParam(r, "id")
 
 	err := c.AdviceService.DeleteAdvice(userID, adviceID)
+	if err != nil {
+		CheckError(err, w, r)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
+// @tags advices
+// @summary Update advice students number.
+// @description Update the number of students who will attend the advice.
+// @security BearerJWT
+// @id update-advice-students-number
+// @success 200
+// @param id path string true "Advice ID."
+// @router /advices/{id}/students-number [patch]
+func (c *AdviceController) UpdateAdviceStudentsNumber(w http.ResponseWriter, r *http.Request) {
+
+	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	if !ok {
+		err := errors.New("user not in context")
+		CheckError(err, w, r)
+		return
+	}
+	adviceID := chi.URLParam(r, "id")
+
+	err := c.AdviceService.UpdateAdviceStudentsNumber(userID, adviceID)
 	if err != nil {
 		CheckError(err, w, r)
 		return

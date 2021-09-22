@@ -25,4 +25,5 @@ type UseCase interface {
 	GetAdviceByID(userID, adviceID string) (*entity.Advice, error)
 	UpdateAdvice(updatedAdvice entity.UpdateAdvicePayload) error
 	DeleteAdvice(userID, adviceID string) error
+	UpdateAdviceStudentsNumber(userID, adviceID string) error
 }

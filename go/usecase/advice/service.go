@@ -194,3 +194,46 @@ func (s *Service) DeleteAdvice(userID, adviceID string) error {
 	}
 	return nil
 }
+
+func (s *Service) UpdateAdviceStudentsNumber(userID, adviceID string) error {
+
+	// Gets old advice.
+	oldAdvice, err := s.GetAdviceByID(userID, adviceID)
+	if err != nil {
+		return err
+	}
+
+	// Creates a new slice with users that will attend to the advice and remove the userID if it has attended or add it if it has not attended.
+	studentsWillAttend := make([]string, 0)
+	studentAttended := false
+	for _, student := range oldAdvice.StudentsWillAttend {
+		if student == userID {
+			studentAttended = true
+		} else {
+			studentsWillAttend = append(studentsWillAttend, student)
+		}
+	}
+	if !studentAttended {
+		studentsWillAttend = append(studentsWillAttend, userID)
+	}
+
+	// Creates a new advice payload and then replaces the old one.
+	updatedAdvice := entity.AdvicePayload{
+		ID:                 oldAdvice.ID,
+		UserID:             oldAdvice.User.ID,
+		UniversityID:       oldAdvice.UniversityID,
+		ClassroomID:        oldAdvice.Classroom.ID,
+		Subject:            oldAdvice.Subject,
+		AdviceDate:         oldAdvice.AdviceDate,
+		StudentsWillAttend: studentsWillAttend,
+		Status:             oldAdvice.Status,
+		CreationDate:       oldAdvice.CreationDate,
+	}
+
+	// Updates new advice.
+	err = s.adviceRepository.UpdateAdvice(updatedAdvice)
+	if err != nil {
+		return entity.NewErrorInternalServer(err, presenter.ErrIntServError)
+	}
+	return nil
+}

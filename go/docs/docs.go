@@ -183,6 +183,35 @@ var doc = `{
                 }
             }
         },
+        "/advices/{id}/students-number": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Update the number of students who will attend the advice.",
+                "tags": [
+                    "advices"
+                ],
+                "summary": "Update advice students number.",
+                "operationId": "update-advice-students-number",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Advice ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/contacts/users/{id}": {
             "get": {
                 "security": [
