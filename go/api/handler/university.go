@@ -67,6 +67,7 @@ func (c *UniversityController) List(w http.ResponseWriter, r *http.Request) {
 // @description Show basic university information.
 // @id show-university
 // @produce json
+// @security BearerJWT
 // @success 200 {object} presenter.UniversityResponse
 // @param id path string true "University ID."
 // @router /universities/{id} [get]

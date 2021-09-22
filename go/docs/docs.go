@@ -378,6 +378,11 @@ var doc = `{
         },
         "/universities/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
                 "description": "Show basic university information.",
                 "produces": [
                     "application/json"

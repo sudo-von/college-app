@@ -469,6 +469,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/presenter.UniversityResponse'
+      security:
+      - BearerJWT: []
       summary: Show university.
       tags:
       - universities
