@@ -11,15 +11,15 @@ import (
 )
 
 type AdviceModel struct {
-	ID             bson.ObjectId   `bson:"_id"`
-	Subject        string          `bson:"subject"`
-	AdviceDate     time.Time       `bson:"advice_date"`
-	ClassroomID    bson.ObjectId   `bson:"classroom_id"`
-	University     UniversityModel `bson:"university"`
-	StudentsNumber []bson.ObjectId `bson:"students_number"`
-	User           TinyUserModel   `bson:"user"`
-	Status         string          `bson:"status"`
-	CreationDate   time.Time       `bson:"creation_date"`
+	ID                 bson.ObjectId   `bson:"_id"`
+	Subject            string          `bson:"subject"`
+	AdviceDate         time.Time       `bson:"advice_date"`
+	ClassroomID        bson.ObjectId   `bson:"classroom_id"`
+	University         UniversityModel `bson:"university"`
+	StudentsWillAttend []bson.ObjectId `bson:"students_will_attend"`
+	User               TinyUserModel   `bson:"user"`
+	Status             string          `bson:"status"`
+	CreationDate       time.Time       `bson:"creation_date"`
 }
 
 func toEntityAdvice(advice AdviceModel) entity.Advice {
@@ -40,34 +40,34 @@ func toEntityAdvice(advice AdviceModel) entity.Advice {
 		}
 	}
 
-	studentsNumber := make([]string, 0)
-	for _, student := range advice.StudentsNumber {
-		studentsNumber = append(studentsNumber, student.Hex())
+	studentsWillAttend := make([]string, 0)
+	for _, student := range advice.StudentsWillAttend {
+		studentsWillAttend = append(studentsWillAttend, student.Hex())
 	}
 
 	return entity.Advice{
-		ID:             advice.ID.Hex(),
-		User:           user,
-		UniversityID:   advice.University.ID.Hex(),
-		Subject:        advice.Subject,
-		Classroom:      classroom,
-		AdviceDate:     advice.AdviceDate,
-		StudentsNumber: studentsNumber,
-		Status:         advice.Status,
-		CreationDate:   advice.CreationDate,
+		ID:                 advice.ID.Hex(),
+		User:               user,
+		UniversityID:       advice.University.ID.Hex(),
+		Subject:            advice.Subject,
+		Classroom:          classroom,
+		AdviceDate:         advice.AdviceDate,
+		StudentsWillAttend: studentsWillAttend,
+		Status:             advice.Status,
+		CreationDate:       advice.CreationDate,
 	}
 }
 
 type AdvicePayloadModel struct {
-	ID             bson.ObjectId   `bson:"_id"`
-	UserID         bson.ObjectId   `bson:"user_id"`
-	UniversityID   bson.ObjectId   `bson:"university_id"`
-	ClassroomID    bson.ObjectId   `bson:"classroom_id"`
-	Subject        string          `bson:"subject"`
-	AdviceDate     time.Time       `bson:"advice_date"`
-	StudentsNumber []bson.ObjectId `bson:"students_number"`
-	Status         string          `bson:"status"`
-	CreationDate   time.Time       `bson:"creation_date"`
+	ID                 bson.ObjectId   `bson:"_id"`
+	UserID             bson.ObjectId   `bson:"user_id"`
+	UniversityID       bson.ObjectId   `bson:"university_id"`
+	ClassroomID        bson.ObjectId   `bson:"classroom_id"`
+	Subject            string          `bson:"subject"`
+	AdviceDate         time.Time       `bson:"advice_date"`
+	StudentsWillAttend []bson.ObjectId `bson:"students_will_attend"`
+	Status             string          `bson:"status"`
+	CreationDate       time.Time       `bson:"creation_date"`
 }
 
 func toAdvicePayloadModel(advice entity.AdvicePayload) AdvicePayloadModel {
@@ -100,27 +100,27 @@ func toAdvicePayloadModel(advice entity.AdvicePayload) AdvicePayloadModel {
 		classroomID = bson.NewObjectId()
 	}
 
-	studentsNumber := make([]bson.ObjectId, 0)
-	for _, student := range advice.StudentsNumber {
+	studentsWillAttend := make([]bson.ObjectId, 0)
+	for _, student := range advice.StudentsWillAttend {
 		var studentID bson.ObjectId
 		if student != "" {
 			studentID = bson.ObjectIdHex(student)
 		} else {
 			studentID = bson.NewObjectId()
 		}
-		studentsNumber = append(studentsNumber, studentID)
+		studentsWillAttend = append(studentsWillAttend, studentID)
 	}
 
 	return AdvicePayloadModel{
-		ID:             adviceID,
-		UserID:         userID,
-		UniversityID:   universityID,
-		ClassroomID:    classroomID,
-		Subject:        advice.Subject,
-		AdviceDate:     advice.AdviceDate,
-		StudentsNumber: studentsNumber,
-		Status:         advice.Status,
-		CreationDate:   advice.CreationDate,
+		ID:                 adviceID,
+		UserID:             userID,
+		UniversityID:       universityID,
+		ClassroomID:        classroomID,
+		Subject:            advice.Subject,
+		AdviceDate:         advice.AdviceDate,
+		StudentsWillAttend: studentsWillAttend,
+		Status:             advice.Status,
+		CreationDate:       advice.CreationDate,
 	}
 }
 

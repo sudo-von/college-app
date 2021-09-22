@@ -22,12 +22,12 @@ func (al *AdviceList) Render(w http.ResponseWriter, r *http.Request) error {
 }
 
 type AdviceResponse struct {
-	ID             string            `json:"id" example:"613aab578a6ef50007e622be"`
-	Subject        string            `json:"subject" example:"Chemistry"`
-	AdviceDate     string            `json:"advice_date" example:"2021-10-24 15:04"`
-	StudentsNumber int               `json:"students_number" example:"2"`
-	Classroom      ClassroomResponse `json:"classroom"`
-	User           TinyUserResponse  `json:"user"`
+	ID                 string            `json:"id" example:"613aab578a6ef50007e622be"`
+	Subject            string            `json:"subject" example:"Chemistry"`
+	AdviceDate         string            `json:"advice_date" example:"2021-10-24 15:04"`
+	StudentsWillAttend []string          `json:"students_will_attend"`
+	Classroom          ClassroomResponse `json:"classroom"`
+	User               TinyUserResponse  `json:"user"`
 }
 
 func (ar *AdviceResponse) Render(w http.ResponseWriter, r *http.Request) error {
@@ -50,12 +50,12 @@ func ToAdvicePresenter(advice entity.Advice) AdviceResponse {
 	}
 
 	return AdviceResponse{
-		ID:             advice.ID,
-		User:           user,
-		Subject:        advice.Subject,
-		AdviceDate:     advice.AdviceDate.Local().Format("2006-01-02 15:04"),
-		Classroom:      classroom,
-		StudentsNumber: len(advice.StudentsNumber),
+		ID:                 advice.ID,
+		User:               user,
+		Subject:            advice.Subject,
+		AdviceDate:         advice.AdviceDate.Local().Format("2006-01-02 15:04"),
+		Classroom:          classroom,
+		StudentsWillAttend: advice.StudentsWillAttend,
 	}
 }
 

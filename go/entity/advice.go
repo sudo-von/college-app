@@ -6,27 +6,27 @@ import (
 )
 
 type Advice struct {
-	ID             string
-	User           TinyUser
-	Classroom      Classroom
-	UniversityID   string
-	Subject        string
-	AdviceDate     time.Time
-	StudentsNumber []string
-	Status         string
-	CreationDate   time.Time
+	ID                 string
+	User               TinyUser
+	Classroom          Classroom
+	UniversityID       string
+	Subject            string
+	AdviceDate         time.Time
+	StudentsWillAttend []string
+	Status             string
+	CreationDate       time.Time
 }
 
 type AdvicePayload struct {
-	ID             string
-	UserID         string
-	ClassroomID    string
-	UniversityID   string
-	Subject        string
-	AdviceDate     time.Time
-	StudentsNumber []string
-	Status         string
-	CreationDate   time.Time
+	ID                 string
+	UserID             string
+	ClassroomID        string
+	UniversityID       string
+	Subject            string
+	AdviceDate         time.Time
+	StudentsWillAttend []string
+	Status             string
+	CreationDate       time.Time
 }
 
 type UpdateAdvicePayload struct {

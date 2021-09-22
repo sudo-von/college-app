@@ -117,15 +117,15 @@ func (s *Service) UpdateAdvice(userID, adviceID string, newAdvice entity.UpdateA
 
 	// Creates a new advice payload and then replaces the old one.
 	updatedAdvice := entity.AdvicePayload{
-		ID:             oldAdvice.ID,
-		UserID:         oldAdvice.User.ID,
-		UniversityID:   university.ID,
-		ClassroomID:    newAdvice.ClassroomID,
-		Subject:        newAdvice.Subject,
-		AdviceDate:     newAdvice.AdviceDate,
-		StudentsNumber: oldAdvice.StudentsNumber,
-		Status:         oldAdvice.Status,
-		CreationDate:   oldAdvice.CreationDate,
+		ID:                 oldAdvice.ID,
+		UserID:             oldAdvice.User.ID,
+		UniversityID:       university.ID,
+		ClassroomID:        newAdvice.ClassroomID,
+		Subject:            newAdvice.Subject,
+		AdviceDate:         newAdvice.AdviceDate,
+		StudentsWillAttend: oldAdvice.StudentsWillAttend,
+		Status:             oldAdvice.Status,
+		CreationDate:       oldAdvice.CreationDate,
 	}
 
 	// Updates new advice.
@@ -149,15 +149,15 @@ func (s *Service) DeleteAdvice(userID, adviceID string) error {
 
 	// Creates a new advice payload and then replaces the old one but now it will have the deleted status.
 	updatedAdvice := entity.AdvicePayload{
-		ID:             oldAdvice.ID,
-		UserID:         oldAdvice.User.ID,
-		ClassroomID:    oldAdvice.Classroom.ID,
-		UniversityID:   oldAdvice.UniversityID,
-		Subject:        oldAdvice.Subject,
-		AdviceDate:     oldAdvice.AdviceDate,
-		StudentsNumber: oldAdvice.StudentsNumber,
-		Status:         entity.DeletedStatus,
-		CreationDate:   oldAdvice.CreationDate,
+		ID:                 oldAdvice.ID,
+		UserID:             oldAdvice.User.ID,
+		ClassroomID:        oldAdvice.Classroom.ID,
+		UniversityID:       oldAdvice.UniversityID,
+		Subject:            oldAdvice.Subject,
+		AdviceDate:         oldAdvice.AdviceDate,
+		StudentsWillAttend: oldAdvice.StudentsWillAttend,
+		Status:             entity.DeletedStatus,
+		CreationDate:       oldAdvice.CreationDate,
 	}
 
 	// Stores new advice.
