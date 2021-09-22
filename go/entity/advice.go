@@ -39,6 +39,18 @@ type AdviceFilters struct {
 	AdviceDate *time.Time
 }
 
+// ValidateUniversity checks if the requested advice belongs to the same university as the user's.
+func (a *Advice) ValidateUniversity(universityID string) error {
+	validRequestedAdvice := false
+	if a.UniversityID == universityID {
+		validRequestedAdvice = true
+	}
+	if !validRequestedAdvice {
+		return errors.New("user has not authorization to request another university advice resource")
+	}
+	return nil
+}
+
 // ValidateDate checks if current date is less than the advice date.
 func (ap *AdvicePayload) ValidateDate() error {
 	validDate := false

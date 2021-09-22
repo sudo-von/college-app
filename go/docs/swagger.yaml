@@ -286,6 +286,27 @@ paths:
       summary: Delete advice.
       tags:
       - advices
+    get:
+      description: Get advice given its ID.
+      operationId: get-advice-by-id
+      parameters:
+      - description: Advice ID.
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.AdviceResponse'
+      security:
+      - BearerJWT: []
+      summary: Show advice.
+      tags:
+      - advices
     patch:
       description: Update advice given its ID.
       operationId: update-advice

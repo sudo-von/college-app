@@ -39,6 +39,33 @@ func (s *Service) GetAdvices(userID string, adviceFilters entity.AdviceFilters) 
 	return advices, total, nil
 }
 
+func (s *Service) GetAdviceByID(userID, adviceID string) (*entity.Advice, error) {
+
+	user, err := s.userRepository.GetUserByID(userID)
+	if err != nil {
+		if err.Error() == "not found" {
+			return nil, entity.NewErrorNotFound(err, presenter.ErrUserNotFound)
+		}
+		return nil, entity.NewErrorInternalServer(err, presenter.ErrIntServError)
+	}
+
+	advice, err := s.adviceRepository.GetAdviceByID(adviceID)
+	if err != nil {
+		if err.Error() == "not found" {
+			return nil, entity.NewErrorNotFound(err, presenter.ErrAdvivceNotFound)
+		}
+		return nil, entity.NewErrorInternalServer(err, presenter.ErrIntServError)
+	}
+
+	// Checks if user's university id is the same as the advice's.
+	err = advice.ValidateUniversity(user.University.ID)
+	if err != nil {
+		return nil, entity.NewErrorConflict(err, presenter.ErrInsufficientPermissions)
+	}
+
+	return advice, nil
+}
+
 func (s *Service) CreateAdvice(newAdvice entity.AdvicePayload) error {
 
 	// Checks if current date is less than the advice date.

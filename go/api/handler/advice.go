@@ -31,6 +31,7 @@ func (c *AdviceController) Routes() chi.Router {
 	r.Use(middleware.IsAuthorized(c.TokenService))
 	r.Get("/", c.List)
 	r.Post("/", c.Create)
+	r.Get("/{id}", c.Show)
 	r.Patch("/{id}", c.Update)
 	r.Delete("/{id}", c.Delete)
 	return r
@@ -75,6 +76,36 @@ func (c *AdviceController) List(w http.ResponseWriter, r *http.Request) {
 
 	render.Status(r, http.StatusOK)
 	render.Render(w, r, &res)
+}
+
+// @tags advices
+// @summary Show advice.
+// @description Get advice given its ID.
+// @security BearerJWT
+// @id get-advice-by-id
+// @produce json
+// @success 200 {object} presenter.AdviceResponse
+// @param id path string true "Advice ID."
+// @router /advices/{id} [get]
+func (c *AdviceController) Show(w http.ResponseWriter, r *http.Request) {
+
+	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	if !ok {
+		err := errors.New("user not in context")
+		CheckError(err, w, r)
+		return
+	}
+	adviceID := chi.URLParam(r, "id")
+
+	advice, err := c.AdviceService.GetAdviceByID(userID, adviceID)
+	if err != nil {
+		CheckError(err, w, r)
+		return
+	}
+
+	response := presenter.ToAdvicePresenter(*advice)
+	render.Status(r, http.StatusOK)
+	render.Render(w, r, &response)
 }
 
 // @tags advices

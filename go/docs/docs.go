@@ -86,6 +86,39 @@ var doc = `{
             }
         },
         "/advices/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Get advice given its ID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "advices"
+                ],
+                "summary": "Show advice.",
+                "operationId": "get-advice-by-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Advice ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.AdviceResponse"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "security": [
                     {

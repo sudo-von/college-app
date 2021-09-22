@@ -59,7 +59,7 @@ func ListenAndServe(services Services) {
 	r.Use(cors.Handler)
 
 	// Documentation.
-	r.Mount("/swagger", httpSwagger.WrapHandler)
+	r.Get("/swagger", httpSwagger.WrapHandler)
 
 	// Http handlers.
 	r.Mount("/advices", handler.NewAdviceController(services.AdviceService, services.TokenService).Routes())
