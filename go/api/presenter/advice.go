@@ -24,7 +24,7 @@ func (al *AdviceList) Render(w http.ResponseWriter, r *http.Request) error {
 type AdviceResponse struct {
 	ID             string            `json:"id" example:"613aab578a6ef50007e622be"`
 	Subject        string            `json:"subject" example:"Chemistry"`
-	AdviceDate     string            `json:"advice_date" example:"2021-10-10 15:04"`
+	AdviceDate     string            `json:"advice_date" example:"2021-10-24 15:04"`
 	StudentsNumber int               `json:"students_number" example:"2"`
 	Classroom      ClassroomResponse `json:"classroom"`
 	User           TinyUserResponse  `json:"user"`
@@ -39,7 +39,7 @@ func ToAdvicePresenter(advice entity.Advice) AdviceResponse {
 	user := TinyUserResponse{
 		ID:                 advice.User.ID,
 		Name:               advice.User.Name,
-		BirthDate:          advice.User.BirthDate.UTC().Format("2006-01-02"),
+		BirthDate:          advice.User.BirthDate.UTC().Format("2006-01-02 15:04"),
 		Email:              advice.User.Email,
 		RegistrationNumber: advice.User.RegistrationNumber,
 	}
@@ -61,7 +61,7 @@ func ToAdvicePresenter(advice entity.Advice) AdviceResponse {
 
 type AdvicePayload struct {
 	Subject     string `json:"subject" example:"Chemistry"`
-	AdviceDate  string `json:"advice_date" example:"1997-04-17 15:04"`
+	AdviceDate  string `json:"advice_date" example:"2021-10-24 15:04"`
 	ClassroomID string `json:"classroom_id" example:"613aab578a6ef50007e622be"`
 }
 
