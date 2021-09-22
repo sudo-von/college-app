@@ -29,7 +29,7 @@ func (c *UniversityController) Routes() chi.Router {
 	r.Get("/", c.List)
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.IsAuthorized(c.TokenService))
-		r.Get("/{id}", c.ShowUniversity)
+		r.Get("/{id}", c.Show)
 	})
 	return r
 }
@@ -65,13 +65,12 @@ func (c *UniversityController) List(w http.ResponseWriter, r *http.Request) {
 // @tags universities
 // @summary Show university.
 // @description Show basic university information.
-// @security BearerJWT
 // @id show-university
 // @produce json
 // @success 200 {object} presenter.UniversityResponse
 // @param id path string true "University ID."
 // @router /universities/{id} [get]
-func (c *UniversityController) ShowUniversity(w http.ResponseWriter, r *http.Request) {
+func (c *UniversityController) Show(w http.ResponseWriter, r *http.Request) {
 
 	universityID := chi.URLParam(r, "id")
 	university, err := c.UniversityService.GetUniversityByID(universityID)

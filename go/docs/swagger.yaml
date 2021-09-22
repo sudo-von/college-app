@@ -12,7 +12,7 @@ definitions:
   presenter.AdvicePayload:
     properties:
       advice_date:
-        example: 1997-04-17 15:04
+        example: 2021-10-24 15:04
         type: string
       classroom_id:
         example: 613aab578a6ef50007e622be
@@ -24,7 +24,7 @@ definitions:
   presenter.AdviceResponse:
     properties:
       advice_date:
-        example: 2021-10-10 15:04
+        example: 2021-10-24 15:04
         type: string
       classroom:
         $ref: '#/definitions/presenter.ClassroomResponse'
@@ -429,8 +429,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/presenter.UniversityResponse'
-      security:
-      - BearerJWT: []
       summary: Show university.
       tags:
       - universities

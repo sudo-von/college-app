@@ -316,11 +316,6 @@ var doc = `{
         },
         "/universities/{id}": {
             "get": {
-                "security": [
-                    {
-                        "BearerJWT": []
-                    }
-                ],
                 "description": "Show basic university information.",
                 "produces": [
                     "application/json"
@@ -564,7 +559,7 @@ var doc = `{
             "properties": {
                 "advice_date": {
                     "type": "string",
-                    "example": "1997-04-17 15:04"
+                    "example": "2021-10-24 15:04"
                 },
                 "classroom_id": {
                     "type": "string",
@@ -581,7 +576,7 @@ var doc = `{
             "properties": {
                 "advice_date": {
                     "type": "string",
-                    "example": "2021-10-10 15:04"
+                    "example": "2021-10-24 15:04"
                 },
                 "classroom": {
                     "$ref": "#/definitions/presenter.ClassroomResponse"
