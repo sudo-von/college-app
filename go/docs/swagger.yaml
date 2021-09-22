@@ -31,9 +31,10 @@ definitions:
       id:
         example: 613aab578a6ef50007e622be
         type: string
-      students_number:
-        example: 2
-        type: integer
+      students_will_attend:
+        items:
+          type: string
+        type: array
       subject:
         example: Chemistry
         type: string

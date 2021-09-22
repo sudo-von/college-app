@@ -585,9 +585,11 @@ var doc = `{
                     "type": "string",
                     "example": "613aab578a6ef50007e622be"
                 },
-                "students_number": {
-                    "type": "integer",
-                    "example": 2
+                "students_will_attend": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "subject": {
                     "type": "string",
