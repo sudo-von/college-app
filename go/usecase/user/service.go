@@ -26,6 +26,9 @@ func (s *Service) GetTinyUserByID(userID, requestedUserID string) (*entity.TinyU
 
 	user, err := s.userRepository.GetUserByID(userID)
 	if err != nil {
+		if err.Error() == "not found" {
+			return nil, entity.NewErrorNotFound(err, presenter.ErrUserNotFound)
+		}
 		return nil, entity.NewErrorInternalServer(err, presenter.ErrIntServError)
 	}
 
@@ -59,12 +62,16 @@ func (s *Service) CreateUser(newUser entity.UserPayload) error {
 	}
 	// Checks if email is already in use.
 	_, err = s.userRepository.GetTinyUserByEmail(newUser.Email)
-	if err == nil {
+	if err != nil && err.Error() != "not found" {
+		return entity.NewErrorInternalServer(err, presenter.ErrIntServError)
+	} else if err == nil {
 		return entity.NewErrorConflict(errors.New("email already in use"), presenter.ErrUserEmailAlreadyRegistered)
 	}
 	// Checks if registration number is already in use.
 	_, err = s.userRepository.GetTinyUserByRegistrationNumber(newUser.RegistrationNumber)
-	if err == nil {
+	if err != nil && err.Error() != "not found" {
+		return entity.NewErrorInternalServer(err, presenter.ErrIntServError)
+	} else if err == nil {
 		return entity.NewErrorConflict(errors.New("registration number already in use"), presenter.ErrUserRegistrationNumberAlreadyRegistered)
 	}
 	// Checks if university exists.
@@ -112,7 +119,9 @@ func (s *Service) UpdateTinyUser(userID, requestedUserID string, newUser entity.
 			return entity.NewErrorConflict(errors.New("invalid email"), presenter.ErrInvUserEmail)
 		}
 		_, err = s.userRepository.GetTinyUserByEmail(newUser.Email)
-		if err == nil {
+		if err != nil && err.Error() != "not found" {
+			return entity.NewErrorInternalServer(err, presenter.ErrIntServError)
+		} else if err == nil {
 			return entity.NewErrorConflict(errors.New("email already in use"), presenter.ErrUserEmailAlreadyRegistered)
 		}
 	}
@@ -123,7 +132,9 @@ func (s *Service) UpdateTinyUser(userID, requestedUserID string, newUser entity.
 			return entity.NewErrorConflict(err, presenter.ErrInvUserRegistrationNumber)
 		}
 		_, err = s.userRepository.GetTinyUserByRegistrationNumber(newUser.RegistrationNumber)
-		if err == nil {
+		if err != nil && err.Error() != "not found" {
+			return entity.NewErrorInternalServer(err, presenter.ErrIntServError)
+		} else if err == nil {
 			return entity.NewErrorConflict(errors.New("registration number already in use"), presenter.ErrUserRegistrationNumberAlreadyRegistered)
 		}
 	}

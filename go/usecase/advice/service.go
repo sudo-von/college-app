@@ -84,7 +84,6 @@ func (s *Service) CreateAdvice(newAdvice entity.AdvicePayload) error {
 	}
 	newAdvice.UniversityID = user.University.ID
 
-	// Gets given university.
 	university, err := s.universityRepository.GetUniversityByID(newAdvice.UniversityID)
 	if err != nil {
 		if err.Error() == "not found" {
@@ -93,7 +92,7 @@ func (s *Service) CreateAdvice(newAdvice entity.AdvicePayload) error {
 		return entity.NewErrorInternalServer(err, presenter.ErrIntServError)
 	}
 
-	// Checks if the given classroom is a valid classroom from that university
+	// Checks if the given classroom is a valid classroom for that university.
 	err = university.ValidateClassroom(newAdvice.ClassroomID)
 	if err != nil {
 		return entity.NewErrorConflict(err, presenter.ErrInvClassroom)
@@ -109,16 +108,17 @@ func (s *Service) CreateAdvice(newAdvice entity.AdvicePayload) error {
 
 func (s *Service) UpdateAdvice(userID, adviceID string, newAdvice entity.UpdateAdvicePayload) error {
 
-	// Gets old advice.
-	oldAdvice, err := s.adviceRepository.GetAdviceByID(adviceID)
+	oldAdvice, err := s.GetAdviceByID(userID, adviceID)
 	if err != nil {
-		if err.Error() == "not found" {
-			return entity.NewErrorNotFound(err, presenter.ErrAdvivceNotFound)
-		}
-		return entity.NewErrorInternalServer(err, presenter.ErrIntServError)
+		return err
 	}
 
-	// If the old date is different from the new date then checks if current date is less than the new advice date.
+	err = oldAdvice.ValidateRequestedAdvice(userID)
+	if err != nil {
+		return entity.NewErrorConflict(err, presenter.ErrInsufficientPermissions)
+	}
+
+	// If the old advice date is different from the new advice date then checks if the current date is less than the new advice date.
 	if oldAdvice.AdviceDate != newAdvice.AdviceDate {
 		err := newAdvice.ValidateDate()
 		if err != nil {
@@ -146,7 +146,7 @@ func (s *Service) UpdateAdvice(userID, adviceID string, newAdvice entity.UpdateA
 	updatedAdvice := entity.AdvicePayload{
 		ID:                 oldAdvice.ID,
 		UserID:             oldAdvice.User.ID,
-		UniversityID:       university.ID,
+		UniversityID:       oldAdvice.UniversityID,
 		ClassroomID:        newAdvice.ClassroomID,
 		Subject:            newAdvice.Subject,
 		AdviceDate:         newAdvice.AdviceDate,
@@ -165,13 +165,14 @@ func (s *Service) UpdateAdvice(userID, adviceID string, newAdvice entity.UpdateA
 
 func (s *Service) DeleteAdvice(userID, adviceID string) error {
 
-	// Gets old advice.
-	oldAdvice, err := s.adviceRepository.GetAdviceByID(adviceID)
+	oldAdvice, err := s.GetAdviceByID(userID, adviceID)
 	if err != nil {
-		if err.Error() == "not found" {
-			return entity.NewErrorNotFound(err, presenter.ErrAdvivceNotFound)
-		}
-		return entity.NewErrorInternalServer(err, presenter.ErrIntServError)
+		return err
+	}
+
+	err = oldAdvice.ValidateRequestedAdvice(userID)
+	if err != nil {
+		return entity.NewErrorConflict(err, presenter.ErrInsufficientPermissions)
 	}
 
 	// Creates a new advice payload and then replaces the old one but now it will have the deleted status.
@@ -217,7 +218,7 @@ func (s *Service) UpdateAdviceStudentsNumber(userID, adviceID string) error {
 		studentsWillAttend = append(studentsWillAttend, userID)
 	}
 
-	// Creates a new advice payload and then replaces the old one.
+	// Creates a new advice payload and then replaces the old one with the StuddentsWillAttend field modified.
 	updatedAdvice := entity.AdvicePayload{
 		ID:                 oldAdvice.ID,
 		UserID:             oldAdvice.User.ID,

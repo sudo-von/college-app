@@ -62,7 +62,9 @@ func (s *Service) CreateContact(userID, requestedUserID string, newContact entit
 
 	// Verifies if the given user has registered his contact yet.
 	_, err = s.GetContactByUserID(userID, requestedUserID)
-	if err == nil {
+	if err != nil && err.Error() != "not found" {
+		return err
+	} else if err == nil {
 		return entity.NewErrorConflict(errors.New("given user_id already has a contact registered"), presenter.ErrContactAlreadyRegistered)
 	}
 
