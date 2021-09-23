@@ -437,37 +437,6 @@ var doc = `{
                 }
             }
         },
-        "/users-mood": {
-            "post": {
-                "security": [
-                    {
-                        "BearerJWT": []
-                    }
-                ],
-                "description": "Create user's mood for the current day.",
-                "tags": [
-                    "users-mood"
-                ],
-                "summary": "Create user's mood.",
-                "operationId": "create-user-mood",
-                "parameters": [
-                    {
-                        "description": "User's mood for the current day.",
-                        "name": "payload",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/presenter.UserMoodPayload"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": ""
-                    }
-                }
-            }
-        },
         "/users-mood/users/{id}": {
             "get": {
                 "security": [
@@ -475,7 +444,7 @@ var doc = `{
                         "BearerJWT": []
                     }
                 ],
-                "description": "Get user's mood given its ID for the current day.",
+                "description": "Get user's mood for the current day given the user ID.",
                 "produces": [
                     "application/json"
                 ],
@@ -499,6 +468,44 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/presenter.UserMoodResponse"
                         }
+                    }
+                }
+            }
+        },
+        "/users-mood/{users}/{id}": {
+            "post": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Create user's mood for the current day given the user ID.",
+                "tags": [
+                    "users-mood"
+                ],
+                "summary": "Create user's mood.",
+                "operationId": "create-user-mood",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "User's mood for the current day.",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.UserMoodPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
                     }
                 }
             }

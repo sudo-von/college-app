@@ -140,12 +140,13 @@ func (c *AdviceController) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	newAdvice := entity.AdvicePayload{
-		UserID:       userID,
-		Subject:      data.Subject,
-		AdviceDate:   adviceDate,
-		ClassroomID:  data.ClassroomID,
-		Status:       entity.ActiveStatus,
-		CreationDate: time.Now().In(time.Local),
+		UserID:             userID,
+		Subject:            data.Subject,
+		AdviceDate:         adviceDate,
+		ClassroomID:        data.ClassroomID,
+		StudentsWillAttend: []string{userID},
+		Status:             entity.ActiveStatus,
+		CreationDate:       time.Now().In(time.Local),
 	}
 
 	err = c.AdviceService.CreateAdvice(newAdvice)

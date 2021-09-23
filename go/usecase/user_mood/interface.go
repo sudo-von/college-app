@@ -19,5 +19,5 @@ type UserMoodRepository interface {
 
 type UseCase interface {
 	GetUserMoodByUserID(userID string, userMoodFilters entity.UserMoodFilters) (*entity.UserMood, error)
-	CreateUserMood(newUserMood entity.UserMoodPayload, userMoodFilters entity.UserMoodFilters) error
+	CreateUserMood(requestedUserID string, newUserMood entity.UserMoodPayload, userMoodFilters entity.UserMoodFilters) error
 }

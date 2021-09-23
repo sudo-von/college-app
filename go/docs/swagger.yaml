@@ -491,11 +491,16 @@ paths:
       summary: Create user.
       tags:
       - users
-  /users-mood:
+  /users-mood/{users}/{id}:
     post:
-      description: Create user's mood for the current day.
+      description: Create user's mood for the current day given the user ID.
       operationId: create-user-mood
       parameters:
+      - description: User ID.
+        in: path
+        name: id
+        required: true
+        type: string
       - description: User's mood for the current day.
         in: body
         name: payload
@@ -512,7 +517,7 @@ paths:
       - users-mood
   /users-mood/users/{id}:
     get:
-      description: Get user's mood given its ID for the current day.
+      description: Get user's mood for the current day given the user ID.
       operationId: get-user-mood-by-user-id
       parameters:
       - description: User ID.

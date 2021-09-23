@@ -31,13 +31,13 @@ func (c *UserMoodController) Routes() chi.Router {
 	r := chi.NewRouter()
 	r.Use(middleware.IsAuthorized(c.TokenService))
 	r.Get("/users/{id}", c.Show)
-	r.Post("/", c.Create)
+	r.Post("/users/{id}", c.Create)
 	return r
 }
 
 // @tags users-mood
 // @summary Show user's mood.
-// @description Get user's mood given its ID for the current day.
+// @description Get user's mood for the current day given the user ID.
 // @security BearerJWT
 // @id get-user-mood-by-user-id
 // @produce json
@@ -71,12 +71,13 @@ func (c *UserMoodController) Show(w http.ResponseWriter, r *http.Request) {
 
 // @tags users-mood
 // @summary Create user's mood.
-// @description Create user's mood for the current day.
+// @description Create user's mood for the current day given the user ID.
 // @security BearerJWT
 // @id create-user-mood
+// @param id path string true "User ID."
 // @param payload body presenter.UserMoodPayload true "User's mood for the current day."
 // @success 201
-// @router /users-mood [post]
+// @router /users-mood/{users}/{id} [post]
 func (c *UserMoodController) Create(w http.ResponseWriter, r *http.Request) {
 
 	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
@@ -85,6 +86,7 @@ func (c *UserMoodController) Create(w http.ResponseWriter, r *http.Request) {
 		CheckError(err, w, r)
 		return
 	}
+	requestedUserID := chi.URLParam(r, "id")
 
 	var data presenter.UserMoodPayload
 	if err := render.Bind(r, &data); err != nil {
@@ -103,7 +105,7 @@ func (c *UserMoodController) Create(w http.ResponseWriter, r *http.Request) {
 		CreationDate: time.Now().In(time.Local),
 	}
 
-	err := c.UserMoodService.CreateUserMood(newUserMood, userMoodFilters)
+	err := c.UserMoodService.CreateUserMood(requestedUserID, newUserMood, userMoodFilters)
 	if err != nil {
 		CheckError(err, w, r)
 		return

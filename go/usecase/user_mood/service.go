@@ -42,7 +42,7 @@ func (s *Service) GetUserMoodByUserID(userID, requestedUserID string, userMoodFi
 	return userMood, nil
 }
 
-func (s *Service) CreateUserMood(newUserMood entity.UserMoodPayload, userMoodFilters entity.UserMoodFilters) error {
+func (s *Service) CreateUserMood(requestedUserID string, newUserMood entity.UserMoodPayload, userMoodFilters entity.UserMoodFilters) error {
 
 	// Checks if given mood is in the valid range.
 	err := newUserMood.ValidateMood()
@@ -50,8 +50,10 @@ func (s *Service) CreateUserMood(newUserMood entity.UserMoodPayload, userMoodFil
 		return entity.NewErrorConflict(err, presenter.ErrInvMood)
 	}
 	// Checks if the user mood has already been registered today.
-	_, err = s.GetUserMoodByUserID(newUserMood.UserID, newUserMood.UserID, userMoodFilters)
-	if err == nil {
+	_, err = s.GetUserMoodByUserID(newUserMood.UserID, requestedUserID, userMoodFilters)
+	if err != nil && err.Error() != "not found" {
+		return err
+	} else if err == nil {
 		return entity.NewErrorConflict(errors.New("user mood has already been registered today"), presenter.ErrUserMoodAlreadyRegistered)
 	}
 	// Stores new user mood.
