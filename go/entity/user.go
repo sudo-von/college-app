@@ -54,11 +54,22 @@ type UpdateUserPayload struct {
 
 func (u *User) ValidateRequestedUser(requestedUserID string) error {
 	validRequestedUser := false
-	if requestedUserID == u.ID || u.Role == AdminRole {
+	if requestedUserID == u.ID {
 		validRequestedUser = true
 	}
 	if !validRequestedUser {
 		return errors.New("user has not authorization to request another user's resource")
+	}
+	return nil
+}
+
+func (u *User) ValidateRequestedUniversity(requestedUniversityID string) error {
+	validRequestedUniversity := false
+	if requestedUniversityID == u.ID {
+		validRequestedUniversity = true
+	}
+	if !validRequestedUniversity {
+		return errors.New("user has not authorization to request another university resource")
 	}
 	return nil
 }
