@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
 
 	"freelancer/college-app/go/api/middleware"
@@ -73,8 +74,15 @@ func (c *UniversityController) List(w http.ResponseWriter, r *http.Request) {
 // @router /universities/{id} [get]
 func (c *UniversityController) Show(w http.ResponseWriter, r *http.Request) {
 
+	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	if !ok {
+		err := errors.New("user not in context")
+		CheckError(err, w, r)
+		return
+	}
 	universityID := chi.URLParam(r, "id")
-	university, err := c.UniversityService.GetUniversityByID(universityID)
+
+	university, err := c.UniversityService.GetUniversityByID(userID, universityID)
 	if err != nil {
 		CheckError(err, w, r)
 		return
