@@ -6,12 +6,14 @@ import (
 )
 
 type Service struct {
+	userRepository       UserRepository
 	universityRepository UniversityRepository
 }
 
-func NewService(universityRepository UniversityRepository) *Service {
+func NewService(userRepository UserRepository, universityRepository UniversityRepository) *Service {
 	return &Service{
-		universityRepository: universityRepository,
+		userRepository,
+		universityRepository,
 	}
 }
 
@@ -23,7 +25,18 @@ func (s Service) GetTinyUniversities() ([]entity.TinyUniversity, *int, error) {
 	return universities, total, nil
 }
 
-func (s Service) GetUniversityByID(universityID string) (*entity.University, error) {
+func (s Service) GetUniversityByID(userID, universityID string) (*entity.University, error) {
+
+	user, err := s.userRepository.GetUserByID(userID)
+	if err != nil {
+		return nil, entity.NewErrorInternalServer(err, presenter.ErrIntServError)
+	}
+
+	err = user.ValidateRequestedUniversity(universityID)
+	if err != nil {
+		return nil, entity.NewErrorConflict(err, presenter.ErrInsufficientPermissions)
+	}
+
 	university, err := s.universityRepository.GetUniversityByID(universityID)
 	if err != nil {
 		if err.Error() == "not found" {
@@ -31,5 +44,6 @@ func (s Service) GetUniversityByID(universityID string) (*entity.University, err
 		}
 		return nil, entity.NewErrorInternalServer(err, presenter.ErrIntServError)
 	}
+
 	return university, nil
 }
