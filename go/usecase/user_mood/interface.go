@@ -4,17 +4,25 @@ import (
 	"freelancer/college-app/go/entity"
 )
 
-type Reader interface {
+type UserReader interface {
+	GetUserByID(userID string) (*entity.User, error)
+}
+
+type UserRepository interface {
+	UserReader
+}
+
+type UserMoodReader interface {
 	GetUserMoodByUserID(userID string, userMoodFilters entity.UserMoodFilters) (*entity.UserMood, error)
 }
 
-type Writer interface {
+type UserMoodWriter interface {
 	CreateUserMood(newUserMood entity.UserMoodPayload) error
 }
 
 type UserMoodRepository interface {
-	Reader
-	Writer
+	UserMoodReader
+	UserMoodWriter
 }
 
 type UseCase interface {
