@@ -4,7 +4,15 @@ import (
 	"freelancer/college-app/go/entity"
 )
 
-type Reader interface {
+type UniversityReader interface {
+	GetUniversityByID(universityID string) (*entity.University, error)
+}
+
+type UniversityRepository interface {
+	UniversityReader
+}
+
+type UserReader interface {
 	GetTinyUserByID(userID string) (*entity.TinyUser, error)
 	GetTinyUserByEmail(email string) (*entity.TinyUser, error)
 	GetTinyUserByRegistrationNumber(registrationNumber string) (*entity.TinyUser, error)
@@ -12,14 +20,14 @@ type Reader interface {
 	GetUserByEmail(email string) (*entity.User, error)
 }
 
-type Writer interface {
+type UserWriter interface {
 	CreateUser(newUser entity.UserPayload) error
 	UpdateUser(newUser entity.UserPayload) error
 }
 
 type UserRepository interface {
-	Reader
-	Writer
+	UserReader
+	UserWriter
 }
 
 type UseCase interface {

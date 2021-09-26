@@ -4,7 +4,6 @@ import (
 	"errors"
 	"freelancer/college-app/go/api/presenter"
 	"freelancer/college-app/go/entity"
-	"freelancer/college-app/go/usecase/university"
 
 	"github.com/badoux/checkmail"
 	"golang.org/x/crypto/bcrypt"
@@ -12,10 +11,10 @@ import (
 
 type Service struct {
 	userRepository       UserRepository
-	universityRepository university.UniversityRepository
+	universityRepository UniversityRepository
 }
 
-func NewService(userRepository UserRepository, universityRepository university.UniversityRepository) *Service {
+func NewService(userRepository UserRepository, universityRepository UniversityRepository) *Service {
 	return &Service{
 		userRepository:       userRepository,
 		universityRepository: universityRepository,
