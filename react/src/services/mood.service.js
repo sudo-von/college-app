@@ -19,9 +19,9 @@ const getMood = async (userID) => {
 }
 
 /* Sends user's mood for the current day. */
-const sendMood = async (mood) => {
+const sendMood = async (userID, mood) => {
     try{
-        await protectedAxios.post(`${MOOD}`, mood)
+        await protectedAxios.post(`${MOOD}/users/${userID}`, mood)
     }catch(error){
         throw new Error(error.message)
     }

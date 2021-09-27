@@ -28,7 +28,7 @@ const Mood = ({ initialMoodValue, minimumValue, maximumValue, minimumText, maxim
   const [mood, setMood] = useState(initialMoodValue)
   const handleMood = async () => {
     try{
-      await sendMood({mood})
+      await sendMood(userID, {mood})
       setShowMood(false)
     }catch(error){
       Alert.alert('',error.message)
