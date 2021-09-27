@@ -4,15 +4,14 @@ import (
 	"errors"
 	"freelancer/college-app/go/api/presenter"
 	"freelancer/college-app/go/entity"
-	"freelancer/college-app/go/usecase/user"
 )
 
 type Service struct {
-	userRepository    user.UserRepository
+	userRepository    UserRepository
 	contactRepository ContactRepository
 }
 
-func NewService(userRepository user.UserRepository, contactRepository ContactRepository) *Service {
+func NewService(userRepository UserRepository, contactRepository ContactRepository) *Service {
 	return &Service{
 		userRepository,
 		contactRepository,
