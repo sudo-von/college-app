@@ -9,8 +9,8 @@ import (
 
 type Service struct {
 	adviceRepository     AdviceRepository
-	userRepository       user.UserRepository
-	universityRepository university.UniversityRepository
+	userRepository       UserRepository
+	universityRepository UniversityRepository
 }
 
 func NewService(adviceRepository AdviceRepository, userRepository user.UserRepository, universityRepository university.UniversityRepository) *Service {
