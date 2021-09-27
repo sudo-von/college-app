@@ -4,12 +4,12 @@ import (
 	"freelancer/college-app/go/entity"
 )
 
-type Writer interface {
+type SuggestionWriter interface {
 	CreateSuggestion(newSuggestion entity.SuggestionPayload) error
 }
 
 type SuggestionRepository interface {
-	Writer
+	SuggestionWriter
 }
 
 type UseCase interface {
