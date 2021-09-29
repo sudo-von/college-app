@@ -1,5 +1,6 @@
 /* Base. */
 export const API_URL = 'http://192.168.0.4:4000'
+export const ADVICE = `/advices`
 export const SUGGESTION = `/suggestions`
 export const USERS = `/users`
 export const CONTACT = `/contacts`
