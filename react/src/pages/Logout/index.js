@@ -9,6 +9,7 @@ import { ActivityIndicator } from 'react-native-paper'
 import Container from 'src/components/Container'
 import Center from 'src/components/Center'
 import Small from 'src/components/Small'
+import { Alert } from 'react-native'
 
 const Logout = () => {
 
@@ -20,6 +21,7 @@ const Logout = () => {
                 await deleteToken()
                 authDispatch({ type: 'logout'})
             }catch(error){
+                Alert.alert('¡Ha ocurrido un error!', error.message)
             }
         }
         doLogout()
