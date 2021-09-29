@@ -236,6 +236,15 @@ paths:
     get:
       description: List advices.
       operationId: list-advices
+      parameters:
+      - description: User ID that will attend to the advice.
+        in: path
+        name: will_attend
+        type: string
+      - description: User ID that will teach the advice.
+        in: path
+        name: will_teach
+        type: string
       produces:
       - application/json
       responses:

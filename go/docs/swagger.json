@@ -27,6 +27,20 @@
                 ],
                 "summary": "List advices.",
                 "operationId": "list-advices",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID that will attend to the advice.",
+                        "name": "will_attend",
+                        "in": "path"
+                    },
+                    {
+                        "type": "string",
+                        "description": "User ID that will teach the advice.",
+                        "name": "will_teach",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
