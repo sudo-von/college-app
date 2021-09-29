@@ -45,6 +45,8 @@ func (c *AdviceController) Routes() chi.Router {
 // @id list-advices
 // @produce json
 // @success 200 {object} presenter.AdviceList
+// @param will_attend path string false "User ID that will attend to the advice."
+// @param will_teach path string false "User ID that will teach the advice."
 // @router /advices [get]
 func (c *AdviceController) List(w http.ResponseWriter, r *http.Request) {
 
@@ -57,7 +59,9 @@ func (c *AdviceController) List(w http.ResponseWriter, r *http.Request) {
 
 	adviceDate := time.Now().In(time.Local)
 	adviceFilters := entity.AdviceFilters{
-		AdviceDate: &adviceDate,
+		AdviceDate:     &adviceDate,
+		UserWillAttend: r.URL.Query().Get("will_attend"),
+		UserWillTeach:  r.URL.Query().Get("will_teach"),
 	}
 
 	list, total, err := c.AdviceService.GetAdvices(userID, adviceFilters)

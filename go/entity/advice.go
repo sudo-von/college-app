@@ -36,7 +36,9 @@ type UpdateAdvicePayload struct {
 }
 
 type AdviceFilters struct {
-	AdviceDate *time.Time
+	AdviceDate     *time.Time
+	UserWillAttend string
+	UserWillTeach  string
 }
 
 func (a *Advice) ValidateRequestedAdvice(userID string) error {

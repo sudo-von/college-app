@@ -199,6 +199,15 @@ func (r *AdviceRepository) GetAdvices(universityID string, adviceFilters entity.
 		},
 	}
 
+	if adviceFilters.UserWillAttend != "" && adviceFilters.UserWillTeach != "" {
+		searchQuery["students_will_attend"] = bson.M{"$elemMatch": bson.M{"$eq": bson.ObjectIdHex(adviceFilters.UserWillAttend)}}
+		searchQuery["user._id"] = bson.ObjectIdHex(adviceFilters.UserWillTeach)
+	} else if adviceFilters.UserWillAttend != "" {
+		searchQuery["students_will_attend"] = bson.M{"$elemMatch": bson.M{"$eq": bson.ObjectIdHex(adviceFilters.UserWillAttend)}}
+	} else if adviceFilters.UserWillTeach != "" {
+		searchQuery["user._id"] = bson.ObjectIdHex(adviceFilters.UserWillTeach)
+	}
+
 	pipes := []bson.M{
 		{
 			"$lookup": bson.M{

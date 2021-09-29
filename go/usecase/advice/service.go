@@ -31,6 +31,19 @@ func (s *Service) GetAdvices(userID string, adviceFilters entity.AdviceFilters) 
 		return nil, nil, entity.NewErrorInternalServer(err, presenter.ErrIntServError)
 	}
 
+	if adviceFilters.UserWillAttend != "" {
+		err = user.ValidateRequestedUser(adviceFilters.UserWillAttend)
+		if err != nil {
+			return nil, nil, entity.NewErrorUnauthorized(err, presenter.ErrInsufficientPermissions)
+		}
+	}
+	if adviceFilters.UserWillTeach != "" {
+		err = user.ValidateRequestedUser(adviceFilters.UserWillTeach)
+		if err != nil {
+			return nil, nil, entity.NewErrorUnauthorized(err, presenter.ErrInsufficientPermissions)
+		}
+	}
+
 	advices, total, err := s.adviceRepository.GetAdvices(user.University.ID, adviceFilters)
 	if err != nil {
 		return nil, nil, entity.NewErrorInternalServer(err, presenter.ErrIntServError)
