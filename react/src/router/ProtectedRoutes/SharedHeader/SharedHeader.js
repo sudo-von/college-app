@@ -4,11 +4,11 @@ const getHeaderTitle = (route) => {
   const routeName = getFocusedRouteNameFromRoute(route)
   switch (routeName) {
     case '/configuration-home':
-        return 'Configuración'
+      return 'Configuración'
     case '/contact-configuration':
-        return 'Configuración de contacto'
+      return 'Configuración de contacto'
     case '/account-configuration':
-        return 'Configuración de la cuenta'
+      return 'Configuración de la cuenta'
   }
 }
 

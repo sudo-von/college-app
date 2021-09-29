@@ -2,7 +2,7 @@ import React from 'react'
 /* React navigation. */
 import { DrawerActions, getFocusedRouteNameFromRoute } from '@react-navigation/native'
 /* React native paper. */
-import { IconButton, Menu } from 'react-native-paper'
+import { IconButton } from 'react-native-paper'
 
 const getHeaderTitle = (route) => {
     const routeName = getFocusedRouteNameFromRoute(route)
@@ -11,6 +11,8 @@ const getHeaderTitle = (route) => {
             return 'Inicio'
         case '/panic-button':
             return 'Botón de pánico'
+        case '/advices':
+            return 'Asesorías'
         case '/suggestions':
             return 'Sugerencias'
         case '/configuration-home':
