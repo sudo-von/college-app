@@ -1,7 +1,7 @@
 import React from 'react'
 /* Routers. */
 import PublicRouter from './PublicRouter'
-import ProtectedRoutes from './ProtectedRoutes'
+import ProtectedRouter from './ProtectedRouter'
 /* React navigation. */
 import { NavigationContainer } from '@react-navigation/native'
 /* Refs. */
@@ -20,7 +20,7 @@ const Router = () => {
   return (
     <NavigationContainer theme={theme} ref={navigationRef}>
       { authState.isLoggedIn ?
-        <ProtectedRoutes/> :
+        <ProtectedRouter/> :
         <PublicRouter/>
       }
     </NavigationContainer>

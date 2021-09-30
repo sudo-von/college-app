@@ -42,7 +42,7 @@ const routes = [
     },
 ]
 
-const ProtectedRoutes = () => {
+const ProtectedRouter = () => {
 
     /* Handles drawer theme. */
     const { colors } = useTheme()
@@ -89,4 +89,4 @@ const ProtectedRoutes = () => {
     )
 }
 
-export default ProtectedRoutes
+export default ProtectedRouter
