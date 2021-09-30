@@ -1,6 +1,6 @@
 import React from 'react'
-/* Custom components. */
-import PublicRoutes from './PublicRoutes'
+/* Routers. */
+import PublicRouter from './PublicRouter'
 import ProtectedRoutes from './ProtectedRoutes'
 /* React navigation. */
 import { NavigationContainer } from '@react-navigation/native'
@@ -12,13 +12,16 @@ import { theme } from 'src/constants/themes'
 import { useAuth } from 'src/providers/auth.provider'
 
 const Router = () => {
+
   const { authState } = useAuth()
+  console.log('entré')
+  console.log(authState)
 
   return (
     <NavigationContainer theme={theme} ref={navigationRef}>
       { authState.isLoggedIn ?
         <ProtectedRoutes/> :
-        <PublicRoutes/>
+        <PublicRouter/>
       }
     </NavigationContainer>
   )

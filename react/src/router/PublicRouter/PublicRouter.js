@@ -24,16 +24,16 @@ const routes = [
     }
 ]
 
-const PublicRoutes = () =>
+const PublicRouter = () =>
     <Stack.Navigator>
         { routes && routes.map(({ name, component, options}, index) => 
             <Stack.Screen
                 key={`${name}-${index}`}
                 name={name} 
                 component={component} 
-                options={{...options}}
+                options={options}
             />
         )}
     </Stack.Navigator>
 
-export default PublicRoutes
+export default PublicRouter
