@@ -13,6 +13,7 @@ import { useAuth } from 'src/providers/auth.provider'
 
 const Router = () => {
   const { authState } = useAuth()
+
   return (
     <NavigationContainer theme={theme} ref={navigationRef}>
       { authState.isLoggedIn ?
