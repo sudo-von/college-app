@@ -39,6 +39,7 @@ const routes = [
 
 const NestedConfigurationNavigator = () => {
     const { colors } = useTheme()
+    console.log('entré al nested configuraiton nav')
     return(
         <Stack.Navigator
             screenOptions={{

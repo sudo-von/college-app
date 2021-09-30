@@ -22,6 +22,7 @@ const LoginForm = () => {
             setLoading(true)
             const user = await login({email: data.email, password: data.password})
             setLoading(false)
+            console.log(user)
             authDispatch({type: 'login', user})
         }catch(error){
             Alert.alert('',error.message)

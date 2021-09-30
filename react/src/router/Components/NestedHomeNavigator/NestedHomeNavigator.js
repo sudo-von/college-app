@@ -54,7 +54,8 @@ const NestedHomeNavigator = () => {
                 headerMode: 'screen',
                 headerTintColor: colors.background,
                 headerStyle: { backgroundColor: colors.primary },
-          }}
+            }}
+            initialRouteName='/'
         >
             { routes && routes.map(({ title, name, component, options }, index) =>
                 <Stack.Screen 
