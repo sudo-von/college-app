@@ -3,7 +3,7 @@ import React from 'react'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { useNavigation } from '@react-navigation/native'
 /* Custom components. */
-import DrawerContent from './DrawerContent'
+import DrawerContent from './Components/DrawerContent'
 /* Routes. */
 import Logout from 'src/pages/Logout'
 /* React native paper. */
@@ -11,10 +11,10 @@ import { useTheme } from 'react-native-paper'
 /* React native icons. */
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 /* Nested routers. */
-import NestedHomeNavigator from './NestedHomeNavigator'
-import NestedConfigurationNavigator from './NestedConfigurationNavigator'
+import NestedHomeNavigator from './Components/NestedHomeNavigator'
+import NestedConfigurationNavigator from './Components/NestedConfigurationNavigator'
 /* Helpers. */
-import { getHeaderButton, getHeaderTitle } from 'src/helpers/react-navigation-helper'
+import { getHeaderLeft, getHeaderTitle } from 'src/helpers/react-navigation-helper'
 
 const Drawer = createDrawerNavigator()
 
@@ -23,49 +23,33 @@ const routes = [
         name: '/home',
         component: NestedHomeNavigator,
         title: 'Inicio',
-        icon: 'home',
-        options: {} 
+        icon: 'home'
     },
     {
         name: '/configuration',
         component: NestedConfigurationNavigator,
         title: 'Configuración',
-        icon: 'cog',
-        options: {} 
+        icon: 'cog'
     },
     {
         name: '/logout',
         component: Logout,
         title: 'Cerrar sesión',
-        icon: 'logout',
-        options: {} 
-    },
+        icon: 'logout'
+    }
 ]
 
 const ProtectedRouter = () => {
 
-    /* Handles drawer theme. */
     const { colors } = useTheme()
-    const screenOptions = {
-        headerStyle:{
-            backgroundColor: colors.primary,
-        },
-        headerTintColor: colors.background,
-        drawerStyle: {
-            backgroundColor: colors.background
-        },
-        drawerActiveBackgroundColor: colors.transparency,
-        drawerActiveTintColor: colors.primary,
-        drawerInactiveTintColor: colors.accent,
-    }
-    const navigations = useNavigation()
+    const navigation = useNavigation()
 
     return(
         <Drawer.Navigator 
-            screenOptions={screenOptions}
+            screenOptions={screenOptions(colors)}
             drawerContent={(props) => <DrawerContent {...props}/>}
         >
-            { routes && routes.map(({ name, component, title, icon, options }, index) =>
+            { routes && routes.map(({ name, component, title, icon }, index) =>
                 <Drawer.Screen 
                     key={`${name}-${index}`}
                     name={name}
@@ -80,13 +64,25 @@ const ProtectedRouter = () => {
                             />
                         ),
                         headerTitle: getHeaderTitle(route),
-                        headerLeft: () => getHeaderButton(navigations, route),
-                        ...options,
+                        headerLeft: () => getHeaderLeft(navigation, route)
                     })}
                 />
             )}
         </Drawer.Navigator>
     )
 }
+
+const screenOptions = (colors) => ({
+    drawerStyle: {
+        backgroundColor: colors.background
+    },
+    drawerActiveBackgroundColor: colors.transparency,
+    drawerActiveTintColor: colors.primary,
+    drawerInactiveTintColor: colors.accent,
+    headerStyle:{
+        backgroundColor: colors.primary,
+    },
+    headerTintColor: colors.background
+})
 
 export default ProtectedRouter

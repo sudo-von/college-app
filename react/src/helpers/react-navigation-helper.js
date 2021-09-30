@@ -24,7 +24,7 @@ const getHeaderTitle = (route) => {
     }
 }
   
-const getHeaderButton = (navigation, route) => {
+const getHeaderLeft = (navigation, route) => {
 
     const routeName = getFocusedRouteNameFromRoute(route) ?? '/'
     const BackButton = () => <IconButton onPress={() => navigation.goBack()} icon='arrow-left' color='white'/>
@@ -42,5 +42,5 @@ const getHeaderButton = (navigation, route) => {
 
 export {
     getHeaderTitle,
-    getHeaderButton
+    getHeaderLeft
 }
