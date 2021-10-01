@@ -20,7 +20,7 @@ const AdviceCardContent = ({ adviceUser, adviceDate, classroom, studentsNumber, 
                 <Bold>{subject}</Bold>
             </Title>
             <Small style={styles(colors).small}>
-                <Bold>{adviceUser.name}</Bold>
+                <Bold>{adviceUser.name}</Bold> / {adviceUser.email}
             </Small>
             <Paragraph>
                 El día {date} a las {time} impartiré una asesoría de {subject} en el salón {classroom.name}.

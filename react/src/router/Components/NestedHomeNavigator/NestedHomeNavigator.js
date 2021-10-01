@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Home from 'src/pages/Home'
 import PanicButton from 'src/pages/PanicButton'
 import Advices from 'src/pages/Advices'
+import CreateAdvice from 'src/pages/CreateAdvice'
 import Suggestions from 'src/pages/Suggestions'
 /* React native paper. */
 import { useTheme } from 'react-native-paper'
@@ -32,6 +33,14 @@ const routes = [
         title: 'Asesorías',
         name: '/advices',
         component: Advices,
+        options: {
+            header: () => null
+        }
+    },
+    {
+        title: 'Asesorías',
+        name: '/create-advice',
+        component: CreateAdvice,
         options: {
             header: () => null
         }

@@ -30,7 +30,7 @@ const AdviceCard = ({ data, userID, setAdvices }) => {
 
 const styles = StyleSheet.create({
   card: {
-    margin: 10
+    margin: 5 
   }
 })
 

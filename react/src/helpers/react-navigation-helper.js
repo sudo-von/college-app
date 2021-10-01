@@ -9,18 +9,20 @@ const getHeaderTitle = (route) => {
     switch (routeName) {
         case '/':
             return 'Inicio'
-        case '/panic-button':
-            return 'Botón de pánico'
+        case '/account-configuration':
+            return 'Configuración de la cuenta'
         case '/advices':
             return 'Asesorías'
-        case '/suggestions':
-            return 'Sugerencias'
+        case '/create-advice':
+            return 'Agregar asesoría'
         case '/configuration-home':
             return 'Configuración'
         case '/contact-configuration':
             return 'Configuración de contacto'
-        case '/account-configuration':
-            return 'Configuración de la cuenta'
+        case '/panic-button':
+            return 'Botón de pánico'
+        case '/suggestions':
+            return 'Sugerencias'
     }
 }
   

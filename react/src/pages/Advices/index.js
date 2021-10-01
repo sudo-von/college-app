@@ -5,14 +5,19 @@ import Loader from 'src/components/Loader'
 import Container from 'src/components/Container'
 import AdvicesList from './Compontents/AdvicesList'
 /* React native paper. */
+import { IconButton, useTheme } from 'react-native-paper'
 import { Tabs, TabScreen } from 'react-native-paper-tabs'
 /* Contexts. */
 import { useAuth } from 'src/providers/auth.provider'
 /* Services. */
 import { getAdvices } from 'src/services/advice.service'
+/* React navigation. */
+import { useNavigation } from '@react-navigation/native'
 
 const Advices = () => {
 
+    const navigation = useNavigation()
+    const { colors } = useTheme()
     /* Gets user id. */
     const { authState } = useAuth()
     const { user } = authState
@@ -39,8 +44,8 @@ const Advices = () => {
     }, [])
     
     return (
-        <Container style={styles.container}>
-            <View style={styles.view}>
+        <Container style={styles(colors).container}>
+            <View style={styles(colors).view}>
                 { loading ? 
                     <Loader loadingMessage='Cargando asesorías'/> :
                     <Tabs>
@@ -68,17 +73,27 @@ const Advices = () => {
                     </Tabs>
                 }
             </View>
+            <View style={styles(colors).bottomView}>
+                <IconButton
+                    icon='plus'
+                    onPress={() => navigation.navigate('/create-advice')}
+                />
+            </View>
         </Container>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (colors) => StyleSheet.create({
     container: {
         padding: 0
     },
     view: {
         backgroundColor: '#F2F2F2',
-        flex: 1
+        flex: 1,
+    },
+    bottomView: {
+        alignItems: 'center',
+        backgroundColor: colors.primary
     }
 })
 
