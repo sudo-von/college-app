@@ -1,27 +1,73 @@
 import React, { useEffect, useState } from 'react'
-import { View, Alert, StyleSheet } from 'react-native'
-/* Formik. */
+import { View, Alert } from 'react-native'
 import { Formik, Field } from 'formik'
-/* Custom components. */
-import Input from 'src/components/Input'
-import PasswordInput from 'src/components/PasswordInput'
-import SelectInput from 'src/components/SelectInput'
-import Datepicker from 'src/components/Datepicker'
-import Option from 'src/components/Option'
-import Button from 'src/components/Button'
-/* Services. */
+import { Input, PasswordInput, SelectInput, Datepicker, Option, Button, Loader } from 'src/components'
 import { signup } from 'src/services/user.service'
 import { getUniversities } from 'src/services/university.service'
-/* React navigation. */
 import { useNavigation } from '@react-navigation/native'
+import { styles } from './SignupForm.styles'
 
 const SignupForm = () => {
 
-    /* Handles university list. */
-    const [ universityList, setUniversityList ] = useState([])
+    /* Handles form. */
+    const [ formLoading, setFormLoading ] = useState(false)
+    /* Handles universities. */
+    const navigation = useNavigation()
+    const [ universities, setUniversities ] = useState([])
+    const [ loadingUniversities, setLoadingUniversities ] = useState(false)
+
+    /* Formik configuration. */
+    const initialValues = { 
+        name: 'VoN',
+        birth_date: '1997-04-17',
+        email : 'martinez-angel@uadec.edu.mx', 
+        registration_number: '16190775',
+        university_id: '', 
+        password: 'college-app'
+    }
+
+    const handleValidation = ({ name, birth_date, email, registration_number, university_id, password }) => {
+        let errors = {}
+        if(!name){
+            errors.name = 'Nombre requerido'
+        }
+        if(!birth_date){
+            errors.birth_date = 'Fecha de nacimiento requerida'
+        }
+        if(!email){
+            errors.email = 'Correo requerido'
+        }
+        if(!registration_number){
+            errors.registration_number = 'Matrícula requerida'
+        }
+        if(!university_id){
+            errors.university_id = 'Universidad requerida'
+        }
+        if(!password){
+            errors.password = 'Contraseña requerida'
+        }
+        return errors
+    }
+
+    const onSubmit = async (form, { resetForm }) => {
+        try{
+            setFormLoading(true)
+            const response = await signup(form)
+            setFormLoading(false)
+            resetForm()
+            Alert.alert('¡Felicidades!', 'Ya puedes iniciar sesión.')
+            navigation.replace('/login')
+        }catch(error){
+            Alert.alert('¡Ha ocurrido un error!', error.message)
+            setFormLoading(false)
+        }
+    }
+
+    /* Get universities for the select component. */
     useEffect(() => {
         const searchUniversities = async () => {
             try{
+                setLoadingUniversities(true)
                 const response = await getUniversities()
                 /* Creates a new array with the special structure that the SelectInput needs. */
                 const universities = response.map((university) => (
@@ -31,64 +77,22 @@ const SignupForm = () => {
                         custom: <Option source={university.profile_picture} label={university.name}/>
                     }
                 ))
-                setUniversityList(universities)
+                setUniversities(universities)
             }catch(error){
                 Alert.alert('¡Ha ocurrido un error!', error.message)
+            }finally{
+                setLoadingUniversities(false)
             }
         }
         searchUniversities()
-    },[])
-
-    /* Handles form submit. */
-    const navigation = useNavigation()
-    const [ loading, setLoading ] = useState(false)
-    const onSubmit = async (form, { resetForm }) => {
-        try{
-            setLoading(true)
-            const response = await signup(form)
-            setLoading(false)
-            resetForm()
-            Alert.alert(response, 'Ya puedes iniciar sesión.')
-            navigation.navigate('/login')
-        }catch(error){
-            Alert.alert('¡Ha ocurrido un error!', error.message)
-            setLoading(false)
-        }
-    }
+    }, [])
 
     return (
         <Formik 
-            initialValues={{ 
-                name: 'VoN',
-                birth_date: '1997-04-17',
-                email : 'martinez-angel@uadec.edu.mx', 
-                registration_number: '16190775',
-                university_id: '', 
-                password: 'college-app'
-            }}
-            validate={values => {
-                const { name, birth_date, email, registration_number, university_id, password } = values
-                const errors = {}
-                if(!name){
-                    errors.name = 'Nombre requerido'
-                }
-                if(!birth_date){
-                    errors.birth_date = 'Fecha de nacimiento requerida'
-                }
-                if(!email){
-                    errors.email = 'Correo requerido'
-                }
-                if(!registration_number){
-                    errors.registration_number = 'Matrícula requerida'
-                }
-                if(!university_id){
-                    errors.university_id = 'Universidad requerida'
-                }
-                if(!password){
-                    errors.password = 'Contraseña requerida'
-                }
-                return errors
-            }}
+            initialValues={initialValues}
+            validate={handleValidation}
+            validateOnChange={false}
+            validateOnBlur={false} 
             onSubmit={onSubmit}
         >
             {({ handleChange, handleBlur, handleSubmit, errors, values }) => (
@@ -128,8 +132,8 @@ const SignupForm = () => {
                     <Field name='university_id'>
                         {({ field, form, meta }) => (
                             <SelectInput
-                                label='Selecciona tu facultad'
-                                data={universityList}
+                                label={loadingUniversities ? 'Cargando universidades...' : 'Selecciona tu universidad'}
+                                data={universities}
                                 field={field} 
                                 form={form} 
                                 meta={meta}
@@ -145,7 +149,7 @@ const SignupForm = () => {
                         error={errors.password}
                     />
                     <Button 
-                        loading={loading} 
+                        loading={formLoading} 
                         loadingMessage='Registrando usuario...' 
                         onPress={handleSubmit}
                         style={styles.button}
@@ -157,11 +161,5 @@ const SignupForm = () => {
         </Formik>
     )
 }
-
-const styles = StyleSheet.create({
-    button: {
-        marginVertical: 20
-    }
-})
 
 export default SignupForm

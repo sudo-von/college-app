@@ -1,6 +1,6 @@
 /* Routes. */
 import LoginPage from 'src/pages/Login/LoginPage/LoginPage'
-import Signup from 'src/pages/Signup'
+import SignupPage from 'src/pages/Signup/SignupPage/SignupPage'
 import Logout from 'src/pages/Logout'
 import NestedHomeNavigator from 'src/router/Components/NestedHomeNavigator'
 import NestedConfigurationNavigator from 'src/router/Components/NestedConfigurationNavigator'
@@ -18,7 +18,7 @@ const publicRoutes = [
   },
   {
     name: '/signup',
-    component: Signup,
+    component: SignupPage,
     title: '',
     icon: '',
     options: {

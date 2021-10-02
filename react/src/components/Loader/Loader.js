@@ -6,10 +6,10 @@ import Small from 'src/components/Small'
 /* React native paper. */
 import { ActivityIndicator } from 'react-native-paper'
 
-const Loader = ({ loadingMessage }) => {
+const Loader = ({ loadingMessage, size }) => {
     return (
         <Container>
-            <ActivityIndicator size={80}/>
+            <ActivityIndicator size={size ? size : 80}/>
             <Center>
                 <Small>{loadingMessage}</Small>
             </Center>

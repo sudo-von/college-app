@@ -10,7 +10,7 @@ const LoginForm = () => {
 
     const [ loading, setLoading ] = useState(false)
     const { authDispatch } = useAuth()
-    const initialValues = { email: '', password: '' }
+    const initialValues = { email: 'martinez-angel@uadec.edu.mx', password: 'college-app' }
 
     const onSubmit = async (form) => {
         try{
