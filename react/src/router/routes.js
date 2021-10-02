@@ -1,5 +1,5 @@
 /* Routes. */
-import Login from 'src/pages/Login'
+import LoginPage from 'src/pages/Login/LoginPage/LoginPage'
 import Signup from 'src/pages/Signup'
 import Logout from 'src/pages/Logout'
 import NestedHomeNavigator from 'src/router/Components/NestedHomeNavigator'
@@ -8,7 +8,7 @@ import NestedConfigurationNavigator from 'src/router/Components/NestedConfigurat
 const publicRoutes = [
   {
     name: '/login',
-    component: Login,
+    component: LoginPage,
     title: '',
     icon: '',
     options: {

@@ -1,49 +1,46 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, Alert } from 'react-native'
-/* Formik. */
+import { View, Alert } from 'react-native'
 import { Formik } from 'formik'
-/* Custom components. */
-import Button from 'src/components/Button'
-import Input from 'src/components/Input'
-import PasswordInput from 'src/components/PasswordInput'
-/* Contexts. */
+import { Button, Input, PasswordInput } from 'src/components'
 import { useAuth } from 'src/providers/auth.provider'
-/* Services. */
 import { login } from 'src/services/user.service'
+import { styles } from './LoginForm.styles'
 
 const LoginForm = () => {
 
-    /* States. */
     const [ loading, setLoading ] = useState(false)
     const { authDispatch } = useAuth()
+    const initialValues = { email: '', password: '' }
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (form) => {
         try{
             setLoading(true)
-            const user = await login({email: data.email, password: data.password})
+            const user = await login(form)
             setLoading(false)
-            console.log(user)
             authDispatch({type: 'login', user})
         }catch(error){
-            Alert.alert('',error.message)
             setLoading(false)
+            Alert.alert('', error.message)
         }
+    }
+
+    const handleValidation = ({ email, password }) => {
+        let errors = {}
+        if(!email){
+            errors.email = 'Correo requerido'
+        }
+        if(!password){
+            errors.password = 'Contraseña requerida'
+        }
+        return errors
     }
 
     return (
         <Formik 
-            initialValues={{ email: 'martinez-angel@uadec.edu.mx', password: 'college-app'}} 
-            validate={values => {
-                const { email, password } = values
-                const errors = {}
-                if(!email){
-                    errors.email = 'Correo requerido'
-                }
-                if(!password){
-                    errors.password = 'Contraseña requerida'
-                }
-                return errors
-            }}
+            initialValues={initialValues} 
+            validate={handleValidation}
+            validateOnChange={false}
+            validateOnBlur={false} 
             onSubmit={onSubmit}
         >
             {({ handleChange, handleBlur, handleSubmit, errors, values }) => (
@@ -75,14 +72,5 @@ const LoginForm = () => {
         </Formik>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        marginVertical: 30
-    },
-    button: {
-        marginTop: 40,
-    }
-})
 
 export default LoginForm
