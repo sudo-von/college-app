@@ -65,7 +65,7 @@ func (u *User) ValidateRequestedUser(requestedUserID string) error {
 
 func (u *User) ValidateRequestedUniversity(requestedUniversityID string) error {
 	validRequestedUniversity := false
-	if requestedUniversityID == u.ID {
+	if requestedUniversityID == u.University.ID {
 		validRequestedUniversity = true
 	}
 	if !validRequestedUniversity {
