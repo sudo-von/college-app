@@ -1,15 +1,9 @@
 import React from 'react'
-/* React native paper. */
-import { Provider as PaperProvider } from 'react-native-paper'
-/* Custom components. */
 import Router from './src/router'
-/* Contexts. */
+import { Provider as PaperProvider } from 'react-native-paper'
 import { AuthProvider } from './src/providers/auth.provider'
-/* Constants. */
 import { theme } from 'src/constants/themes'
-/* Refs. */
 import { navigationRef } from 'src/refs/navigation.ref'
-/* React navigation. */
 import { NavigationContainer } from '@react-navigation/native'
 
 const App = () =>

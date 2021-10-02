@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Alert } from 'react-native'
 /* Custom components. */
 import Loader from 'src/components/Loader'
 import Container from 'src/components/Container'

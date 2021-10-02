@@ -40,9 +40,9 @@ const CreateAdviceForm = () => {
     const onSubmit = async (form, { resetForm }) => {
         try{
             setLoading(true)
-            await createAdvice(form)
+            await createAdvice({ ...form, advice_date: `${form.advice_date} ${form.advice_time}`})
             resetForm()
-            Alert.alert(response, '¡Has registrado la asesorái con éxito!')
+            Alert.alert('', '¡Has registrado la asesoría con éxito!')
         }catch(error){
             Alert.alert('¡Ha ocurrido un error!', error.message)
         }finally{
