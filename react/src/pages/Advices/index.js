@@ -76,6 +76,7 @@ const Advices = () => {
             <View style={styles(colors).bottomView}>
                 <IconButton
                     icon='plus'
+                    color='white'
                     onPress={() => navigation.navigate('/create-advice')}
                 />
             </View>
