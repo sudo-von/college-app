@@ -6,6 +6,7 @@ import { Formik, Field } from 'formik'
 import Input from 'src/components/Input'
 import SelectInput from 'src/components/SelectInput'
 import Datepicker from 'src/components/Datepicker'
+import Timepicker from 'src/components/Timepicker'
 import Button from 'src/components/Button'
 /* Services. */
 import { createAdvice } from 'src/services/advice.service'
@@ -85,6 +86,16 @@ const CreateAdviceForm = () => {
                         {({ field, form, meta }) => (
                             <Datepicker 
                                 label='Selecciona la fecha de la asesoría'
+                                field={field} 
+                                form={form} 
+                                meta={meta}
+                            />
+                        )}
+                    </Field>
+                    <Field name='advice_time'>
+                        {({ field, form, meta }) => (
+                            <Timepicker 
+                                label='Selecciona la hora de la asesoría'
                                 field={field} 
                                 form={form} 
                                 meta={meta}
