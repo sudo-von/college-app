@@ -16,7 +16,8 @@ export const ERRORS = {
     /* University errors. */
     'INVALID_CLASSROOM': 'El salón proporcionado no pertenece a tu universidad.',
     'UNIVERSITY_NOT_FOUND': 'La universidad que estás buscando no fue encontrada.',
-    /* User errors.. */
+    /* User errors. */
+    'INSUFFICIENT_PERMISSIONS': 'El usuario no cuenta con los permisos necesarios para realizar esta acción',
     'INVALID_USER_EMAIL':  'El correo proporcionado es inválido.',
     'INVALID_USER_REGISTRATION_NUMBER':  'La matrícula proporcionada es inválida.',
     'USER_NOT_FOUND':  'El usuario que estás buscando no fue encontrado.',
