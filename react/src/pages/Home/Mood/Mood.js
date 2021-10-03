@@ -36,12 +36,12 @@ const Mood = ({ initialMoodValue, minimumValue, maximumValue, minimumText, maxim
 
   return (
     <Portal>
-      <Dialog visible={showMood}>
+      <Dialog visible={show}>
         <Dialog.Content>
           <Fab
             small
             icon='close-thick'
-            onPress={handleShow(false)}
+            onPress={() => handleShow(false)}
           />
           <Dialog.Title style={styles.title}>¿Cómo te sientes el día de hoy?</Dialog.Title>
           <Small style={styles.small}>Nos importas mucho y nos gustaría saber cómo te sientes el día de hoy.</Small>
