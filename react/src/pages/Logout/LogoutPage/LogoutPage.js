@@ -1,25 +1,19 @@
 import React, { useEffect } from 'react'
-/* Helpers. */
 import { deleteToken } from 'src/helpers/auth-helper'
-/* Contexts. */
 import { useAuth } from 'src/providers/auth.provider'
-/* React native paper. */
 import { ActivityIndicator } from 'react-native-paper'
-/* Custom components. */
-import Container from 'src/components/Container'
-import Center from 'src/components/Center'
-import Small from 'src/components/Small'
+import { Container, Center, Small } from 'src/components'
 import { Alert } from 'react-native'
 
-const Logout = () => {
+const LogoutPage = () => {
 
-    /* Deletes token from the storage and deletes user from the context. */
+    /* Deletes token from the storage and then deletes user from the context. */
     const { authDispatch } = useAuth()
     useEffect(() => {
         const doLogout = async () => {
             try{
                 await deleteToken()
-                authDispatch({ type: 'logout'})
+                authDispatch({ type: 'logout' })
             }catch(error){
                 Alert.alert('¡Ha ocurrido un error!', error.message)
             }
@@ -29,9 +23,7 @@ const Logout = () => {
     
     return (
         <Container>
-            <ActivityIndicator
-                size={80}
-            />
+            <ActivityIndicator size={80}/>
             <Center>
                 <Small>Cerrando sesión...</Small>
             </Center>
@@ -39,4 +31,4 @@ const Logout = () => {
     )
 }
 
-export default Logout
+export default LogoutPage

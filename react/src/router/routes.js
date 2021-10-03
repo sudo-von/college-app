@@ -1,7 +1,7 @@
 /* Routes. */
 import LoginPage from 'src/pages/Login/LoginPage/LoginPage'
 import SignupPage from 'src/pages/Signup/SignupPage/SignupPage'
-import Logout from 'src/pages/Logout'
+import LogoutPage from 'src/pages/Logout/LogoutPage/LogoutPage'
 import NestedHomeNavigator from 'src/router/Components/NestedHomeNavigator'
 import NestedConfigurationNavigator from 'src/router/Components/NestedConfigurationNavigator'
 
@@ -45,7 +45,7 @@ const protectedRoutes = [
   },
   {
     name: '/logout',
-    component: Logout,
+    component: LogoutPage,
     title: 'Cerrar sesión',
     icon: 'logout',
     options: {}
