@@ -1,15 +1,10 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
-/* Custom components. */
-import Container from 'src/components/Container'
-import Small from 'src/components/Small'
-import Bold from 'src/components/Bold'
-import NavigationBadge from 'src/components/NavigationBadge'
-import Mood from './Components/Mood'
-/* React native paper. */
+import { View } from 'react-native'
+import { Container, Small, Bold, NavigationBadge } from 'src/components'
 import { Title } from 'react-native-paper'
-/* Contexts. */
 import { useAuth } from 'src/providers/auth.provider'
+import { styles } from './HomePage.styles'
+import Mood from '../Mood/Mood'
 
 const routes = [
     {
@@ -35,9 +30,8 @@ const routes = [
     }
 ]
 
-const Home = () => {
+const HomePage = () => {
 
-    /* Destructuring user properties. */
     const { authState } = useAuth()
     const { user } = authState
     const { user_name, user_id } = user
@@ -71,13 +65,4 @@ const Home = () => {
     )
 }
 
-const styles = StyleSheet.create({
-    view: {
-        marginVertical: 40,
-    },
-    title: {
-        fontSize: 24
-    }
-})
-
-export default Home
+export default HomePage

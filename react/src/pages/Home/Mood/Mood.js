@@ -1,39 +1,38 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Alert } from 'react-native'
-/* React native paper. */
-import {Dialog, Portal } from 'react-native-paper'
-/* Custom components. */
-import Small from 'src/components/Small'
-import Button from 'src/components/Button'
-import Fab from 'src/components/Fab'
-import SliderInput from 'src/components/SliderInput'
-/* Services. */
+import { Alert } from 'react-native'
+import { Dialog, Portal } from 'react-native-paper'
+import { Small, Button, Fab, SliderInput } from 'src/components'
 import { getMood, sendMood } from 'src/services/mood.service'
+import { styles } from './Mood.styles'
 
 const Mood = ({ initialMoodValue, minimumValue, maximumValue, minimumText, maximumText, userID }) => {
 
   /* If user has not sent its mood today then the modal mood will be show. */
-  const [showMood, setShowMood] = useState(false)
+  const [mood, setMood] = useState(initialMoodValue)
+  const [show, setShow] = useState(false)
+  
   useEffect(() => {
-      const getDailyMood = async () => {
+      const searchMood = async () => {
         try{
           await getMood(userID)
         }catch(error){
-          setShowMood(true)
+          setShow(true)
         }
       }
-      getDailyMood()
+      searchMood()
   }, [])
-  /* Sends user mood. */
-  const [mood, setMood] = useState(initialMoodValue)
+
   const handleMood = async () => {
     try{
       await sendMood(userID, {mood})
-      setShowMood(false)
     }catch(error){
-      Alert.alert('',error.message)
+      Alert.alert('¡Ha ocurrido un error!', error.message)
+    }finally{
+      setShow(false)
     }
   }
+
+  const handleShow = (show) => setShow(show) 
 
   return (
     <Portal>
@@ -42,7 +41,7 @@ const Mood = ({ initialMoodValue, minimumValue, maximumValue, minimumText, maxim
           <Fab
             small
             icon='close-thick'
-            onPress={() => setShowMood(false)}
+            onPress={handleShow(false)}
           />
           <Dialog.Title style={styles.title}>¿Cómo te sientes el día de hoy?</Dialog.Title>
           <Small style={styles.small}>Nos importas mucho y nos gustaría saber cómo te sientes el día de hoy.</Small>
@@ -62,27 +61,5 @@ const Mood = ({ initialMoodValue, minimumValue, maximumValue, minimumText, maxim
     </Portal>
   )
 }
-
-const styles = StyleSheet.create({
-  fab: {
-    position: 'absolute',
-    margin: 15,
-    right: 0,
-    top: 0
-  },
-  title: {
-    marginTop: 50,
-    fontSize: 24,
-    textAlign: 'center',
-    fontWeight: 'bold'
-  },
-  small: {
-    textAlign: 'center',
-  },
-  sliderInput: {
-    marginTop: 25,
-    marginBottom: 25
-  }
-})
 
 export default Mood

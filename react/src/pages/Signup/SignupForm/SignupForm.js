@@ -56,7 +56,7 @@ const SignupForm = () => {
             setFormLoading(false)
             resetForm()
             Alert.alert('¡Felicidades!', 'Ya puedes iniciar sesión.')
-            navigation.replace('/login')
+            navigation.navigate('/login')
         }catch(error){
             Alert.alert('¡Ha ocurrido un error!', error.message)
             setFormLoading(false)

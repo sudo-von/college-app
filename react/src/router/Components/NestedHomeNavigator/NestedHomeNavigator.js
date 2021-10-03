@@ -2,7 +2,7 @@ import React from 'react'
 /* React navigation. */
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 /* Routes. */
-import Home from 'src/pages/Home'
+import HomePage from 'src/pages/Home/HomePage/HomePage'
 import PanicButton from 'src/pages/PanicButton'
 import Advices from 'src/pages/Advices'
 import CreateAdvice from 'src/pages/CreateAdvice'
@@ -16,7 +16,7 @@ const routes = [
     {
         title: 'Inicio',
         name: '/',
-        component: Home,
+        component: HomePage,
         options: {
             header: () => null
         }
