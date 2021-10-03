@@ -6,7 +6,7 @@ import HomePage from 'src/pages/Home/HomePage/HomePage'
 import PanicButton from 'src/pages/PanicButton'
 import Advices from 'src/pages/Advices'
 import CreateAdvice from 'src/pages/CreateAdvice'
-import Suggestions from 'src/pages/Suggestions'
+import CreateSuggestionPage from 'src/pages/Suggestions/CreateSuggestionPage/CreateSuggestionPage'
 /* React native paper. */
 import { useTheme } from 'react-native-paper'
 
@@ -48,7 +48,7 @@ const routes = [
     {
         title: 'Sugerencias',
         name: '/suggestions',
-        component: Suggestions,
+        component: CreateSuggestionPage,
         options: {
             header: () => null
         }

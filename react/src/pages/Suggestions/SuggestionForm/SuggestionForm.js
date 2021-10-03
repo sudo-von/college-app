@@ -1,24 +1,32 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, Alert } from 'react-native'
-/* Formik. */
+import { View, Alert } from 'react-native'
 import { Formik } from 'formik'
-/* Custom components. */
-import Button from 'src/components/Button'
-import Input from 'src/components/Input'
-/* Services. */
+import { Button, Input } from 'src/components'
 import { sendSuggestion } from 'src/services/suggestion.service'
+import { styles } from './SuggestionForm.style'
 
 const SuggestionForm = () => {
 
     const [ loading, setLoading ] = useState(false)
-    const onSubmit = async ({ suggestion }, { resetForm }) => {
+
+    /* Formik configuration. */
+    const initialValues = { suggestion : ''}
+
+    const handleValidation = ({ suggestion }) => {
+        let errors = {}
+        if(!suggestion){
+            errors.suggestion = 'Sugerencia requerida'
+        }
+        return errors
+    }
+
+    const onSubmit = async (form, { resetForm }) => {
         try{
             setLoading(true)
-            await sendSuggestion({ suggestion })
+            await sendSuggestion(form)
             resetForm()
-            Alert.alert('¡Increíble!', 'Tu sugerencia ha sido enviada con éxito.')
+            Alert.alert('¡Felicidades!', 'Tu sugerencia ha sido enviada con éxito.')
         }catch(error){
-            console.log(error)
             Alert.alert('¡Ha ocurrido un error!', error.message)
         }finally{
             setLoading(false)
@@ -27,14 +35,10 @@ const SuggestionForm = () => {
         
     return (
         <Formik 
-            initialValues={{ suggestion: '' }} 
-            validate={({suggestion}) => {
-                const errors = {}
-                if(!suggestion){
-                    errors.suggestion = 'Sugerencia requerida'
-                }
-                return errors
-            }}
+            initialValues={initialValues} 
+            validate={handleValidation}
+            validateOnChange={false}
+            validateOnBlur={false}
             onSubmit={onSubmit}
         >
             {({ handleChange, handleBlur, handleSubmit, errors, values }) => (
@@ -61,13 +65,5 @@ const SuggestionForm = () => {
         </Formik>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-    },
-    button: {
-        marginTop: 10,
-    }
-})
 
 export default SuggestionForm
