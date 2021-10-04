@@ -3,7 +3,7 @@ import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 /* Routes. */
 import ConfigurationPage from 'src/pages/Configuration/ConfigurationPage/ConfigurationPage'
-import AccountConfiguration from 'src/pages/AccountConfiguration'
+import UpdateAccountConfigurationPage from 'src/pages/Configuration/UpdateAccountConfigurationPage/UpdateAccountConfigurationPage'
 import ContactConfigurationPage from 'src/pages/Configuration/ContactConfigurationPage/ContactConfigurationPage'
 /* React native paper. */
 import { useTheme } from 'react-native-paper'
@@ -22,7 +22,7 @@ const routes = [
     {
         title: 'Configuración de la cuenta',
         name: '/account-configuration',
-        component: AccountConfiguration,
+        component: UpdateAccountConfigurationPage,
         options: {
             header: () => null
         }
