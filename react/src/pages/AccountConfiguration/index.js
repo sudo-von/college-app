@@ -33,7 +33,7 @@ const AccountConfiguration = () => {
             }
         }
         searchUser(user_id)
-    },[])
+    },  [])
 
     return (
         <Container justifyContent='flex-start'>
