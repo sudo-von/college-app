@@ -2,7 +2,7 @@ import React from 'react'
 /* React navigation. */
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 /* Routes. */
-import Configuration from 'src/pages/Configuration'
+import ConfigurationPage from 'src/pages/Configuration/ConfigurationPage/ConfigurationPage'
 import AccountConfiguration from 'src/pages/AccountConfiguration'
 import ContactConfiguration from 'src/pages/ContactConfiguration'
 /* React native paper. */
@@ -14,7 +14,7 @@ const routes = [
     {
         title: 'Configuración',
         name: '/configuration-home',
-        component: Configuration,
+        component: ConfigurationPage,
         options: {
             header: () => null
         }

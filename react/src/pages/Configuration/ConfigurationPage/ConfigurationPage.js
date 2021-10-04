@@ -1,12 +1,9 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
-/* Custom components. */
-import Container from 'src/components/Container'
-import Small from 'src/components/Small'
-import Bold from 'src/components/Bold'
-import NavigationBadge from 'src/components/NavigationBadge'
-/* React native paper. */
+import { View } from 'react-native'
+import { Container, Small, Bold } from 'src/components'
 import { Title } from 'react-native-paper'
+import { styles } from './ConfigurationPage.styles'
+import NavigationBadge from 'src/components/NavigationBadge'
 
 const routes = [
     {
@@ -25,7 +22,7 @@ const routes = [
     }
 ]
 
-const Configuration = () => 
+const ConfigurationPage = () => 
     <Container justifyContent='flex-start'>
         <View style={styles.view}>
             <Title><Bold>¡Bienvenido al{'\n'}panel de configuración!</Bold></Title>
@@ -43,10 +40,4 @@ const Configuration = () =>
         )}
     </Container>
 
-const styles = StyleSheet.create({
-    view: {
-        marginVertical: 40,
-    }
-})
-
-export default Configuration
+export default ConfigurationPage
