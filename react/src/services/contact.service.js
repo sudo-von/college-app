@@ -5,7 +5,7 @@ import { CONTACT, USERS } from 'src/constants/endpoints'
 
 export {
     getContactByUserID,
-    sendContactByUserID,
+    createContactByUserID,
     updateContactByID
 }
 
@@ -19,7 +19,7 @@ const getContactByUserID = async (userID) => {
     }
 }
 
-const sendContactByUserID = async (userID, contact) => {
+const createContactByUserID = async (userID, contact) => {
     try{
         await protectedAxios.post(`${CONTACT}${USERS}/${userID}`, contact)
     }catch(error){
