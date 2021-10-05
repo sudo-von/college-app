@@ -1,30 +1,24 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, Alert } from 'react-native'
-/* Custom components. */
-import Loader from 'src/components/Loader'
-import Container from 'src/components/Container'
-import AdvicesList from './Compontents/AdvicesList'
-/* React native paper. */
+import { View, Alert } from 'react-native'
+import { Loader, Container } from 'src/components'
 import { IconButton, useTheme } from 'react-native-paper'
 import { Tabs, TabScreen } from 'react-native-paper-tabs'
-/* Contexts. */
 import { useAuth } from 'src/providers/auth.provider'
-/* Services. */
 import { getAdvices } from 'src/services/advice.service'
-/* React navigation. */
 import { useNavigation } from '@react-navigation/native'
+import { styles } from './AdvicesPage.styles'
+import AdvicesList from '../AdvicesList/AdvicesList'
 
-const Advices = () => {
+const AdvicesPage = () => {
 
     const navigation = useNavigation()
     const { colors } = useTheme()
-    /* Gets user id. */
     const { authState } = useAuth()
     const { user } = authState
     const { user_id } = user
-    /* Sets the advice list that will use each component. */
-    const [ advices, setAdvices ] = useState([])
+
     const [ loading, setLoading ] = useState(false)
+    const [ advices, setAdvices ] = useState([])
     const attendedAdvices = advices.filter(advice => advice.students_will_attend.some(student_id => student_id == user_id))
     const teachedAdvices = advices.filter(advice => advice.user.id == user_id)
 
@@ -40,7 +34,10 @@ const Advices = () => {
                 setLoading(false)
             }
         }
-        searchAdvices()
+        const willFocusSubscription = navigation.addListener('focus', () => {
+            searchAdvices()
+        })
+        return willFocusSubscription
     }, [])
     
     return (
@@ -84,18 +81,4 @@ const Advices = () => {
     )
 }
 
-const styles = (colors) => StyleSheet.create({
-    container: {
-        padding: 0
-    },
-    view: {
-        backgroundColor: '#F2F2F2',
-        flex: 1,
-    },
-    bottomView: {
-        alignItems: 'center',
-        backgroundColor: colors.primary
-    }
-})
-
-export default Advices
+export default AdvicesPage

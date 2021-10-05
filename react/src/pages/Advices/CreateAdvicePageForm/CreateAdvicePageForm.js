@@ -1,32 +1,25 @@
 import React, { useEffect, useState } from 'react'
-import { View, Alert, StyleSheet } from 'react-native'
-/* Formik. */
+import { View, Alert } from 'react-native'
 import { Formik, Field } from 'formik'
-/* Custom components. */
-import Input from 'src/components/Input'
-import SelectInput from 'src/components/SelectInput'
-import Datepicker from 'src/components/Datepicker'
-import Timepicker from 'src/components/Timepicker'
-import Button from 'src/components/Button'
-/* Services. */
+import { Input, SelectInput, Datepicker, Timepicker, Button } from 'src/components'
 import { createAdvice } from 'src/services/advice.service'
 import { getUniversityByID } from 'src/services/university.service'
-/* Contexts. */
 import { useAuth } from 'src/providers/auth.provider'
+import { styles } from './CreateAdvicePageForm.styles'
 
-const CreateAdviceForm = () => {
+const CreateAdvicePageForm = () => {
 
-    /* Gets user id. */
     const { authState } = useAuth()
     const { user } = authState
     const { university_id } = user
-    /* Handles classrooms list. */
+
+    const [ loading, setLoading ] = useState(false)
     const [ classrooms, setClassrooms ] = useState([])
+
     useEffect(() => {
         const searchUniversityByID = async () => {
             try{
                 const university = await getUniversityByID(university_id)
-                console.log(university)
                 setClassrooms(university.classrooms.map(classroom => ({ label: classroom.name, value: classroom.id })))
             }catch(error){
                 Alert.alert('¡Ha ocurrido un error!', error.message)
@@ -35,43 +28,51 @@ const CreateAdviceForm = () => {
         searchUniversityByID()
     },[])
 
-    /* Handles form submit. */
-    const [ loading, setLoading ] = useState(false)
-    const onSubmit = async (form, { resetForm }) => {
+    /* Formik configuration. */
+    const initialValues = { 
+        subject: '',
+        advice_date: '',
+        advice_time: ''
+    }
+
+    const handleValidation = ({ subject, advice_date, advice_time, classroom_id }) => {
+        let errors = {}
+        if(!subject){
+            errors.subject = 'Materia requerida'
+        }
+        if(!advice_date){
+            errors.advice_date = 'Fecha de la asesoría requerida'
+        }
+        if(!advice_time){
+            errors.advice_time = 'Hora de la asesoría requerida'
+        }
+        if(!classroom_id){
+            errors.classroom_id = 'Salón requerido'
+        }
+        return errors
+    }
+
+    const onHandleSubmit = async (form, { resetForm }) => {
         try{
             setLoading(true)
             await createAdvice({ ...form, advice_date: `${form.advice_date} ${form.advice_time}`})
             resetForm()
-            Alert.alert('', '¡Has registrado la asesoría con éxito!')
+            Alert.alert('¡Felicidades!', '¡Has registrado la asesoría con éxito!')
         }catch(error){
             Alert.alert('¡Ha ocurrido un error!', error.message)
         }finally{
             setLoading(false)
         }
+        console.log(classrooms)
     }
 
     return (
         <Formik 
-            initialValues={{ 
-                subject: '',
-                advice_date: '',
-                classroom_id : ''
-            }}
-            validate={values => {
-                const { subject, advice_date, classroom_id } = values
-                const errors = {}
-                if(!subject){
-                    errors.subject = 'Materia requerida'
-                }
-                if(!advice_date){
-                    errors.advice_date = 'Fecha de la asesoría requerida'
-                }
-                if(!classroom_id){
-                    errors.classroom_id = 'Salón requerido'
-                }
-                return errors
-            }}
-            onSubmit={onSubmit}
+            initialValues={initialValues}
+            validateOnChange={false}
+            validateOnBlur={false}
+            validate={handleValidation}
+            onSubmit={onHandleSubmit}
         >
             {({ handleChange, handleBlur, handleSubmit, errors, values }) => (
                 <View>
@@ -128,10 +129,4 @@ const CreateAdviceForm = () => {
     )
 }
 
-const styles = StyleSheet.create({
-    button: {
-        marginVertical: 20
-    }
-})
-
-export default CreateAdviceForm
+export default CreateAdvicePageForm

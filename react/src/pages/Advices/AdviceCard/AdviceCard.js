@@ -1,10 +1,8 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
-/* Custom components. */
-import AdviceCardActions from './Components/AdviceCardActions'
-import AdviceCardContent from './Components/AdviceCardContent'
-/* React native paper. */
 import { Card } from 'react-native-paper'
+import { styles } from './AdviceCard.styles'
+import AdviceCardActions from './AdviceCardActions/AdviceCardActions'
+import AdviceCardContent from './AdviceCardContent/AdviceCardContent'
 
 const AdviceCard = ({ data, userID, setAdvices }) => {
   const { advice_date, classroom, id, students_will_attend, subject, user } = data
@@ -27,11 +25,5 @@ const AdviceCard = ({ data, userID, setAdvices }) => {
     </Card>
   )
 }
-
-const styles = StyleSheet.create({
-  card: {
-    margin: 5 
-  }
-})
 
 export default AdviceCard

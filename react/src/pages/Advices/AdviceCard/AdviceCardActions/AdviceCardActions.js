@@ -1,8 +1,6 @@
 import React from 'react'
 import { Alert, StyleSheet, Linking } from 'react-native'
-/* React native paper. */
 import { IconButton, Card } from 'react-native-paper'
-/* Services. */
 import { deleteAdviceByID, updateStudentsNumber } from 'src/services/advice.service'
 
 const AdviceCardActions = ({ studentsWillAttend, adviceID, adviceUser, userID, setAdvices }) => {

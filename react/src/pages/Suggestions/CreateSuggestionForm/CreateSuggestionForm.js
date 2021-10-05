@@ -3,9 +3,9 @@ import { View, Alert } from 'react-native'
 import { Formik } from 'formik'
 import { Button, Input } from 'src/components'
 import { sendSuggestion } from 'src/services/suggestion.service'
-import { styles } from './SuggestionForm.style'
+import { styles } from './CreateSuggestionForm.style'
 
-const SuggestionForm = () => {
+const CreateSuggestionForm = () => {
 
     const [ loading, setLoading ] = useState(false)
 
@@ -20,7 +20,7 @@ const SuggestionForm = () => {
         return errors
     }
 
-    const onSubmit = async (form, { resetForm }) => {
+    const onHandleSubmit = async (form, { resetForm }) => {
         try{
             setLoading(true)
             await sendSuggestion(form)
@@ -39,7 +39,7 @@ const SuggestionForm = () => {
             validate={handleValidation}
             validateOnChange={false}
             validateOnBlur={false}
-            onSubmit={onSubmit}
+            onSubmit={onHandleSubmit}
         >
             {({ handleChange, handleBlur, handleSubmit, errors, values }) => (
                 <View style={styles.container}>
@@ -66,4 +66,4 @@ const SuggestionForm = () => {
     )
 }
 
-export default SuggestionForm
+export default CreateSuggestionForm

@@ -1,11 +1,7 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
-/* Custom components. */
-import Bold from 'src/components/Bold'
-import Small from 'src/components/Small'
-/* React native paper. */
+import { Bold, Small } from 'src/components'
 import { Card, Title, Paragraph, useTheme } from 'react-native-paper'
-/* Moment. */
+import { styles } from './AdiveCardContent.styles'
 import moment from 'moment'
 
 const AdviceCardContent = ({ adviceUser, adviceDate, classroom, studentsNumber, subject }) => {
@@ -34,10 +30,4 @@ const AdviceCardContent = ({ adviceUser, adviceDate, classroom, studentsNumber, 
     )
 }
 
-const styles = (colors) => StyleSheet.create({
-    small: {
-      color: colors.primary,
-    },
-})
-  
 export default AdviceCardContent

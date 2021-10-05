@@ -4,8 +4,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 /* Routes. */
 import HomePage from 'src/pages/Home/HomePage/HomePage'
 import PanicButtonPage from 'src/pages/PanicButton/PanicButtonPage/PanicButtonPage'
-import Advices from 'src/pages/Advices'
-import CreateAdvice from 'src/pages/CreateAdvice'
+import AdvicesPage from 'src/pages/Advices/AdvicesPage/AdvicesPage'
+import CreateAdvicePage from 'src/pages/Advices/CreateAdvicePage/CreateAdvicePage'
 import CreateSuggestionPage from 'src/pages/Suggestions/CreateSuggestionPage/CreateSuggestionPage'
 /* React native paper. */
 import { useTheme } from 'react-native-paper'
@@ -32,7 +32,7 @@ const routes = [
     {
         title: 'Asesorías',
         name: '/advices',
-        component: Advices,
+        component: AdvicesPage,
         options: {
             header: () => null
         }
@@ -40,7 +40,7 @@ const routes = [
     {
         title: 'Asesorías',
         name: '/create-advice',
-        component: CreateAdvice,
+        component: CreateAdvicePage,
         options: {
             header: () => null
         }

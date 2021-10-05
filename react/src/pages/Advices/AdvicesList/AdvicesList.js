@@ -1,7 +1,6 @@
 import React from 'react'
 import { ScrollView } from 'react-native'
-/* Custom components. */
-import AdviceCard from '../AdviceCard'
+import AdviceCard from '../AdviceCard/AdviceCard'
 
 const AdvicesList = ({ advices, setAdvices, userID }) =>
     <ScrollView>
