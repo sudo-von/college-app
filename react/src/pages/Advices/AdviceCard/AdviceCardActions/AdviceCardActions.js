@@ -2,10 +2,12 @@ import React from 'react'
 import { Alert, StyleSheet, Linking } from 'react-native'
 import { IconButton, Card } from 'react-native-paper'
 import { deleteAdviceByID, updateStudentsNumber } from 'src/services/advice.service'
+import { useNavigation } from '@react-navigation/native'
 
 const AdviceCardActions = ({ studentsWillAttend, adviceID, adviceUser, userID, setAdvices }) => {
 
     const attended = studentsWillAttend.includes(userID)
+    const navigation = useNavigation()
     /* Updates the number of students that will go to the advice. */
     const handleAssistance = async () => {
         try{
@@ -29,6 +31,9 @@ const AdviceCardActions = ({ studentsWillAttend, adviceID, adviceUser, userID, s
     }
 
     const handleEdit = () => {
+        navigation.navigate('/update-advice', {
+            id: adviceID
+        })
     }
 
     /* Delete the advice and updates the advices list. */

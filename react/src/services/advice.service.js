@@ -4,11 +4,23 @@ import { protectedAxios } from 'src/helpers/axios-helper'
 import { ADVICE } from 'src/constants/endpoints'
 
 export {
+    getAdviceByID,
     getAdvices,
     createAdvice,
     deleteAdviceByID,
+    updateAdviceByID,
     updateStudentsNumber
 }
+
+const getAdviceByID = async (adviceID) => {
+    try{
+        const advice = await protectedAxios.get(`${ADVICE}/${adviceID}`)
+        return advice.data
+    }catch(error){
+        throw error
+    }
+}
+
 
 const getAdvices = async () => {
     try{
@@ -31,6 +43,14 @@ const createAdvice = async (advicePayload) => {
 const deleteAdviceByID = async (adviceID) => {
     try{
         await protectedAxios.delete(`${ADVICE}/${adviceID}`)
+    }catch(error){
+        throw error
+    }
+}
+
+const updateAdviceByID = async (adviceID, advice) => {
+    try{
+        await protectedAxios.patch(`${ADVICE}/${adviceID}`, advice)
     }catch(error){
         throw error
     }

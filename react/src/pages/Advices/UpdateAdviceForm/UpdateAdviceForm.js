@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { View, Alert } from 'react-native'
 import { Formik, Field } from 'formik'
 import { Input, SelectInput, Datepicker, Timepicker, Button } from 'src/components'
-import { createAdvice } from 'src/services/advice.service'
+import { updateAdviceByID } from 'src/services/advice.service'
 import { getUniversityByID } from 'src/services/university.service'
 import { useAuth } from 'src/providers/auth.provider'
-import { styles } from './CreateAdvicePageForm.styles'
+import { styles } from './UpdateAdviceForm.styles'
+import withLoading from 'src/hocs/withLoading'
+import moment from 'moment'
 
-const CreateAdvicePageForm = () => {
-
+const UpdateAdviceForm = ({ advice }) => {
+   
     const { authState } = useAuth()
     const { user } = authState
     const { university_id } = user
@@ -17,22 +19,23 @@ const CreateAdvicePageForm = () => {
     const [ classrooms, setClassrooms ] = useState([])
 
     useEffect(() => {
-        const searchUniversityByID = async () => {
+        const searchUniversityByID = async (universityID) => {
             try{
-                const university = await getUniversityByID(university_id)
+                const university = await getUniversityByID(universityID)
                 setClassrooms(university.classrooms.map(classroom => ({ label: classroom.name, value: classroom.id })))
             }catch(error){
                 Alert.alert('¡Ha ocurrido un error!', error.message)
             }
         }
-        searchUniversityByID()
-    },[])
+        searchUniversityByID(university_id)
+    },  [])
 
     /* Formik configuration. */
     const initialValues = { 
-        subject: '',
-        advice_date: '',
-        advice_time: ''
+        subject: advice.subject,
+        advice_date: moment(advice.advice_date).format('YYYY-MM-DD'),
+        advice_time: moment(advice.advice_date).format('HH:mm'),
+        classroom_id: advice.classroom.id
     }
 
     const handleValidation = ({ subject, advice_date, advice_time, classroom_id }) => {
@@ -52,18 +55,16 @@ const CreateAdvicePageForm = () => {
         return errors
     }
 
-    const onHandleSubmit = async (form, { resetForm }) => {
+    const onHandleSubmit = async (form) => {
         try{
             setLoading(true)
-            await createAdvice({ ...form, advice_date: `${form.advice_date} ${form.advice_time}`})
-            resetForm()
-            Alert.alert('¡Felicidades!', '¡Has registrado la asesoría con éxito!')
+            await updateAdviceByID(advice.id, { ...form, advice_date: `${form.advice_date} ${form.advice_time}`})
+            Alert.alert('¡Felicidades!', '¡Has actualizado la asesoría con éxito!')
         }catch(error){
             Alert.alert('¡Ha ocurrido un error!', error.message)
         }finally{
             setLoading(false)
         }
-        console.log(classrooms)
     }
 
     return (
@@ -117,11 +118,11 @@ const CreateAdvicePageForm = () => {
                     </Field>
                     <Button 
                         loading={loading} 
-                        loadingMessage='Registrando asesoría...' 
+                        loadingMessage='Actualizando asesoría...' 
                         onPress={handleSubmit}
                         style={styles.button}
                     >
-                        Registrar asesoría
+                        Actualizar asesoría
                     </Button>
                 </View>
             )}
@@ -129,4 +130,4 @@ const CreateAdvicePageForm = () => {
     )
 }
 
-export default CreateAdvicePageForm
+export default withLoading(UpdateAdviceForm, 'Cargando asesoría...')
