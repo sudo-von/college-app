@@ -18,7 +18,7 @@ func NewService(userRepository UserRepository, userMoodRepository UserMoodReposi
 	}
 }
 
-func (s *Service) GetUserMoodByUserID(userID, requestedUserID string, userMoodFilters entity.UserMoodFilters) (*entity.UserMood, error) {
+func (s Service) GetUserMoodByUserID(userID, requestedUserID string, userMoodFilters entity.UserMoodFilters) (*entity.UserMood, error) {
 
 	user, err := s.userRepository.GetUserByID(userID)
 	if err != nil {
@@ -41,7 +41,7 @@ func (s *Service) GetUserMoodByUserID(userID, requestedUserID string, userMoodFi
 	return userMood, nil
 }
 
-func (s *Service) CreateUserMood(requestedUserID string, newUserMood entity.UserMoodPayload, userMoodFilters entity.UserMoodFilters) error {
+func (s Service) CreateUserMood(requestedUserID string, newUserMood entity.UserMoodPayload, userMoodFilters entity.UserMoodFilters) error {
 
 	// Checks if given mood is in the valid range.
 	err := newUserMood.ValidateMood()
