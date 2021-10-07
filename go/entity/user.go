@@ -4,6 +4,7 @@ import (
 	"errors"
 	"strings"
 	"time"
+	"unicode"
 )
 
 var (
@@ -74,7 +75,16 @@ func (u *User) ValidateRequestedUniversity(requestedUniversityID string) error {
 	return nil
 }
 
-func (up *UserPayload) ValidateRegistrationNumber() error {
+func (up *UserPayload) ValidateRegistrationNumberDigits() error {
+	for _, r := range up.RegistrationNumber {
+		if unicode.IsLetter(r) {
+			return errors.New("invalid registration_number, it can only contains digits")
+		}
+	}
+	return nil
+}
+
+func (up *UserPayload) ValidateRegistrationNumberLength() error {
 	validRegistrationNumber := false
 	if len(strings.Replace(up.RegistrationNumber, " ", "", -1)) == 8 {
 		validRegistrationNumber = true
@@ -85,9 +95,18 @@ func (up *UserPayload) ValidateRegistrationNumber() error {
 	return nil
 }
 
-func (uup *UpdateUserPayload) ValidateRegistrationNumber() error {
+func (up *UpdateUserPayload) ValidateRegistrationNumberDigits() error {
+	for _, r := range up.RegistrationNumber {
+		if unicode.IsLetter(r) {
+			return errors.New("invalid registration_number, it can only contains digits")
+		}
+	}
+	return nil
+}
+
+func (up *UpdateUserPayload) ValidateRegistrationNumberLength() error {
 	validRegistrationNumber := false
-	if len(strings.Replace(uup.RegistrationNumber, " ", "", -1)) == 8 {
+	if len(strings.Replace(up.RegistrationNumber, " ", "", -1)) == 8 {
 		validRegistrationNumber = true
 	}
 	if !validRegistrationNumber {
