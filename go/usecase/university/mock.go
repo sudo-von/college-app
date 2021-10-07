@@ -5,14 +5,14 @@ import (
 	"freelancer/college-app/go/pkg/search"
 )
 
-var fakeUniversityIDS = []string{"615c09f7309d7ded48c7a049", "615c09f7309d7ded48c7a050"}
+var fakeUniversityIDS = []string{"615c09f7309d7ded48c7a049", "615c0794590f4315693633a6"}
 
 type UniversityReaderMock struct{}
 
 func (u UniversityReaderMock) GetTinyUniversities() ([]entity.TinyUniversity, *int, error) {
 	tinyUniversities := []entity.TinyUniversity{
 		{
-			ID:             "615c09f7309d7ded48c7a050",
+			ID:             "615c09f7309d7ded48c7a049",
 			Name:           "Fake name",
 			ProfilePicture: "Fake profile picture",
 		},
