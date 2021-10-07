@@ -55,9 +55,13 @@ func (s *Service) CreateUser(newUser entity.UserPayload) error {
 		return entity.NewErrorConflict(errors.New("invalid email"), presenter.ErrInvUserEmail)
 	}
 	// Checks if registration number has a correct format.
-	err = newUser.ValidateRegistrationNumber()
+	err = newUser.ValidateRegistrationNumberDigits()
 	if err != nil {
-		return entity.NewErrorConflict(err, presenter.ErrInvUserRegistrationNumber)
+		return entity.NewErrorConflict(err, presenter.ErrInvUserRegistrationNumberDigits)
+	}
+	err = newUser.ValidateRegistrationNumberLength()
+	if err != nil {
+		return entity.NewErrorConflict(err, presenter.ErrInvUserRegistrationNumberLength)
 	}
 	// Checks if email is already in use.
 	_, err = s.userRepository.GetTinyUserByEmail(newUser.Email)
@@ -126,9 +130,13 @@ func (s *Service) UpdateTinyUser(userID, requestedUserID string, newUser entity.
 	}
 
 	if requestedUser.RegistrationNumber != newUser.RegistrationNumber {
-		err = newUser.ValidateRegistrationNumber()
+		err = newUser.ValidateRegistrationNumberDigits()
 		if err != nil {
-			return entity.NewErrorConflict(err, presenter.ErrInvUserRegistrationNumber)
+			return entity.NewErrorConflict(err, presenter.ErrInvUserRegistrationNumberDigits)
+		}
+		err = newUser.ValidateRegistrationNumberLength()
+		if err != nil {
+			return entity.NewErrorConflict(err, presenter.ErrInvUserRegistrationNumberLength)
 		}
 		_, err = s.userRepository.GetTinyUserByRegistrationNumber(newUser.RegistrationNumber)
 		if err != nil && err.Error() != "not found" {
