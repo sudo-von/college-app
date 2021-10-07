@@ -94,18 +94,13 @@ func (c *UserMoodController) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	currentDate := time.Now().In(time.Local)
-	userMoodFilters := entity.UserMoodFilters{
-		CreationDate: &currentDate,
-	}
-
 	newUserMood := entity.UserMoodPayload{
-		UserID:       userID,
+		UserID:       requestedUserID,
 		Mood:         data.Mood,
 		CreationDate: time.Now().In(time.Local),
 	}
 
-	err := c.UserMoodService.CreateUserMood(requestedUserID, newUserMood, userMoodFilters)
+	err := c.UserMoodService.CreateUserMood(userID, requestedUserID, newUserMood)
 	if err != nil {
 		CheckError(err, w, r)
 		return
