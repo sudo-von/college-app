@@ -4,6 +4,7 @@ import (
 	"errors"
 	"freelancer/college-app/go/api/presenter"
 	"freelancer/college-app/go/entity"
+	"time"
 )
 
 type Service struct {
@@ -41,15 +42,29 @@ func (s Service) GetUserMoodByUserID(userID, requestedUserID string, userMoodFil
 	return userMood, nil
 }
 
-func (s Service) CreateUserMood(requestedUserID string, newUserMood entity.UserMoodPayload, userMoodFilters entity.UserMoodFilters) error {
+func (s Service) CreateUserMood(userID, requestedUserID string, newUserMood entity.UserMoodPayload) error {
+
+	user, err := s.userRepository.GetUserByID(userID)
+	if err != nil {
+		return entity.NewErrorInternalServer(err, presenter.ErrIntServError)
+	}
+
+	err = user.ValidateRequestedUser(requestedUserID)
+	if err != nil {
+		return entity.NewErrorUnauthorized(err, presenter.ErrInsufficientPermissions)
+	}
 
 	// Checks if given mood is in the valid range.
-	err := newUserMood.ValidateMood()
+	err = newUserMood.ValidateMood()
 	if err != nil {
 		return entity.NewErrorConflict(err, presenter.ErrInvMood)
 	}
 	// Checks if the user mood has already been registered today.
-	_, err = s.GetUserMoodByUserID(newUserMood.UserID, requestedUserID, userMoodFilters)
+	currentDate := time.Now().In(time.Local)
+	userMoodFilters := entity.UserMoodFilters{
+		CreationDate: &currentDate,
+	}
+	_, err = s.GetUserMoodByUserID(userID, requestedUserID, userMoodFilters)
 	if err != nil && err.Error() != "not found" {
 		return err
 	} else if err == nil {
