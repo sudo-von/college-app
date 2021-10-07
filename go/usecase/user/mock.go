@@ -85,7 +85,7 @@ func (u UserReaderMock) GetUserByID(userID string) (*entity.User, error) {
 		Status:             entity.ActiveStatus,
 		Role:               entity.StudentRole,
 		University: entity.University{
-			ID:             "615c0794590f4315693633a6",
+			ID:             "615c09f7309d7ded48c7a049",
 			Name:           "Fake university name",
 			ProfilePicture: "Fake profile picture url",
 			Classrooms: []entity.Classroom{
