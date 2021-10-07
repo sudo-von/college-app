@@ -75,3 +75,66 @@ func TestService_GetUserMoodByUserID(t *testing.T) {
 		})
 	}
 }
+
+func TestService_CreateUserMood(t *testing.T) {
+	type fields struct {
+		userRepository     user.UserReaderMock
+		userMoodRepository UserMoodRepositoryMock
+	}
+	type args struct {
+		userID          string
+		requestedUserID string
+		newUserMood     entity.UserMoodPayload
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "ok",
+			args: args{
+				userID:          "615c09f7309d7ded48c7a054",
+				requestedUserID: "615c09f7309d7ded48c7a054",
+				newUserMood: entity.UserMoodPayload{
+					UserID:       "615c09f7309d7ded48c7a054",
+					Mood:         5,
+					CreationDate: time.Date(2021, 01, 01, 0, 0, 0, 0, time.Local),
+				},
+			},
+		},
+		{
+			name: "insufficient permissions",
+			args: args{
+				userID:          "615c09f7309d7ded48c7a053",
+				requestedUserID: "615c09f7309d7ded48c7a054",
+			},
+			wantErr: true,
+		},
+		{
+			name: "invalid mood",
+			args: args{
+				userID:          "615c09f7309d7ded48c7a054",
+				requestedUserID: "615c09f7309d7ded48c7a054",
+				newUserMood: entity.UserMoodPayload{
+					UserID:       "615c09f7309d7ded48c7a054",
+					Mood:         11,
+					CreationDate: time.Date(2021, 01, 01, 0, 0, 0, 0, time.Local),
+				},
+			},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := Service{
+				userRepository:     tt.fields.userRepository,
+				userMoodRepository: tt.fields.userMoodRepository,
+			}
+			if err := s.CreateUserMood(tt.args.userID, tt.args.requestedUserID, tt.args.newUserMood); (err != nil) != tt.wantErr {
+				t.Errorf("Service.CreateUserMood() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
