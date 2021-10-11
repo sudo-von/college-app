@@ -24,8 +24,3 @@ type UserMoodRepository interface {
 	UserMoodReader
 	UserMoodWriter
 }
-
-type UseCase interface {
-	GetUserMoodByUserID(userID, requestedUserID string, userMoodFilters entity.UserMoodFilters) (*entity.UserMood, error)
-	CreateUserMood(requestedUserID string, newUserMood entity.UserMoodPayload, userMoodFilters entity.UserMoodFilters) error
-}
