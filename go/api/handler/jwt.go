@@ -70,7 +70,6 @@ func (c *JWTController) BasicAuth() func(http.Handler) http.Handler {
 			}
 			err := errors.New("unauthorized user")
 			render.Render(w, r, presenter.ErrorUnauthorizedResponse(err, presenter.ErrUnauthorizedUser))
-			return
 		})
 	}
 }
