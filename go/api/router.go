@@ -2,7 +2,6 @@ package api
 
 import (
 	"freelancer/college-app/go/api/handler"
-	"freelancer/college-app/go/api/middleware"
 	"freelancer/college-app/go/pkg/token"
 	"freelancer/college-app/go/usecase/advice"
 	"freelancer/college-app/go/usecase/contact"
@@ -17,6 +16,7 @@ import (
 
 	"github.com/go-chi/chi"
 	chimiddleware "github.com/go-chi/chi/middleware"
+	"github.com/go-chi/cors"
 	"github.com/go-chi/render"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
@@ -55,7 +55,14 @@ func ListenAndServe(services Services) {
 	r.Use(render.SetContentType(render.ContentTypeJSON))
 
 	// CORS configuration.
-	cors := middleware.Cors()
+	cors := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token", "File-Name"},
+		ExposedHeaders:   []string{"Link", "File-Name", "Authorization"},
+		AllowCredentials: true,
+		MaxAge:           300,
+	})
 	r.Use(cors.Handler)
 
 	// Documentation.
