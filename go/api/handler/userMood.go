@@ -9,18 +9,22 @@ import (
 	"freelancer/college-app/go/api/presenter"
 	"freelancer/college-app/go/entity"
 	"freelancer/college-app/go/pkg/token"
-	"freelancer/college-app/go/usecase/user_mood"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 )
 
+type UserMoodService interface {
+	GetUserMoodByUserID(userID, requestedUserID string, userMoodFilters entity.UserMoodFilters) (*entity.UserMood, error)
+	CreateUserMood(userID, requestedUserID string, newUserMood entity.UserMoodPayload) error
+}
+
 type UserMoodController struct {
-	UserMoodService user_mood.Service
+	UserMoodService UserMoodService
 	TokenService    token.Service
 }
 
-func NewUserMoodController(userMood user_mood.Service, token token.Service) *UserMoodController {
+func NewUserMoodController(userMood UserMoodService, token token.Service) *UserMoodController {
 	return &UserMoodController{
 		UserMoodService: userMood,
 		TokenService:    token,
