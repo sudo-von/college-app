@@ -77,7 +77,7 @@ func (u *User) ValidateRequestedUniversity(requestedUniversityID string) error {
 
 func (up *UserPayload) ValidateRegistrationNumberDigits() error {
 	for _, r := range up.RegistrationNumber {
-		if unicode.IsLetter(r) {
+		if !unicode.IsDigit(r) {
 			return errors.New("invalid registration_number, it can only contains digits")
 		}
 	}
