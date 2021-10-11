@@ -29,9 +29,3 @@ type UserRepository interface {
 	UserReader
 	UserWriter
 }
-
-type UseCase interface {
-	CreateUser(newUser entity.UserPayload) error
-	GetTinyUserByID(userID, requestedUserID string) (*entity.TinyUser, error)
-	UpdateTinyUser(userID, requestedUserID string, newUser entity.UpdateUserPayload) error
-}

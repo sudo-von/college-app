@@ -4,24 +4,27 @@ import (
 	"errors"
 	"net/http"
 
-	"freelancer/college-app/go/api/middleware"
 	"freelancer/college-app/go/api/presenter"
-	"freelancer/college-app/go/pkg/token"
-	"freelancer/college-app/go/usecase/university"
+	"freelancer/college-app/go/entity"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 )
 
-type UniversityController struct {
-	UniversityService university.Service
-	TokenService      token.Service
+type UniversityService interface {
+	GetTinyUniversities() ([]entity.TinyUniversity, *int, error)
+	GetUniversityByID(userID, universityID string) (*entity.University, error)
 }
 
-func NewUniversityController(university university.Service, token token.Service) *UniversityController {
+type UniversityController struct {
+	UniversityService UniversityService
+	AuthService       func(http.Handler) http.Handler
+}
+
+func NewUniversityController(universityService UniversityService, authService func(http.Handler) http.Handler) *UniversityController {
 	return &UniversityController{
-		UniversityService: university,
-		TokenService:      token,
+		UniversityService: universityService,
+		AuthService:       authService,
 	}
 }
 
@@ -29,7 +32,7 @@ func (c *UniversityController) Routes() chi.Router {
 	r := chi.NewRouter()
 	r.Get("/", c.List)
 	r.Group(func(r chi.Router) {
-		r.Use(middleware.IsAuthorized(c.TokenService))
+		r.Use(c.AuthService)
 		r.Get("/{id}", c.Show)
 	})
 	return r
@@ -74,7 +77,7 @@ func (c *UniversityController) List(w http.ResponseWriter, r *http.Request) {
 // @router /universities/{id} [get]
 func (c *UniversityController) Show(w http.ResponseWriter, r *http.Request) {
 
-	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	userID, ok := r.Context().Value(ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
 		CheckError(err, w, r)

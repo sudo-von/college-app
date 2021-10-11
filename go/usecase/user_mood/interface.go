@@ -24,3 +24,8 @@ type UserMoodRepository interface {
 	UserMoodReader
 	UserMoodWriter
 }
+
+type UserMoodService interface {
+	GetUserMoodByUserID(userID, requestedUserID string, userMoodFilters entity.UserMoodFilters) (*entity.UserMood, error)
+	CreateUserMood(userID, requestedUserID string, newUserMood entity.UserMoodPayload) error
+}

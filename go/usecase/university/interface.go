@@ -20,8 +20,3 @@ type UniversityReader interface {
 type UniversityRepository interface {
 	UniversityReader
 }
-
-type UseCase interface {
-	GetTinyUniversities() ([]entity.TinyUniversity, *int, error)
-	GetUniversityByID(universityID string) (*entity.University, error)
-}

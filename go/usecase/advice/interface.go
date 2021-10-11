@@ -34,12 +34,3 @@ type AdviceRepository interface {
 	AdviceReader
 	AdviceWriter
 }
-
-type UseCase interface {
-	GetAdvices(userID string, adviceFilters entity.AdviceFilters) ([]entity.Advice, *int, error)
-	CreateAdvice(newAdvice entity.AdvicePayload) error
-	GetAdviceByID(userID, adviceID string) (*entity.Advice, error)
-	UpdateAdvice(updatedAdvice entity.UpdateAdvicePayload) error
-	DeleteAdvice(userID, adviceID string) error
-	UpdateAdviceStudentsNumber(userID, adviceID string) error
-}

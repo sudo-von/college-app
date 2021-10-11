@@ -226,6 +226,36 @@ var doc = `{
                 }
             }
         },
+        "/auth/login": {
+            "post": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "description": "Gets Bearer token.",
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "JWT.",
+                "operationId": "login",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "headers": {
+                            "Access-Control-Allow-Headers": {
+                                "type": "string",
+                                "description": "Authorization."
+                            },
+                            "Authorization": {
+                                "type": "string",
+                                "description": "Bearer jwt that must be used as Api Key in the Authorize section."
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/contacts/users/{id}": {
             "get": {
                 "security": [
@@ -520,36 +550,6 @@ var doc = `{
                 "responses": {
                     "201": {
                         "description": ""
-                    }
-                }
-            }
-        },
-        "/users/login": {
-            "post": {
-                "security": [
-                    {
-                        "BasicAuth": []
-                    }
-                ],
-                "description": "Gets Bearer token.",
-                "tags": [
-                    "authentication"
-                ],
-                "summary": "Login.",
-                "operationId": "login",
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "headers": {
-                            "Access-Control-Allow-Headers": {
-                                "type": "string",
-                                "description": "Authorization."
-                            },
-                            "Authorization": {
-                                "type": "string",
-                                "description": "Bearer jwt that must be used as Api Key in the Authorize section."
-                            }
-                        }
                     }
                 }
             }

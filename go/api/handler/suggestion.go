@@ -5,31 +5,32 @@ import (
 	"net/http"
 	"time"
 
-	"freelancer/college-app/go/api/middleware"
 	"freelancer/college-app/go/api/presenter"
 	"freelancer/college-app/go/entity"
-	"freelancer/college-app/go/pkg/token"
-	"freelancer/college-app/go/usecase/suggestion"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 )
 
-type SuggestionController struct {
-	SuggestionService suggestion.Service
-	TokenService      token.Service
+type SuggestionService interface {
+	CreateSuggestion(newSuggestion entity.SuggestionPayload) error
 }
 
-func NewSuggestionController(suggestion suggestion.Service, token token.Service) *SuggestionController {
+type SuggestionController struct {
+	SuggestionService SuggestionService
+	AuthService       func(http.Handler) http.Handler
+}
+
+func NewSuggestionController(suggestionService SuggestionService, authService func(http.Handler) http.Handler) *SuggestionController {
 	return &SuggestionController{
-		SuggestionService: suggestion,
-		TokenService:      token,
+		SuggestionService: suggestionService,
+		AuthService:       authService,
 	}
 }
 
 func (c *SuggestionController) Routes() chi.Router {
 	r := chi.NewRouter()
-	r.Use(middleware.IsAuthorized(c.TokenService))
+	r.Use(c.AuthService)
 	r.Post("/", c.Create)
 	return r
 }
@@ -45,7 +46,7 @@ func (c *SuggestionController) Routes() chi.Router {
 // @router /suggestions [post]
 func (c *SuggestionController) Create(w http.ResponseWriter, r *http.Request) {
 
-	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	userID, ok := r.Context().Value(ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
 		CheckError(err, w, r)

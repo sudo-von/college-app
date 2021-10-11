@@ -11,7 +11,3 @@ type SuggestionWriter interface {
 type SuggestionRepository interface {
 	SuggestionWriter
 }
-
-type UseCase interface {
-	CreateSuggestion(newSuggestion entity.SuggestionPayload) error
-}

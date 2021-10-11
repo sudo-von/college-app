@@ -26,7 +26,7 @@ func main() {
 	log.Println("[main]: MongoDB connection established")
 
 	// Token service.
-	tokenService, err := token.NewJWTMaker(config.SECRET_KEY)
+	tokenService, err := token.NewService(config.SECRET_KEY)
 	if err != nil {
 		log.Panic("[main] NewJWTMaker error: %w", err)
 	}

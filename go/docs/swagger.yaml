@@ -357,6 +357,26 @@ paths:
       summary: Update advice students number.
       tags:
       - advices
+  /auth/login:
+    post:
+      description: Gets Bearer token.
+      operationId: login
+      responses:
+        "200":
+          description: ""
+          headers:
+            Access-Control-Allow-Headers:
+              description: Authorization.
+              type: string
+            Authorization:
+              description: Bearer jwt that must be used as Api Key in the Authorize
+                section.
+              type: string
+      security:
+      - BasicAuth: []
+      summary: JWT.
+      tags:
+      - authentication
   /contacts/{id}:
     patch:
       description: Update contact given its ID.
@@ -591,26 +611,6 @@ paths:
       summary: Update user.
       tags:
       - users
-  /users/login:
-    post:
-      description: Gets Bearer token.
-      operationId: login
-      responses:
-        "200":
-          description: ""
-          headers:
-            Access-Control-Allow-Headers:
-              description: Authorization.
-              type: string
-            Authorization:
-              description: Bearer jwt that must be used as Api Key in the Authorize
-                section.
-              type: string
-      security:
-      - BasicAuth: []
-      summary: Login.
-      tags:
-      - authentication
 securityDefinitions:
   BasicAuth:
     type: basic

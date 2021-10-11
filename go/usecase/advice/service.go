@@ -21,7 +21,7 @@ func NewService(adviceRepository AdviceRepository, userRepository user.UserRepos
 	}
 }
 
-func (s *Service) GetAdvices(userID string, adviceFilters entity.AdviceFilters) ([]entity.Advice, *int, error) {
+func (s Service) GetAdvices(userID string, adviceFilters entity.AdviceFilters) ([]entity.Advice, *int, error) {
 
 	user, err := s.userRepository.GetUserByID(userID)
 	if err != nil {
@@ -52,7 +52,7 @@ func (s *Service) GetAdvices(userID string, adviceFilters entity.AdviceFilters) 
 	return advices, total, nil
 }
 
-func (s *Service) GetAdviceByID(userID, adviceID string) (*entity.Advice, error) {
+func (s Service) GetAdviceByID(userID, adviceID string) (*entity.Advice, error) {
 
 	user, err := s.userRepository.GetUserByID(userID)
 	if err != nil {
@@ -79,7 +79,7 @@ func (s *Service) GetAdviceByID(userID, adviceID string) (*entity.Advice, error)
 	return advice, nil
 }
 
-func (s *Service) CreateAdvice(newAdvice entity.AdvicePayload) error {
+func (s Service) CreateAdvice(newAdvice entity.AdvicePayload) error {
 
 	// Checks if current date is less than the advice date.
 	err := newAdvice.ValidateDate()
@@ -119,7 +119,7 @@ func (s *Service) CreateAdvice(newAdvice entity.AdvicePayload) error {
 	return nil
 }
 
-func (s *Service) UpdateAdvice(userID, adviceID string, newAdvice entity.UpdateAdvicePayload) error {
+func (s Service) UpdateAdvice(userID, adviceID string, newAdvice entity.UpdateAdvicePayload) error {
 
 	oldAdvice, err := s.GetAdviceByID(userID, adviceID)
 	if err != nil {
@@ -176,7 +176,7 @@ func (s *Service) UpdateAdvice(userID, adviceID string, newAdvice entity.UpdateA
 	return nil
 }
 
-func (s *Service) DeleteAdvice(userID, adviceID string) error {
+func (s Service) DeleteAdvice(userID, adviceID string) error {
 
 	oldAdvice, err := s.GetAdviceByID(userID, adviceID)
 	if err != nil {
@@ -209,7 +209,7 @@ func (s *Service) DeleteAdvice(userID, adviceID string) error {
 	return nil
 }
 
-func (s *Service) UpdateAdviceStudentsNumber(userID, adviceID string) error {
+func (s Service) UpdateAdviceStudentsNumber(userID, adviceID string) error {
 
 	// Gets old advice.
 	oldAdvice, err := s.GetAdviceByID(userID, adviceID)

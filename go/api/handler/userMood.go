@@ -5,10 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"freelancer/college-app/go/api/middleware"
 	"freelancer/college-app/go/api/presenter"
 	"freelancer/college-app/go/entity"
-	"freelancer/college-app/go/pkg/token"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
@@ -21,19 +19,19 @@ type UserMoodService interface {
 
 type UserMoodController struct {
 	UserMoodService UserMoodService
-	TokenService    token.Service
+	AuthService     func(http.Handler) http.Handler
 }
 
-func NewUserMoodController(userMood UserMoodService, token token.Service) *UserMoodController {
+func NewUserMoodController(userMoodService UserMoodService, authService func(http.Handler) http.Handler) *UserMoodController {
 	return &UserMoodController{
-		UserMoodService: userMood,
-		TokenService:    token,
+		UserMoodService: userMoodService,
+		AuthService:     authService,
 	}
 }
 
 func (c *UserMoodController) Routes() chi.Router {
 	r := chi.NewRouter()
-	r.Use(middleware.IsAuthorized(c.TokenService))
+	r.Use(c.AuthService)
 	r.Get("/users/{id}", c.Show)
 	r.Post("/users/{id}", c.Create)
 	return r
@@ -50,7 +48,7 @@ func (c *UserMoodController) Routes() chi.Router {
 // @router /users-mood/users/{id} [get]
 func (c *UserMoodController) Show(w http.ResponseWriter, r *http.Request) {
 
-	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	userID, ok := r.Context().Value(ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
 		CheckError(err, w, r)
@@ -84,7 +82,7 @@ func (c *UserMoodController) Show(w http.ResponseWriter, r *http.Request) {
 // @router /users-mood/{users}/{id} [post]
 func (c *UserMoodController) Create(w http.ResponseWriter, r *http.Request) {
 
-	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	userID, ok := r.Context().Value(ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
 		CheckError(err, w, r)

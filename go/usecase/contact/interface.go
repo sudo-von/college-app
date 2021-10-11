@@ -26,10 +26,3 @@ type ContactRepository interface {
 	ContactReader
 	ContactWriter
 }
-
-type UseCase interface {
-	GetContactByID(contactID string) (*entity.Contact, error)
-	GetContactByUserID(userID, requestedUserID string) (*entity.Contact, error)
-	CreateContact(newContact entity.ContactPayload) error
-	UpdateContactByUserID(userID string, newContact entity.UpdateContactPayload) error
-}

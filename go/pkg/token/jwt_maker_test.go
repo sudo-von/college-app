@@ -7,14 +7,14 @@ import (
 	"time"
 )
 
-func TestNewJWTMaker(t *testing.T) {
+func TestNewService(t *testing.T) {
 	type args struct {
 		secretKey string
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    Service
+		want    *Service
 		wantErr bool
 	}{
 		{
@@ -22,7 +22,7 @@ func TestNewJWTMaker(t *testing.T) {
 			args: args{
 				secretKey: "67eec82ed526e288e022ee743e254defeef869ff1af05b39943f0c46f9ed83e8",
 			},
-			want: &JWTMaker{
+			want: &Service{
 				secretKey: "67eec82ed526e288e022ee743e254defeef869ff1af05b39943f0c46f9ed83e8",
 			},
 		},
@@ -36,19 +36,19 @@ func TestNewJWTMaker(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := NewJWTMaker(tt.args.secretKey)
+			got, err := NewService(tt.args.secretKey)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("NewJWTMaker() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("NewService() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewJWTMaker() = %v, want %v", got, tt.want)
+				t.Errorf("NewService() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestJWTMaker_CreateToken(t *testing.T) {
+func TestService_CreateToken(t *testing.T) {
 	type fields struct {
 		secretKey string
 	}
@@ -84,17 +84,17 @@ func TestJWTMaker_CreateToken(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			maker := &JWTMaker{
+			s := &Service{
 				secretKey: tt.fields.secretKey,
 			}
-			got, err := maker.CreateToken(tt.args.user, tt.args.duration)
+			got, err := s.CreateToken(tt.args.user, tt.args.duration)
 			tt.want = got
 			if (err != nil) != tt.wantErr {
-				t.Errorf("JWTMaker.CreateToken() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Service.CreateToken() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if got != tt.want {
-				t.Errorf("JWTMaker.CreateToken() = %v, want %v", got, tt.want)
+				t.Errorf("Service.CreateToken() = %v, want %v", got, tt.want)
 			}
 		})
 	}

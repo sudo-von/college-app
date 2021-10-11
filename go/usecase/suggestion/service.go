@@ -15,7 +15,7 @@ func NewService(suggestionRepository SuggestionRepository) *Service {
 	}
 }
 
-func (s *Service) CreateSuggestion(newSuggestion entity.SuggestionPayload) error {
+func (s Service) CreateSuggestion(newSuggestion entity.SuggestionPayload) error {
 	err := s.suggestionRepository.CreateSuggestion(newSuggestion)
 	if err != nil {
 		return entity.NewErrorInternalServer(err, presenter.ErrIntServError)

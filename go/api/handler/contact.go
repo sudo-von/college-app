@@ -5,31 +5,34 @@ import (
 	"net/http"
 	"time"
 
-	"freelancer/college-app/go/api/middleware"
 	"freelancer/college-app/go/api/presenter"
 	"freelancer/college-app/go/entity"
-	"freelancer/college-app/go/pkg/token"
-	"freelancer/college-app/go/usecase/contact"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 )
 
-type ContactController struct {
-	ContactService contact.Service
-	TokenService   token.Service
+type ContactService interface {
+	GetContactByUserID(userID, requestedUserID string) (*entity.Contact, error)
+	CreateContact(userID, requestedUserID string, newContact entity.ContactPayload) error
+	UpdateContactByID(userID, contactID string, newContact entity.UpdateContactPayload) error
 }
 
-func NewContactController(contact contact.Service, token token.Service) *ContactController {
+type ContactController struct {
+	ContactService ContactService
+	AuthService    func(http.Handler) http.Handler
+}
+
+func NewContactController(contactService ContactService, authService func(http.Handler) http.Handler) *ContactController {
 	return &ContactController{
-		ContactService: contact,
-		TokenService:   token,
+		ContactService: contactService,
+		AuthService:    authService,
 	}
 }
 
 func (c *ContactController) Routes() chi.Router {
 	r := chi.NewRouter()
-	r.Use(middleware.IsAuthorized(c.TokenService))
+	r.Use(c.AuthService)
 	r.Get("/users/{id}", c.Show)
 	r.Post("/users/{id}", c.Create)
 	r.Patch("/{id}", c.Update)
@@ -47,7 +50,7 @@ func (c *ContactController) Routes() chi.Router {
 // @router /contacts/users/{id} [get]
 func (c *ContactController) Show(w http.ResponseWriter, r *http.Request) {
 
-	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	userID, ok := r.Context().Value(ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
 		CheckError(err, w, r)
@@ -77,7 +80,7 @@ func (c *ContactController) Show(w http.ResponseWriter, r *http.Request) {
 // @router /contacts/users/{id} [post]
 func (c *ContactController) Create(w http.ResponseWriter, r *http.Request) {
 
-	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	userID, ok := r.Context().Value(ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
 		CheckError(err, w, r)
@@ -119,7 +122,7 @@ func (c *ContactController) Create(w http.ResponseWriter, r *http.Request) {
 // @router /contacts/{id} [patch]
 func (c *ContactController) Update(w http.ResponseWriter, r *http.Request) {
 
-	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	userID, ok := r.Context().Value(ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
 		CheckError(err, w, r)

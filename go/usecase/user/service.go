@@ -21,7 +21,7 @@ func NewService(userRepository UserRepository, universityRepository UniversityRe
 	}
 }
 
-func (s *Service) GetTinyUserByID(userID, requestedUserID string) (*entity.TinyUser, error) {
+func (s Service) GetTinyUserByID(userID, requestedUserID string) (*entity.TinyUser, error) {
 
 	user, err := s.userRepository.GetUserByID(userID)
 	if err != nil {
@@ -47,7 +47,7 @@ func (s *Service) GetTinyUserByID(userID, requestedUserID string) (*entity.TinyU
 
 }
 
-func (s *Service) CreateUser(newUser entity.UserPayload) error {
+func (s Service) CreateUser(newUser entity.UserPayload) error {
 
 	// Check if email has a correct format .
 	err := checkmail.ValidateFormat(newUser.Email)
@@ -99,7 +99,7 @@ func (s *Service) CreateUser(newUser entity.UserPayload) error {
 	return nil
 }
 
-func (s *Service) UpdateTinyUser(userID, requestedUserID string, newUser entity.UpdateUserPayload) error {
+func (s Service) UpdateTinyUser(userID, requestedUserID string, newUser entity.UpdateUserPayload) error {
 
 	user, err := s.userRepository.GetUserByID(userID)
 	if err != nil {
@@ -166,7 +166,7 @@ func (s *Service) UpdateTinyUser(userID, requestedUserID string, newUser entity.
 	return nil
 }
 
-func (s *Service) AuthenticateUser(email, password string) (*entity.User, error) {
+func (s Service) AuthenticateUser(email, password string) (*entity.User, error) {
 
 	user, err := s.userRepository.GetUserByEmail(email)
 	if err != nil {

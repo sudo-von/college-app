@@ -18,7 +18,7 @@ func NewService(userRepository UserRepository, contactRepository ContactReposito
 	}
 }
 
-func (s *Service) GetContactByUserID(userID, requestedUserID string) (*entity.Contact, error) {
+func (s Service) GetContactByUserID(userID, requestedUserID string) (*entity.Contact, error) {
 
 	user, err := s.userRepository.GetUserByID(userID)
 	if err != nil {
@@ -41,7 +41,7 @@ func (s *Service) GetContactByUserID(userID, requestedUserID string) (*entity.Co
 	return contact, nil
 }
 
-func (s *Service) CreateContact(userID, requestedUserID string, newContact entity.ContactPayload) error {
+func (s Service) CreateContact(userID, requestedUserID string, newContact entity.ContactPayload) error {
 
 	user, err := s.userRepository.GetUserByID(userID)
 	if err != nil {
@@ -75,7 +75,7 @@ func (s *Service) CreateContact(userID, requestedUserID string, newContact entit
 	return nil
 }
 
-func (s *Service) UpdateContactByID(userID, contactID string, newContact entity.UpdateContactPayload) error {
+func (s Service) UpdateContactByID(userID, contactID string, newContact entity.UpdateContactPayload) error {
 
 	user, err := s.userRepository.GetUserByID(userID)
 	if err != nil {

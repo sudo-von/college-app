@@ -2,11 +2,8 @@ package handler
 
 import (
 	"errors"
-	"freelancer/college-app/go/api/middleware"
 	"freelancer/college-app/go/api/presenter"
 	"freelancer/college-app/go/entity"
-	"freelancer/college-app/go/pkg/token"
-	"freelancer/college-app/go/usecase/advice"
 	"net/http"
 	"time"
 
@@ -14,21 +11,30 @@ import (
 	"github.com/go-chi/render"
 )
 
-type AdviceController struct {
-	AdviceService advice.Service
-	TokenService  token.Service
+type AdviceService interface {
+	GetAdvices(userID string, adviceFilters entity.AdviceFilters) ([]entity.Advice, *int, error)
+	GetAdviceByID(userID, adviceID string) (*entity.Advice, error)
+	CreateAdvice(newAdvice entity.AdvicePayload) error
+	UpdateAdvice(userID, adviceID string, newAdvice entity.UpdateAdvicePayload) error
+	DeleteAdvice(userID, adviceID string) error
+	UpdateAdviceStudentsNumber(userID, adviceID string) error
 }
 
-func NewAdviceController(advice advice.Service, token token.Service) *AdviceController {
+type AdviceController struct {
+	AdviceService AdviceService
+	AuthService   func(http.Handler) http.Handler
+}
+
+func NewAdviceController(adviceService AdviceService, authService func(http.Handler) http.Handler) *AdviceController {
 	return &AdviceController{
-		AdviceService: advice,
-		TokenService:  token,
+		AdviceService: adviceService,
+		AuthService:   authService,
 	}
 }
 
 func (c *AdviceController) Routes() chi.Router {
 	r := chi.NewRouter()
-	r.Use(middleware.IsAuthorized(c.TokenService))
+	r.Use(c.AuthService)
 	r.Get("/", c.List)
 	r.Post("/", c.Create)
 	r.Get("/{id}", c.Show)
@@ -50,7 +56,7 @@ func (c *AdviceController) Routes() chi.Router {
 // @router /advices [get]
 func (c *AdviceController) List(w http.ResponseWriter, r *http.Request) {
 
-	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	userID, ok := r.Context().Value(ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
 		CheckError(err, w, r)
@@ -94,7 +100,7 @@ func (c *AdviceController) List(w http.ResponseWriter, r *http.Request) {
 // @router /advices/{id} [get]
 func (c *AdviceController) Show(w http.ResponseWriter, r *http.Request) {
 
-	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	userID, ok := r.Context().Value(ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
 		CheckError(err, w, r)
@@ -124,7 +130,7 @@ func (c *AdviceController) Show(w http.ResponseWriter, r *http.Request) {
 // @router /advices [post]
 func (c *AdviceController) Create(w http.ResponseWriter, r *http.Request) {
 
-	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	userID, ok := r.Context().Value(ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
 		CheckError(err, w, r)
@@ -173,7 +179,7 @@ func (c *AdviceController) Create(w http.ResponseWriter, r *http.Request) {
 // @router /advices/{id} [patch]
 func (c *AdviceController) Update(w http.ResponseWriter, r *http.Request) {
 
-	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	userID, ok := r.Context().Value(ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
 		CheckError(err, w, r)
@@ -218,7 +224,7 @@ func (c *AdviceController) Update(w http.ResponseWriter, r *http.Request) {
 // @router /advices/{id} [delete]
 func (c *AdviceController) Delete(w http.ResponseWriter, r *http.Request) {
 
-	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	userID, ok := r.Context().Value(ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
 		CheckError(err, w, r)
@@ -245,7 +251,7 @@ func (c *AdviceController) Delete(w http.ResponseWriter, r *http.Request) {
 // @router /advices/{id}/students-number [patch]
 func (c *AdviceController) UpdateAdviceStudentsNumber(w http.ResponseWriter, r *http.Request) {
 
-	userID, ok := r.Context().Value(middleware.ContextKeyUserID).(string)
+	userID, ok := r.Context().Value(ContextKeyUserID).(string)
 	if !ok {
 		err := errors.New("user not in context")
 		CheckError(err, w, r)
