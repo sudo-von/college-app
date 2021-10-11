@@ -138,3 +138,34 @@ func TestService_CreateUserMood(t *testing.T) {
 		})
 	}
 }
+
+func TestNewService(t *testing.T) {
+	type args struct {
+		userRepository     user.UserReaderMock
+		userMoodRepository UserMoodRepositoryMock
+	}
+	tests := []struct {
+		name string
+		args args
+		want *Service
+	}{
+		{
+			name: "ok",
+			args: args{
+				userRepository:     user.UserReaderMock{},
+				userMoodRepository: UserMoodRepositoryMock{},
+			},
+			want: &Service{
+				userRepository:     user.UserReaderMock{},
+				userMoodRepository: UserMoodRepositoryMock{},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewService(tt.args.userRepository, tt.args.userMoodRepository); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewService() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

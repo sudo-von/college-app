@@ -2,6 +2,7 @@ package suggestion
 
 import (
 	"freelancer/college-app/go/entity"
+	"reflect"
 	"testing"
 	"time"
 )
@@ -37,6 +38,34 @@ func TestService_CreateSuggestion(t *testing.T) {
 			}
 			if err := s.CreateSuggestion(tt.args.newSuggestion); (err != nil) != tt.wantErr {
 				t.Errorf("Service.CreateSuggestion() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestNewService(t *testing.T) {
+	type args struct {
+		suggestionRepository SuggestionRepositoryMock
+	}
+	tests := []struct {
+		name string
+		args args
+		want *Service
+	}{
+		{
+			name: "ok",
+			args: args{
+				suggestionRepository: SuggestionRepositoryMock{},
+			},
+			want: &Service{
+				suggestionRepository: SuggestionRepositoryMock{},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewService(tt.args.suggestionRepository); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewService() = %v, want %v", got, tt.want)
 			}
 		})
 	}

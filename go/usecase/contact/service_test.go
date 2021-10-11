@@ -233,3 +233,34 @@ func TestService_UpdateContactByID(t *testing.T) {
 		})
 	}
 }
+
+func TestNewService(t *testing.T) {
+	type args struct {
+		userRepository    user.UserReaderMock
+		contactRepository ContactRepositoryMock
+	}
+	tests := []struct {
+		name string
+		args args
+		want *Service
+	}{
+		{
+			name: "ok",
+			args: args{
+				userRepository:    user.UserReaderMock{},
+				contactRepository: ContactRepositoryMock{},
+			},
+			want: &Service{
+				userRepository:    user.UserReaderMock{},
+				contactRepository: ContactRepositoryMock{},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewService(tt.args.userRepository, tt.args.contactRepository); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewService() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

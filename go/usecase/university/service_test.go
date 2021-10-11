@@ -16,7 +16,7 @@ func TestService_GetTinyUniversities(t *testing.T) {
 		name      string
 		fields    fields
 		want      []entity.TinyUniversity
-		wantTotal *int
+		totalWant *int
 		wantErr   bool
 	}{
 		{
@@ -36,17 +36,17 @@ func TestService_GetTinyUniversities(t *testing.T) {
 				userRepository:       tt.fields.userRepository,
 				universityRepository: tt.fields.universityRepository,
 			}
-			got, gotTotal, err := s.GetTinyUniversities()
+			got, totalGot, err := s.GetTinyUniversities()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Service.GetTinyUniversities() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			tt.wantTotal = gotTotal
+			tt.totalWant = totalGot
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("Service.GetTinyUniversities() got = %v, want %v", got, tt.want)
 			}
-			if gotTotal != tt.wantTotal {
-				t.Errorf("Service.GetTinyUniversities() gotTotal = %v, want %v", gotTotal, tt.wantTotal)
+			if totalGot != tt.totalWant {
+				t.Errorf("Service.GetTinyUniversities() totalGot = %v, want %v", totalGot, tt.totalWant)
 			}
 		})
 	}
@@ -108,6 +108,37 @@ func TestService_GetUniversityByID(t *testing.T) {
 			}
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("Service.GetUniversityByID() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestNewService(t *testing.T) {
+	type args struct {
+		userRepository       user.UserReaderMock
+		universityRepository UniversityRepositoryMock
+	}
+	tests := []struct {
+		name string
+		args args
+		want *Service
+	}{
+		{
+			name: "ok",
+			args: args{
+				userRepository:       user.UserReaderMock{},
+				universityRepository: UniversityRepositoryMock{},
+			},
+			want: &Service{
+				userRepository:       user.UserReaderMock{},
+				universityRepository: UniversityRepositoryMock{},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewService(tt.args.userRepository, tt.args.universityRepository); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewService() = %v, want %v", got, tt.want)
 			}
 		})
 	}

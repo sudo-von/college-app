@@ -321,3 +321,34 @@ func TestService_AuthenticateUser(t *testing.T) {
 		})
 	}
 }
+
+func TestNewService(t *testing.T) {
+	type args struct {
+		userRepository       UserRepository
+		universityRepository UniversityRepository
+	}
+	tests := []struct {
+		name string
+		args args
+		want *Service
+	}{
+		{
+			name: "ok",
+			args: args{
+				userRepository:       UserRepositoryMock{},
+				universityRepository: university.UniversityReaderMock{},
+			},
+			want: &Service{
+				userRepository:       UserRepositoryMock{},
+				universityRepository: university.UniversityReaderMock{},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := NewService(tt.args.userRepository, tt.args.universityRepository); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewService() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
