@@ -10,7 +10,7 @@ const CreateSuggestionForm = () => {
     const [ loading, setLoading ] = useState(false)
 
     /* Formik configuration. */
-    const initialValues = { suggestion : ''}
+    const initialValues = { suggestion : '' }
 
     const handleValidation = ({ suggestion }) => {
         let errors = {}
@@ -23,9 +23,9 @@ const CreateSuggestionForm = () => {
     const onHandleSubmit = async (form, { resetForm }) => {
         try{
             setLoading(true)
-            await sendSuggestion(form)
+            const response = await sendSuggestion(form)
+            Alert.alert('¡Felicidades!', response)
             resetForm()
-            Alert.alert('¡Felicidades!', 'Tu sugerencia ha sido enviada con éxito.')
         }catch(error){
             Alert.alert('¡Ha ocurrido un error!', error.message)
         }finally{

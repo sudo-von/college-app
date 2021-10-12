@@ -1,4 +1,3 @@
-/* React native paper. */
 import { DefaultTheme } from 'react-native-paper'
 
 const theme = {
@@ -10,7 +9,7 @@ const theme = {
     accent: '#BAB2B5',
     transparency: '#CAE2E8',
     placeholder: '#7D8286'
-   },
+  },
 }
 
 export { 

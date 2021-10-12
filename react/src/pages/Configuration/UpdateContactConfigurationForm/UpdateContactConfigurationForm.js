@@ -35,8 +35,8 @@ const UpdateContactConfigurationForm = ({ contact, setContact }) => {
         try{
             setLoading(true)
             const response = await updateContactByID(contact.id, data)
+            Alert.alert('¡Felicidades!', response)
             setContact({...contact, ...data})
-            Alert.alert(response, 'El usuario ha sido actualizado con éxito.')
         }catch(error){
             Alert.alert('¡Ha ocurrido un error al actualizar tu contacto!', error.message)
         }finally{

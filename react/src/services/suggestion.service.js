@@ -1,16 +1,12 @@
-/* Helpers. */
-import { protectedAxios } from 'src/helpers/axios-helper'
-/* Constants. */
-import { SUGGESTION } from 'src/constants/endpoints'
-
-export {
-    sendSuggestion,
-}
+import { post } from 'src/helpers/protected-axios-helper'
 
 const sendSuggestion = async (suggestion) => {
     try{
-        await protectedAxios.post(SUGGESTION, suggestion)
+        await post('/suggestions', suggestion)
+        return 'Tu sugerencia se ha registrado con éxito'
     }catch(error){
-        throw new Error(error.message)
+        throw error
     }
 }
+
+export { sendSuggestion }

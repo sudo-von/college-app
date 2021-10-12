@@ -41,7 +41,7 @@ const UpdateAccountConfigurationForm = ({ account }) => {
         try{
             setLoading(true)
             const response = await updateUserByID(account.id, data)
-            Alert.alert(response, 'El usuario ha sido actualizado con éxito.')
+            Alert.alert('¡Felicidades!', response)
             authDispatch({ type: 'update', user : { name : data.name }})
         }catch(error){
             Alert.alert('¡Ha ocurrido un error!', error.message)

@@ -27,7 +27,7 @@ const AdvicesPage = () => {
             try{
                 setLoading(true)
                 const response = await getAdvices()
-                setAdvices(response)
+                setAdvices(response.results)
             }catch(error){
                 Alert.alert('¡Ha ocurrido un error!', error.message)
             }finally{

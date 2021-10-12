@@ -1,5 +1,4 @@
 import React from 'react'
-/* Custom components. */
 import Loader from 'src/components/Loader'
 
 const withLoading = (Component, loadingMessage) => {

@@ -3,7 +3,7 @@ import { View, Alert } from 'react-native'
 import { Formik } from 'formik'
 import { Button, Input, PasswordInput } from 'src/components'
 import { useAuth } from 'src/providers/auth.provider'
-import { login } from 'src/services/user.service'
+import { login } from 'src/services/auth.service'
 import { styles } from './LoginForm.styles'
 
 const LoginForm = () => {

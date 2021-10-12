@@ -1,36 +1,35 @@
-/* Helpers. */
-import { protectedAxios } from 'src/helpers/axios-helper'
-/* Constants. */
-import { CONTACT, USERS } from 'src/constants/endpoints'
-
-export {
-    getContactByUserID,
-    createContactByUserID,
-    updateContactByID
-}
+import { get, post, patch } from 'src/helpers/protected-axios-helper'
 
 const getContactByUserID = async (userID) => {
     try{
-        const response = await protectedAxios.get(`${CONTACT}${USERS}/${userID}`)
+        const response = await get(`/contacts/users/${userID}`)
         const user = await response.data
         return user
     }catch(error){
-        throw new Error(error.message)
+        throw error
     }
 }
 
 const createContactByUserID = async (userID, contact) => {
     try{
-        await protectedAxios.post(`${CONTACT}${USERS}/${userID}`, contact)
+        await post(`/contacts/users/${userID}`, contact)
+        return 'El contacto ha sido guardado con éxito.'
     }catch(error){
-        throw new Error(error.message)
+        throw error
     }
 }
 
 const updateContactByID = async (contactID, contact) => {
     try{
-        await protectedAxios.patch(`${CONTACT}/${contactID}`, contact)
+        await patch(`/contacts/${contactID}`, contact)
+        return 'El contacto ha sido actualizado con éxito.'
     }catch(error){
-        throw new Error(error.message)
+        throw error
     }
+}
+
+export {
+    getContactByUserID,
+    createContactByUserID,
+    updateContactByID
 }

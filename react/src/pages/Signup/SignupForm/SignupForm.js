@@ -70,7 +70,7 @@ const SignupForm = () => {
                 setLoadingUniversities(true)
                 const response = await getUniversities()
                 /* Creates a new array with the special structure that the SelectInput needs. */
-                const universities = response.map((university) => (
+                const universities = response.results.map((university) => (
                     { 
                         label : university.name, 
                         value : university.id, 

@@ -1,28 +1,23 @@
-/* Helpers. */
-import { protectedAxios } from 'src/helpers/axios-helper'
-/* Constants. */
-import { MOOD } from 'src/constants/endpoints'
+import { get, post } from 'src/helpers/protected-axios-helper'
+
+const getMood = async (userID) => {
+    try{
+        const mood = await get(`/users-mood/users/${userID}`)
+        return mood.data
+    }catch(error){
+        throw error
+    }
+}
+
+const sendMood = async (userID, mood) => {
+    try{
+        await post(`/users-mood/users/${userID}`, mood)
+    }catch(error){
+        throw error
+    }
+}
 
 export {
     getMood,
     sendMood
-}
-
-/* Gets the current day user's mood. */
-const getMood = async (userID) => {
-    try{
-        const mood = await protectedAxios.get(`${MOOD}/users/${userID}`)
-        return mood.data
-    }catch(error){
-        throw new Error(error.message)
-    }
-}
-
-/* Sends user's mood for the current day. */
-const sendMood = async (userID, mood) => {
-    try{
-        await protectedAxios.post(`${MOOD}/users/${userID}`, mood)
-    }catch(error){
-        throw new Error(error.message)
-    }
 }

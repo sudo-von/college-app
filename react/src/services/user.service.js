@@ -1,58 +1,34 @@
-/* Base64. */
-import { Base64 } from 'js-base64'
-/* Helpers. */
-import { publicAxios, protectedAxios } from 'src/helpers/axios-helper'
-import { setToken, decodeToken } from 'src/helpers/auth-helper'
-/* Constants. */
-import { LOGIN, SIGNUP, USERS } from 'src/constants/endpoints'
+import { post, get, patch } from 'src/helpers/protected-axios-helper'
 
-export {
-    login,
-    signup,
-    getUserByID,
-    updateUserByID
-}
-
-/* Handles basic auth. */
-const login = async ({ email, password }) => {
-    try{
-        const response = await publicAxios.post(LOGIN,{},{
-            "headers": { 
-                'Authorization': "Basic " + Base64.encode(`${email}:${password}`)
-            }
-        })
-        await setToken(response.headers.authorization)
-        const user = await decodeToken(response.headers.authorization)
-        return user
-    }catch(error){
-        throw new Error(error.message)
-    }
-}
-
-/* Adds a new user. */
 const signup = async (user) => {
     try{
-        await protectedAxios.post(SIGNUP, user)
-        return "¡Registro éxitoso!"
+        await post('/users', user)
     }catch(error){
-        throw new Error(error.message)
+        throw error
     }
 }
 
 const getUserByID = async (userID) => {
     try{
-        const response = await protectedAxios.get(`${USERS}/${userID}`)
+        const response = await get(`/users/${userID}`)
         const user = await response.data
         return user
     }catch(error){
-        throw new Error(error.message)
+        throw error
     }
 }
 
 const updateUserByID = async (userID, user) => {
     try{
-        await protectedAxios.patch(`${USERS}/${userID}`, user)
+        await patch(`/users/${userID}`, user)
+        return '¡El usuario ha sido actualizado con éxito!'
     }catch(error){
-        throw new Error(error.message)
+        throw error
     }
+}
+
+export {
+    signup,
+    getUserByID,
+    updateUserByID
 }
