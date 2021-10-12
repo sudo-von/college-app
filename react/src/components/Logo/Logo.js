@@ -1,9 +1,10 @@
 import React from 'react'
-import { StyleSheet, View, Image } from 'react-native'
-/* React native paper. */
+import PropTypes from 'prop-types'
+import { View, Image } from 'react-native'
 import { useTheme } from 'react-native-paper'
+import { styles } from './Logo.styles'
 
-const Logo = ({ source, size }) => {
+const Logo = ({ source, size=180 }) => {
     const { colors } = useTheme()
     return (
         <View style={styles({ size, colors}).view}>
@@ -15,21 +16,9 @@ const Logo = ({ source, size }) => {
     )
 }
 
-const styles = ({ size, colors }) => StyleSheet.create({ 
-    view: {
-        borderRadius: 100,
-        width: size ? size : 180,
-        height: size ? size : 180,
-        backgroundColor: colors.primary,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    image: {
-        width: size ? size-25 : 155,
-        resizeMode: 'contain'
-    }
-})
-
+Logo.propTypes = {
+    source: PropTypes.any,
+    size: PropTypes.number
+}
 
 export default Logo

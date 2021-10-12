@@ -1,14 +1,17 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import PropTypes from 'prop-types'
+import { View } from 'react-native'
+import { styles } from './Tabs.style'
 
-const Tabs = ({ tab, setTab, children }) =>
-    <View style={styles.container}>
-        {children && children.map(( child, i ) => {
-            if( tab == i ){
+const Tabs = ({ tab=0, setTab, children }) =>
+    <View style={styles.view}>
+        {   
+            children && children.map(( child, i ) => {
+            if( tab === i ){
                 return(
                     <child.type 
                         {...child.props} 
-                        key={`tab-${i}`} 
+                        key={`tab-${i}`}
                         tab={tab} 
                         setTab={setTab}
                     />    
@@ -17,10 +20,10 @@ const Tabs = ({ tab, setTab, children }) =>
         })}
     </View>
 
-const styles = StyleSheet.create({
-    container: {
-        width: '100%'
-    }
-})
+Tabs.PropTypes = {
+    children: PropTypes.any,
+    tab: PropTypes.number,
+    setTab: PropTypes.func
+}
 
 export default Tabs

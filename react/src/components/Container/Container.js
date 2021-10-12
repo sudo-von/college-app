@@ -1,21 +1,17 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import PropTypes from 'prop-types'
+import { View } from 'react-native'
+import { styles } from './Container.styles'
 
-const Container = ({ children, justifyContent, style, ...rest}) => 
-    <View 
-        style={styles({ style, justifyContent}).container} 
-        {...rest}
-    >
+const Container = ({ children, justifyContent='center', style={}, ...rest}) => 
+    <View style={styles({ justifyContent, style}).container} {...rest}>
         {children}
     </View>
 
-const styles = ({ style, justifyContent}) => StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 25,
-        justifyContent: justifyContent ? justifyContent : 'center',
-        ...style
-    }
-})
+Container.propTypes = {
+    children: PropTypes.any,
+    justifyContent: PropTypes.string,
+    style: PropTypes.object,
+} 
 
 export default Container

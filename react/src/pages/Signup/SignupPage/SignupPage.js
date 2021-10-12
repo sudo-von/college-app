@@ -2,14 +2,13 @@ import React from 'react'
 import { SafeAreaView, ScrollView } from 'react-native'
 import { Container, Logo, Small, Center, Bold, Link } from 'src/components'
 import { Title } from 'react-native-paper'
-import { styles } from './SignupPage.styles'
 import SignupForm from '../SignupForm/SignupForm'
 
 const SignupPage = () =>
     <SafeAreaView>
         <ScrollView>
             <Container>
-                <Center style={styles.center}>
+                <Center>
                     <Logo size={60} source={require('assets/logo.png')}/>
                     <Title><Bold>Bienvenido</Bold></Title>
                     <Small>Crea tu cuenta completando el formulario.</Small>

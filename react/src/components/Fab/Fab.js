@@ -1,12 +1,12 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
-/* React native paper. */
-import { FAB, useTheme } from 'react-native-paper'
+import PropTypes from 'prop-types'
+import { FAB as PaperFab, useTheme } from 'react-native-paper'
+import { styles } from './Fab.styles'
 
-const CustomFab = ({ icon, ...rest}) => {
+const Fab = ({ icon='home', ...rest}) => {
     const { colors } = useTheme()
     return(
-        <FAB 
+        <PaperFab
             style={styles(colors).fab}
             color={colors.background}
             icon={icon}
@@ -15,15 +15,8 @@ const CustomFab = ({ icon, ...rest}) => {
     )
 }
 
-const styles = (colors) => StyleSheet.create({
-    fab: {
-        color: 'white',
-        backgroundColor: colors.primary,
-        position: 'absolute',
-        margin: 15,
-        right: 0,
-        top: 0
-    }
-})
+Fab.propTypes = {
+    icon: PropTypes.string
+}
 
-export default CustomFab
+export default Fab

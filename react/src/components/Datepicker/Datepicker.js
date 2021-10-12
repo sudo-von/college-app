@@ -1,12 +1,8 @@
 import React, { useState } from 'react'
-import { View, Button, Platform } from 'react-native'
-/* Custom components. */
+import { View } from 'react-native'
 import { Input } from 'src/components'
-/* React native paper. */
 import { TextInput } from 'react-native-paper'
-/* React native community. */
 import DateTimePicker from '@react-native-community/datetimepicker'
-/* Moment. */
 import moment from 'moment'
 
 const Datepicker = ({ field, form, meta, ...rest }) => {

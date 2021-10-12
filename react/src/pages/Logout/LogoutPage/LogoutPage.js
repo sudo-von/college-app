@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { deleteToken } from 'src/helpers/auth-helper'
+import { deleteToken } from 'src/services/token.service'
 import { useAuth } from 'src/providers/auth.provider'
 import { ActivityIndicator } from 'react-native-paper'
 import { Container, Center, Small } from 'src/components'

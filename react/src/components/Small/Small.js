@@ -1,20 +1,19 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
-/* React native paper. */
+import PropTypes from 'prop-types'
 import { Caption } from 'react-native-paper'
+import { styles } from './Small.styles'
 
-const Small = ({ children, style, ...rest }) => {
-    return (
-        <Caption style={styles(style).message} {...rest}>{children}</Caption>
-    )
+const Small = ({ children, style={}, ...rest }) =>
+    <Caption 
+        style={styles(style).caption} 
+        {...rest}
+    >
+        {children}
+    </Caption>
+
+Small.PropTypes = {
+    children: PropTypes.any,
+    styles: PropTypes.object
 }
-
-const styles = (style) => StyleSheet.create({
-    message: {
-        color: '#666666',
-        fontSize: 12,
-        ...style
-    }
-})
 
 export default Small

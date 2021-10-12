@@ -1,26 +1,23 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
-/* React navigation. */
-import { Link } from '@react-navigation/native'
-/* React native paper. */
+import PropTypes from 'prop-types'
+import { Link as NativeLink } from '@react-navigation/native'
 import { useTheme, Caption } from 'react-native-paper'
+import { styles } from './Link.styles'
 
-const CustomLink = ({ url, children }) => {
+const Link = ({ url='/', children, ...rest }) => {
     const { colors } = useTheme()
     return(
-        <Link to={{ screen: url }}>
-            <Caption style={styles({ colors }).signup}>
+        <NativeLink to={{ screen: url }} {...rest}>
+            <Caption style={styles(colors).caption}>
                 {children}
             </Caption>
-        </Link>
+        </NativeLink>
     )
 }
 
-const styles = ({ colors }) => StyleSheet.create({
-    signup: {
-        fontSize: 16,
-        color: colors.primary
-    }
-})
+Link.propTypes = {
+    title: PropTypes.string,
+    subtitle: PropTypes.string
+}
 
-export default CustomLink
+export default Link

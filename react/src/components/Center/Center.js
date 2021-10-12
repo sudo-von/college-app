@@ -1,19 +1,19 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import PropTypes from 'prop-types'
+import { View } from 'react-native'
+import { styles } from './Center.styles'
 
-const Center = ({ children, style }) => {
+const Center = ({ children, ...rest }) => {
     return (
-        <View style={styles(style).view}>
+        <View style={styles.view} {...rest}>
             {children}
         </View>
     )
 }
 
-const styles = (style) => StyleSheet.create({
-    view: {
-        alignItems: 'center',
-        ...style
-    }
-})
+Center.propTypes = {
+    children: PropTypes.any
+} 
+
 
 export default Center

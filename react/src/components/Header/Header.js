@@ -1,27 +1,22 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
-/* Custom components. */
+import PropTypes from 'prop-types'
+import { View } from 'react-native'
 import { Bold } from 'src/components'
-/* React native paper. */
 import { Title, Caption } from 'react-native-paper'
+import { styles } from './Header.styles.js'
 
-const Header = ({ title, subtitle }) => {
+const Header = ({ title='', subtitle='', ...rest }) => {
     return (
-        <View style={styles.container}>
+        <View style={styles.container} {...rest}>
             <Title><Bold>{title}</Bold></Title>
             <Caption style={styles.subtitle}>{subtitle}</Caption>
         </View>
     )
 }
 
-const styles = StyleSheet.create({
-    container:{
-        marginTop: 20
-    },
-    subtitle: {
-        lineHeight: 12,
-        fontSize: 12,
-    }
-})
+Header.propTypes = {
+    title: PropTypes.string,
+    subtitle: PropTypes.string
+}
 
 export default Header

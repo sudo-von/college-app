@@ -1,12 +1,12 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
-/* React native paper. */
-import { Button, useTheme } from 'react-native-paper'
+import PropTypes from 'prop-types'
+import { Button as PaperButton, useTheme } from 'react-native-paper'
+import { styles } from './Button.styles'
 
-const CustomButton = ({ loading, loadingMessage, children, ...rest}) => {
+const Button = ({ loading=false, loadingMessage='', children, ...rest }) => {
     const { colors } = useTheme()
     return(
-        <Button 
+        <PaperButton 
             style={styles(colors).button} 
             mode='contained' 
             loading={loading} 
@@ -15,17 +15,14 @@ const CustomButton = ({ loading, loadingMessage, children, ...rest}) => {
             {...rest}
         >
             { loading ? loadingMessage : children }
-        </Button>
+        </PaperButton>
     )
 }
 
-const styles = (colors) => StyleSheet.create({
-    label: {
-        color: 'white'
-    },
-    button: {
-        backgroundColor: colors.primary,
-    }
-})
+Button.propTypes = {
+    loading: PropTypes.bool,
+    loadingMessage: PropTypes.string,
+    children: PropTypes.any
+} 
 
-export default CustomButton
+export default Button

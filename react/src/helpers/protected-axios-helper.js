@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { configuration } from './axios-helper'
-import { getToken, deleteToken } from './auth-helper'
+import { getToken, deleteToken } from 'src/services/token.service'
 import { navigate } from 'src/refs/navigation.ref'
 import { ERRORS } from 'src/constants/errors'
 
