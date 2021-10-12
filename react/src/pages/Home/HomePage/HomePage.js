@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, Image } from 'react-native'
 import { Container, Small, Bold, NavigationBadge } from 'src/components'
 import { Title } from 'react-native-paper'
 import { useAuth } from 'src/providers/auth.provider'
@@ -47,8 +47,9 @@ const HomePage = () => {
                 userID={user_id}
             />
             <View style={styles.view}>
-                <Title><Bold>¡Hola {user_name}!</Bold></Title>
-                <Small>Mantente al día con las últimas{'\n'}noticias visitando la página de tu escuela.</Small>
+                <Image style={styles.image} source={require('assets/home.png')}/>
+                <Title style={styles.title}><Bold>¡Hola {user_name}!</Bold></Title>
+                <Small style={styles.small}>Mantente al día con las últimas{'\n'}noticias visitando la página de tu escuela.</Small>
             </View>
             { routes && routes.map(({ url, title, icon, color, backgroundColor, ...rest }, index) =>
                 <NavigationBadge

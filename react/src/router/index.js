@@ -61,9 +61,11 @@ const screenOptions = (colors) => ({
   drawerActiveTintColor: colors.primary,
   drawerInactiveTintColor: colors.accent,
   headerStyle:{
-    backgroundColor: colors.primary,
-  },
-  headerTintColor: colors.background
+    backgroundColor: 'transparent',
+    elevation: 0,
+    shadowOpacity: 0,
+    borderBottomWidth: 0
+  }
 })
 
 export default Router

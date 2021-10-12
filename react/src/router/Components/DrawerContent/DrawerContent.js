@@ -3,7 +3,7 @@ import { View, StyleSheet, Image } from 'react-native'
 /* React navigation. */
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
 /* Custom components. */
-import Header from 'src/components/Header'
+import { Header } from 'src/components'
 /* Contexts. */
 import { useAuth } from 'src/providers/auth.provider'
 

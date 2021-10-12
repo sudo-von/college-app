@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 /* Custom components. */
-import Bold from 'src/components/Bold'
+import { Bold } from 'src/components'
 /* React native paper. */
 import { Title, Caption } from 'react-native-paper'
 

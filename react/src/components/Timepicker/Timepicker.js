@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, Button, Platform } from 'react-native'
 /* Custom components. */
-import Input from 'src/components/Input'
+import { Input } from 'src/components'
 /* React native paper. */
 import { TextInput } from 'react-native-paper'
 /* React native community. */

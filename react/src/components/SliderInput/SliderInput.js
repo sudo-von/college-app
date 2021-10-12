@@ -5,7 +5,7 @@ import Slider from '@react-native-community/slider'
 /* React native paper. */
 import { useTheme } from 'react-native-paper'
 /* Custom components. */
-import Small from 'src/components/Small'
+import { Small } from 'src/components'
 
 const SliderInput = ({ initialValue, minimumValue, maximumValue, changeValue, minimumText, maximumText, ...rest }) => {
     const { colors } = useTheme()

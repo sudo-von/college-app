@@ -1,5 +1,5 @@
 import React from 'react'
-import Loader from 'src/components/Loader'
+import { Loader } from 'src/components'
 
 const withLoading = (Component, loadingMessage) => {
 

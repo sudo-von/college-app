@@ -1,9 +1,8 @@
 import React from 'react'
 import { View } from 'react-native'
-import { Container, Small, Bold } from 'src/components'
+import { Container, Small, Bold, NavigationBadge } from 'src/components'
 import { Title } from 'react-native-paper'
 import { styles } from './ConfigurationPage.styles'
-import NavigationBadge from 'src/components/NavigationBadge'
 
 const routes = [
     {

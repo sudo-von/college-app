@@ -1,8 +1,6 @@
 import React from 'react'
 /* Custom components. */
-import Container from 'src/components/Container'
-import Center from 'src/components/Center'
-import Small from 'src/components/Small'
+import { Container, Center, Small }  from 'src/components'
 /* React native paper. */
 import { ActivityIndicator } from 'react-native-paper'
 
