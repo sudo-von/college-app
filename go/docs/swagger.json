@@ -404,6 +404,77 @@
                 }
             }
         },
+        "/departments/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Get department given its ID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "departments"
+                ],
+                "summary": "Show department.",
+                "operationId": "get-department-by-id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Department ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.DepartmentResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Update department given its ID.",
+                "tags": [
+                    "departments"
+                ],
+                "summary": "Update department.",
+                "operationId": "update-department",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Department ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Department information that wants to be updated.",
+                        "name": "updatePayload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.UpdateDepartmentPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/suggestions": {
             "post": {
                 "security": [
@@ -987,6 +1058,31 @@
                 "message": {
                     "type": "string",
                     "example": "Hi, i need..."
+                }
+            }
+        },
+        "presenter.UpdateDepartmentPayload": {
+            "type": "object",
+            "properties": {
+                "available": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "cost": {
+                    "type": "number",
+                    "example": 1000
+                },
+                "description": {
+                    "type": "string",
+                    "example": "description"
+                },
+                "neighborhood": {
+                    "type": "string",
+                    "example": "neighborhood"
+                },
+                "street": {
+                    "type": "string",
+                    "example": "street"
                 }
             }
         },

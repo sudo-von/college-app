@@ -226,6 +226,24 @@ definitions:
         example: Hi, i need...
         type: string
     type: object
+  presenter.UpdateDepartmentPayload:
+    properties:
+      available:
+        example: true
+        type: boolean
+      cost:
+        example: 1000
+        type: number
+      description:
+        example: description
+        type: string
+      neighborhood:
+        example: neighborhood
+        type: string
+      street:
+        example: street
+        type: string
+    type: object
   presenter.UpdateUserPayload:
     properties:
       birth_date:
@@ -538,6 +556,51 @@ paths:
       security:
       - BearerJWT: []
       summary: Create department.
+      tags:
+      - departments
+  /departments/{id}:
+    get:
+      description: Get department given its ID.
+      operationId: get-department-by-id
+      parameters:
+      - description: Department ID.
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.DepartmentResponse'
+      security:
+      - BearerJWT: []
+      summary: Show department.
+      tags:
+      - departments
+    patch:
+      description: Update department given its ID.
+      operationId: update-department
+      parameters:
+      - description: Department ID.
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Department information that wants to be updated.
+        in: body
+        name: updatePayload
+        required: true
+        schema:
+          $ref: '#/definitions/presenter.UpdateDepartmentPayload'
+      responses:
+        "200":
+          description: ""
+      security:
+      - BearerJWT: []
+      summary: Update department.
       tags:
       - departments
   /suggestions:
