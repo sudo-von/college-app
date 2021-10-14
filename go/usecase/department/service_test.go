@@ -307,6 +307,21 @@ func TestService_UpdateDepartment(t *testing.T) {
 			},
 			wantErr: true,
 		},
+		{
+			name: "insufficient permissions",
+			args: args{
+				userID:       "615c09f7309d7ded48c7a054",
+				departmentID: "6167698bd0187e53d4789212",
+				departmentPayload: entity.UpdateDepartmentPayload{
+					Description:  "updated description",
+					Street:       "updated stret",
+					Neighborhood: "updated neighborhood",
+					Cost:         1,
+					Available:    true,
+				},
+			},
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -316,6 +331,66 @@ func TestService_UpdateDepartment(t *testing.T) {
 			}
 			if err := s.UpdateDepartment(tt.args.userID, tt.args.departmentID, tt.args.departmentPayload); (err != nil) != tt.wantErr {
 				t.Errorf("Service.UpdateDepartment() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestService_DeleteDepartment(t *testing.T) {
+	type fields struct {
+		departmentRepository DepartmentRepositoryMock
+		userRepository       user.UserReaderMock
+	}
+	type args struct {
+		userID       string
+		departmentID string
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "ok",
+			args: args{
+				userID:       "615c09f7309d7ded48c7a053",
+				departmentID: "6167698bd0187e53d4789212",
+			},
+		},
+		{
+			name: "user not found",
+			args: args{
+				userID:       "615c09f7309d7ded48c7a052",
+				departmentID: "6167698bd0187e53d4789212",
+			},
+			wantErr: true,
+		},
+		{
+			name: "department not found",
+			args: args{
+				userID:       "615c09f7309d7ded48c7a052",
+				departmentID: "6167698bd0187e53d4789211",
+			},
+			wantErr: true,
+		},
+		{
+			name: "insufficient permissions",
+			args: args{
+				userID:       "615c09f7309d7ded48c7a054",
+				departmentID: "6167698bd0187e53d4789212",
+			},
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := Service{
+				departmentRepository: tt.fields.departmentRepository,
+				userRepository:       tt.fields.userRepository,
+			}
+			if err := s.DeleteDepartment(tt.args.userID, tt.args.departmentID); (err != nil) != tt.wantErr {
+				t.Errorf("Service.DeleteDepartment() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

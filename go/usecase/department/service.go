@@ -112,6 +112,39 @@ func (s Service) UpdateDepartment(userID, departmentID string, departmentPayload
 		Neighborhood: departmentPayload.Neighborhood,
 		Cost:         departmentPayload.Cost,
 		Available:    departmentPayload.Available,
+		Status:       oldDepartment.Status,
+		CreationDate: oldDepartment.CreationDate,
+	}
+
+	err = s.departmentRepository.UpdateDepartment(updatedDepartment)
+	if err != nil {
+		return entity.NewErrorInternalServer(err, presenter.ErrIntServError)
+	}
+	return nil
+}
+
+func (s Service) DeleteDepartment(userID, departmentID string) error {
+
+	oldDepartment, err := s.GetDepartmentByID(userID, departmentID)
+	if err != nil {
+		return err
+	}
+
+	err = oldDepartment.ValidateRequestedDepartment(userID)
+	if err != nil {
+		return entity.NewErrorConflict(err, presenter.ErrInsufficientPermissions)
+	}
+
+	updatedDepartment := entity.DepartmentPayload{
+		ID:           oldDepartment.ID,
+		UserID:       oldDepartment.User.ID,
+		UniversityID: oldDepartment.UniversityID,
+		Description:  oldDepartment.Description,
+		Street:       oldDepartment.Street,
+		Neighborhood: oldDepartment.Neighborhood,
+		Cost:         oldDepartment.Cost,
+		Available:    oldDepartment.Available,
+		Status:       entity.DeletedStatus,
 		CreationDate: oldDepartment.CreationDate,
 	}
 

@@ -559,6 +559,23 @@ paths:
       tags:
       - departments
   /departments/{id}:
+    delete:
+      description: Delete department given its ID.
+      operationId: delete-department
+      parameters:
+      - description: Department ID.
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+      security:
+      - BearerJWT: []
+      summary: Delete department.
+      tags:
+      - departments
     get:
       description: Get department given its ID.
       operationId: get-department-by-id

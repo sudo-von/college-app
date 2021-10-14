@@ -16,6 +16,7 @@ type DepartmentService interface {
 	GetDepartments(userID string, departmentFilters entity.DepartmentFilters) ([]entity.Department, *int, error)
 	CreateDepartment(userID string, departmentPayload entity.DepartmentPayload) error
 	UpdateDepartment(userID, departmentID string, departmentPayload entity.UpdateDepartmentPayload) error
+	DeleteDepartment(userID, departmentID string) error
 }
 
 type DepartmentController struct {
@@ -37,6 +38,7 @@ func (c *DepartmentController) Routes() chi.Router {
 	r.Get("/", c.List)
 	r.Post("/", c.Create)
 	r.Patch("/", c.Update)
+	r.Delete("/{id}", c.Delete)
 	return r
 }
 
@@ -137,6 +139,7 @@ func (c *DepartmentController) Create(w http.ResponseWriter, r *http.Request) {
 		Street:       data.Street,
 		Neighborhood: data.Neighborhood,
 		Cost:         data.Cost,
+		Status:       entity.ActiveStatus,
 		Available:    true,
 		CreationDate: time.Now().In(time.Local),
 	}
@@ -184,6 +187,33 @@ func (c *DepartmentController) Update(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err := c.DepartmentService.UpdateDepartment(userID, departmentID, departmentPayload)
+	if err != nil {
+		CheckError(err, w, r)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
+// @tags departments
+// @summary Delete department.
+// @description Delete department given its ID.
+// @security BearerJWT
+// @id delete-department
+// @success 200
+// @param id path string true "Department ID."
+// @router /departments/{id} [delete]
+func (c *DepartmentController) Delete(w http.ResponseWriter, r *http.Request) {
+
+	userID, ok := r.Context().Value(ContextKeyUserID).(string)
+	if !ok {
+		err := errors.New("user not in context")
+		CheckError(err, w, r)
+		return
+	}
+	departmentID := chi.URLParam(r, "id")
+
+	err := c.DepartmentService.DeleteDepartment(userID, departmentID)
 	if err != nil {
 		CheckError(err, w, r)
 		return

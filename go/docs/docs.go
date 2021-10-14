@@ -454,6 +454,33 @@ var doc = `{
                     }
                 }
             },
+            "delete": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Delete department given its ID.",
+                "tags": [
+                    "departments"
+                ],
+                "summary": "Delete department.",
+                "operationId": "delete-department",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Department ID.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
             "patch": {
                 "security": [
                     {

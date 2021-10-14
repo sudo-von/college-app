@@ -12,6 +12,7 @@ type Department struct {
 	Description  string
 	Street       string
 	Neighborhood string
+	Status       string
 	Cost         float32
 	Available    bool
 	CreationDate time.Time
@@ -47,6 +48,7 @@ type DepartmentPayload struct {
 	Street       string
 	Neighborhood string
 	Cost         float32
+	Status       string
 	Available    bool
 	CreationDate time.Time
 }
