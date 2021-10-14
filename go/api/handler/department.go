@@ -13,7 +13,8 @@ import (
 
 type DepartmentService interface {
 	GetDepartments(userID string, departmentFilters entity.DepartmentFilters) ([]entity.Department, *int, error)
-	CreateDepartment(userID string, newDepartment entity.DepartmentPayload) error
+	CreateDepartment(userID string, departmentPayload entity.DepartmentPayload) error
+	UpdateDepartment(userID, departmentID string, departmentPayload entity.UpdateDepartmentPayload) error
 }
 
 type DepartmentController struct {
@@ -33,6 +34,7 @@ func (c *DepartmentController) Routes() chi.Router {
 	r.Use(c.AuthService)
 	r.Get("/", c.List)
 	r.Post("/", c.Create)
+	r.Patch("/", c.Update)
 	return r
 }
 
@@ -114,4 +116,46 @@ func (c *DepartmentController) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
+}
+
+// @tags departments
+// @summary Update department.
+// @description Update department given its ID.
+// @security BearerJWT
+// @id update-department
+// @success 200
+// @param id path string true "Department ID."
+// @param updatePayload body presenter.UpdateDepartmentPayload true "Department information that wants to be updated."
+// @router /departments/{id} [patch]
+func (c *DepartmentController) Update(w http.ResponseWriter, r *http.Request) {
+
+	userID, ok := r.Context().Value(ContextKeyUserID).(string)
+	if !ok {
+		err := errors.New("user not in context")
+		CheckError(err, w, r)
+		return
+	}
+	departmentID := chi.URLParam(r, "id")
+
+	var data presenter.UpdateDepartmentPayload
+	if err := render.Bind(r, &data); err != nil {
+		CheckError(err, w, r)
+		return
+	}
+
+	departmentPayload := entity.UpdateDepartmentPayload{
+		Description:  data.Description,
+		Street:       data.Street,
+		Neighborhood: data.Neighborhood,
+		Cost:         data.Cost,
+		Available:    data.Available,
+	}
+
+	err := c.DepartmentService.UpdateDepartment(userID, departmentID, departmentPayload)
+	if err != nil {
+		CheckError(err, w, r)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }

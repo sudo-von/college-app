@@ -7,6 +7,10 @@ import (
 	"strings"
 )
 
+var (
+	ErrInvDepCost = "INVALID_DEPARTMENT_COST"
+)
+
 type DepartmentList struct {
 	Total       int                  `json:"total" example:"1"`
 	Departments []DepartmentResponse `json:"results"`
@@ -71,6 +75,34 @@ func (dp *DepartmentPayload) validate() (err error) {
 
 func (dp *DepartmentPayload) Bind(r *http.Request) error {
 	if err := dp.validate(); err != nil {
+		return err
+	}
+	return nil
+}
+
+type UpdateDepartmentPayload struct {
+	Description  string  `json:"description" example:"description"`
+	Street       string  `json:"street" example:"street"`
+	Neighborhood string  `json:"neighborhood" example:"neighborhood"`
+	Cost         float32 `json:"cost" example:"1000"`
+	Available    bool    `json:"available" example:"true"`
+}
+
+func (udp *UpdateDepartmentPayload) validate() (err error) {
+	if len(strings.TrimSpace(udp.Description)) == 0 {
+		err = mergeErrors(err, errors.New("missing field description"))
+	}
+	if len(strings.TrimSpace(udp.Street)) == 0 {
+		err = mergeErrors(err, errors.New("missing field street"))
+	}
+	if len(strings.TrimSpace(udp.Neighborhood)) == 0 {
+		err = mergeErrors(err, errors.New("missing field neigborhood"))
+	}
+	return
+}
+
+func (udp *UpdateDepartmentPayload) Bind(r *http.Request) error {
+	if err := udp.validate(); err != nil {
 		return err
 	}
 	return nil

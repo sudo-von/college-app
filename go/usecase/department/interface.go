@@ -13,11 +13,13 @@ type UserRepository interface {
 }
 
 type DepartmentReader interface {
+	GetDepartmentByID(departmentID string) (*entity.Department, error)
 	GetDepartments(universityID string, departmentFilters entity.DepartmentFilters) ([]entity.Department, *int, error)
 }
 
 type DepartmentWriter interface {
 	CreateDepartment(newDepartment entity.DepartmentPayload) error
+	UpdateDepartment(updatedDepartment entity.DepartmentPayload) error
 }
 
 type DepartmentRepository interface {

@@ -100,6 +100,51 @@ func NewDepartmentRepository(repository *Repository) *DepartmentRepository {
 	}
 }
 
+func (r *DepartmentRepository) GetDepartmentByID(departmentID string) (*entity.Department, error) {
+
+	session := r.Session.Copy()
+	defer session.Close()
+	com := session.DB(r.DatabaseName).C("departments")
+
+	searchQuery := bson.M{
+		"_id":         bson.ObjectIdHex(departmentID),
+		"available":   true,
+		"user.status": entity.ActiveStatus,
+	}
+
+	pipes := []bson.M{
+		{
+			"$lookup": bson.M{
+				"from":         "users",
+				"localField":   "user_id",
+				"foreignField": "_id",
+				"as":           "user",
+			},
+		},
+		{"$unwind": "$user"},
+		{
+			"$lookup": bson.M{
+				"from":         "universities",
+				"localField":   "university_id",
+				"foreignField": "_id",
+				"as":           "university",
+			},
+		},
+		{"$unwind": "$university"},
+		{"$match": searchQuery},
+	}
+
+	var departmentM DepartmentModel
+	pipe := com.Pipe(pipes)
+	err := pipe.One(&departmentM)
+	if err != nil {
+		return nil, err
+	}
+
+	department := toEntityDepartment(departmentM)
+	return &department, nil
+}
+
 func (r *DepartmentRepository) GetDepartments(universityID string, departmentFilters entity.DepartmentFilters) ([]entity.Department, *int, error) {
 
 	session := r.Session.Copy()
@@ -158,6 +203,25 @@ func (r *DepartmentRepository) CreateDepartment(newDepartment entity.DepartmentP
 
 	departmentM := toDepartmentPayloadModel(newDepartment)
 	err := con.Insert(&departmentM)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *DepartmentRepository) UpdateDepartment(updatedDepartment entity.DepartmentPayload) error {
+
+	session := r.Session.Copy()
+	defer session.Close()
+	con := session.DB(r.DatabaseName).C("departments")
+
+	searchQuery := bson.M{
+		"_id": bson.ObjectIdHex(updatedDepartment.ID),
+	}
+
+	departmentM := toDepartmentPayloadModel(updatedDepartment)
+	err := con.Update(searchQuery, &departmentM)
 	if err != nil {
 		return err
 	}

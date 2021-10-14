@@ -13,6 +13,29 @@ var (
 
 type DepartmentReaderMock struct{}
 
+func (a DepartmentReaderMock) GetDepartmentByID(departmentID string) (*entity.Department, error) {
+
+	err := search.FindInSlice(departmentID, fakeDepartmentIDS)
+	if err != nil {
+		return nil, err
+	}
+
+	department := &entity.Department{
+		ID: departmentID,
+		User: entity.BasicUser{
+			ID: "615c09f7309d7ded48c7a053",
+		},
+		UniversityID: "615c09f7309d7ded48c7a049",
+		Description:  "fake description",
+		Street:       "fake street",
+		Neighborhood: "fake neighborhood",
+		Cost:         1000,
+		Available:    true,
+		CreationDate: time.Date(2021, 01, 01, 0, 0, 0, 0, time.Local),
+	}
+	return department, nil
+}
+
 func (a DepartmentReaderMock) GetDepartments(universityID string, departmentFilters entity.DepartmentFilters) ([]entity.Department, *int, error) {
 
 	err := search.FindInSlice(universityID, fakeUniversityIDS)
@@ -42,6 +65,10 @@ func (a DepartmentReaderMock) GetDepartments(universityID string, departmentFilt
 type DepartmentWriterMock struct{}
 
 func (a DepartmentWriterMock) CreateDepartment(newDepartment entity.DepartmentPayload) error {
+	return nil
+}
+
+func (a DepartmentWriterMock) UpdateDepartment(updateDepartment entity.DepartmentPayload) error {
 	return nil
 }
 
