@@ -12,6 +12,7 @@ import (
 )
 
 type DepartmentService interface {
+	GetDepartmentByID(userID, departmentID string) (*entity.Department, error)
 	GetDepartments(userID string, departmentFilters entity.DepartmentFilters) ([]entity.Department, *int, error)
 	CreateDepartment(userID string, departmentPayload entity.DepartmentPayload) error
 	UpdateDepartment(userID, departmentID string, departmentPayload entity.UpdateDepartmentPayload) error
@@ -32,6 +33,7 @@ func NewDepartmentController(departmentService DepartmentService, authService fu
 func (c *DepartmentController) Routes() chi.Router {
 	r := chi.NewRouter()
 	r.Use(c.AuthService)
+	r.Get("/{id}", c.Show)
 	r.Get("/", c.List)
 	r.Post("/", c.Create)
 	r.Patch("/", c.Update)
@@ -74,6 +76,36 @@ func (c *DepartmentController) List(w http.ResponseWriter, r *http.Request) {
 
 	render.Status(r, http.StatusOK)
 	render.Render(w, r, &res)
+}
+
+// @tags departments
+// @summary Show department.
+// @description Get department given its ID.
+// @security BearerJWT
+// @id get-department-by-id
+// @produce json
+// @success 200 {object} presenter.DepartmentResponse
+// @param id path string true "Department ID."
+// @router /departments/{id} [get]
+func (c *DepartmentController) Show(w http.ResponseWriter, r *http.Request) {
+
+	userID, ok := r.Context().Value(ContextKeyUserID).(string)
+	if !ok {
+		err := errors.New("user not in context")
+		CheckError(err, w, r)
+		return
+	}
+	departmentID := chi.URLParam(r, "id")
+
+	department, err := c.DepartmentService.GetDepartmentByID(userID, departmentID)
+	if err != nil {
+		CheckError(err, w, r)
+		return
+	}
+
+	response := presenter.ToDepartmentPresenter(*department)
+	render.Status(r, http.StatusOK)
+	render.Render(w, r, &response)
 }
 
 // @tags departments
