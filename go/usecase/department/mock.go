@@ -39,6 +39,13 @@ func (a DepartmentReaderMock) GetDepartments(universityID string, departmentFilt
 	return departments, &total, nil
 }
 
+type DepartmentWriterMock struct{}
+
+func (a DepartmentWriterMock) CreateDepartment(newDepartment entity.DepartmentPayload) error {
+	return nil
+}
+
 type DepartmentRepositoryMock struct {
 	DepartmentReaderMock
+	DepartmentWriterMock
 }

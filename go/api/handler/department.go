@@ -5,6 +5,7 @@ import (
 	"freelancer/college-app/go/api/presenter"
 	"freelancer/college-app/go/entity"
 	"net/http"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
@@ -12,6 +13,7 @@ import (
 
 type DepartmentService interface {
 	GetDepartments(userID string, departmentFilters entity.DepartmentFilters) ([]entity.Department, *int, error)
+	CreateDepartment(userID string, newDepartment entity.DepartmentPayload) error
 }
 
 type DepartmentController struct {
@@ -69,4 +71,46 @@ func (c *DepartmentController) List(w http.ResponseWriter, r *http.Request) {
 
 	render.Status(r, http.StatusOK)
 	render.Render(w, r, &res)
+}
+
+// @tags departments
+// @summary Create department.
+// @description Create department.
+// @security BearerJWT
+// @param payload body presenter.DepartmentPayload true "Department that wants to be stored."
+// @id create-department
+// @success 201
+// @router /departments [post]
+func (c *DepartmentController) Create(w http.ResponseWriter, r *http.Request) {
+
+	userID, ok := r.Context().Value(ContextKeyUserID).(string)
+	if !ok {
+		err := errors.New("user not in context")
+		CheckError(err, w, r)
+		return
+	}
+
+	var data presenter.DepartmentPayload
+	if err := render.Bind(r, &data); err != nil {
+		CheckError(err, w, r)
+		return
+	}
+
+	newDepartment := entity.DepartmentPayload{
+		UserID:       userID,
+		Description:  data.Description,
+		Street:       data.Street,
+		Neighborhood: data.Neighborhood,
+		Cost:         data.Cost,
+		Available:    true,
+		CreationDate: time.Now().In(time.Local),
+	}
+
+	err := c.DepartmentService.CreateDepartment(userID, newDepartment)
+	if err != nil {
+		CheckError(err, w, r)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
 }

@@ -40,6 +40,54 @@ func toEntityDepartment(department DepartmentModel) entity.Department {
 	}
 }
 
+type DepartmentPayloadModel struct {
+	ID           bson.ObjectId `bson:"_id"`
+	UserID       bson.ObjectId `bson:"user_id"`
+	UniversityID bson.ObjectId `bson:"university_id"`
+	Description  string        `bson:"description"`
+	Street       string        `bson:"street"`
+	Neighborhood string        `bson:"neighborhood"`
+	Cost         float32       `bson:"cost"`
+	Available    bool          `bson:"available"`
+	CreationDate time.Time     `bson:"creation_date"`
+}
+
+func toDepartmentPayloadModel(department entity.DepartmentPayload) DepartmentPayloadModel {
+
+	var departmentID bson.ObjectId
+	if department.ID != "" {
+		departmentID = bson.ObjectIdHex(department.ID)
+	} else {
+		departmentID = bson.NewObjectId()
+	}
+
+	var userID bson.ObjectId
+	if department.UserID != "" {
+		userID = bson.ObjectIdHex(department.UserID)
+	} else {
+		userID = bson.NewObjectId()
+	}
+
+	var universityID bson.ObjectId
+	if department.UniversityID != "" {
+		universityID = bson.ObjectIdHex(department.UniversityID)
+	} else {
+		universityID = bson.NewObjectId()
+	}
+
+	return DepartmentPayloadModel{
+		ID:           departmentID,
+		UserID:       userID,
+		UniversityID: universityID,
+		Description:  department.Description,
+		Street:       department.Street,
+		Neighborhood: department.Neighborhood,
+		Cost:         department.Cost,
+		Available:    department.Available,
+		CreationDate: department.CreationDate,
+	}
+}
+
 type DepartmentRepository struct {
 	Session      *mgo.Session
 	DatabaseName string
@@ -100,4 +148,19 @@ func (r *DepartmentRepository) GetDepartments(universityID string, departmentFil
 	}
 
 	return departments, &total, nil
+}
+
+func (r *DepartmentRepository) CreateDepartment(newDepartment entity.DepartmentPayload) error {
+
+	session := r.Session.Copy()
+	defer session.Close()
+	con := session.DB(r.DatabaseName).C("departments")
+
+	departmentM := toDepartmentPayloadModel(newDepartment)
+	err := con.Insert(&departmentM)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

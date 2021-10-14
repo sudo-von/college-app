@@ -1,8 +1,10 @@
 package presenter
 
 import (
+	"errors"
 	"freelancer/college-app/go/entity"
 	"net/http"
+	"strings"
 )
 
 type DepartmentList struct {
@@ -45,4 +47,31 @@ func ToDepartmentPresenter(department entity.Department) DepartmentResponse {
 		Cost:         department.Cost,
 		Available:    department.Available,
 	}
+}
+
+type DepartmentPayload struct {
+	Description  string  `json:"description" example:"description"`
+	Street       string  `json:"street" example:"street"`
+	Neighborhood string  `json:"neighborhood" example:"neighborhood"`
+	Cost         float32 `json:"cost" example:"1000"`
+}
+
+func (dp *DepartmentPayload) validate() (err error) {
+	if len(strings.TrimSpace(dp.Description)) == 0 {
+		err = mergeErrors(err, errors.New("missing field description"))
+	}
+	if len(strings.TrimSpace(dp.Street)) == 0 {
+		err = mergeErrors(err, errors.New("missing field street"))
+	}
+	if len(strings.TrimSpace(dp.Neighborhood)) == 0 {
+		err = mergeErrors(err, errors.New("missing field neigborhood"))
+	}
+	return
+}
+
+func (dp *DepartmentPayload) Bind(r *http.Request) error {
+	if err := dp.validate(); err != nil {
+		return err
+	}
+	return nil
 }
