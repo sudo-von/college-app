@@ -7,6 +7,7 @@ import (
 	"freelancer/college-app/go/pkg/token"
 	"freelancer/college-app/go/usecase/advice"
 	"freelancer/college-app/go/usecase/contact"
+	"freelancer/college-app/go/usecase/department"
 	"freelancer/college-app/go/usecase/suggestion"
 	"freelancer/college-app/go/usecase/university"
 	"freelancer/college-app/go/usecase/user"
@@ -36,6 +37,7 @@ func main() {
 	universityRepository := mongo.NewUniversityRepository(db)
 	suggestionRepository := mongo.NewSuggestionRepository(db)
 	contactRepository := mongo.NewContactRepository(db)
+	departmentRepository := mongo.NewDepartmentRepository(db)
 	userMoodRepository := mongo.NewUserMoodRepository(db)
 	adviceRepository := mongo.NewAdviceRepository(db)
 
@@ -44,6 +46,7 @@ func main() {
 	universityService := university.NewService(userRepository, universityRepository)
 	suggestionService := suggestion.NewService(suggestionRepository)
 	contactService := contact.NewService(userRepository, contactRepository)
+	departmentService := department.NewService(departmentRepository, userRepository, universityRepository)
 	userMoodService := user_mood.NewService(userRepository, userMoodRepository)
 	adviceService := advice.NewService(adviceRepository, userRepository, universityRepository)
 
@@ -54,6 +57,7 @@ func main() {
 		ContactService:    *contactService,
 		UserMoodService:   *userMoodService,
 		AdviceService:     *adviceService,
+		DepartmentService: *departmentService,
 		TokenService:      tokenService,
 	}
 

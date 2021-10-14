@@ -23,6 +23,24 @@ var (
 	ErrUserRegistrationNumberAlreadyRegistered = "USER_REGISTRATION_NUMBER_ALREADY_REGISTERED"
 )
 
+type BasicUser struct {
+	ID    string `json:"id" example:"613aab4d8a6ef50007e622bd"`
+	Name  string `json:"name" example:"Sudo Von"`
+	Email string `json:"email" example:"sudo.von.contact@gmail.com"`
+}
+
+func (ur *BasicUser) Render(w http.ResponseWriter, r *http.Request) error {
+	return nil
+}
+
+func ToBasicUserPresenter(user entity.TinyUser) BasicUser {
+	return BasicUser{
+		ID:    user.ID,
+		Name:  user.Name,
+		Email: user.Email,
+	}
+}
+
 type TinyUserResponse struct {
 	ID                 string `json:"id" example:"613aab4d8a6ef50007e622bd"`
 	Name               string `json:"name" example:"Sudo Von"`

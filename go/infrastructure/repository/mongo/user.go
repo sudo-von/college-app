@@ -23,6 +23,12 @@ type UserModel struct {
 	CreationDate       time.Time       `bson:"creation_date"`
 }
 
+type BasicUser struct {
+	ID    bson.ObjectId `bson:"_id"`
+	Name  string        `bson:"name"`
+	Email string        `bson:"email"`
+}
+
 type TinyUserModel struct {
 	ID                 bson.ObjectId   `bson:"_id"`
 	Name               string          `bson:"name"`

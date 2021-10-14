@@ -41,6 +41,18 @@ definitions:
       user:
         $ref: '#/definitions/presenter.TinyUserResponse'
     type: object
+  presenter.BasicUser:
+    properties:
+      email:
+        example: sudo.von.contact@gmail.com
+        type: string
+      id:
+        example: 613aab4d8a6ef50007e622bd
+        type: string
+      name:
+        example: Sudo Von
+        type: string
+    type: object
   presenter.ClassroomResponse:
     properties:
       id:
@@ -79,6 +91,39 @@ definitions:
       user_id:
         example: 613aab578a6ef50007e622bd
         type: string
+    type: object
+  presenter.DepartmentList:
+    properties:
+      results:
+        items:
+          $ref: '#/definitions/presenter.DepartmentResponse'
+        type: array
+      total:
+        example: 1
+        type: integer
+    type: object
+  presenter.DepartmentResponse:
+    properties:
+      available:
+        example: true
+        type: boolean
+      cost:
+        example: 1000
+        type: number
+      description:
+        example: description
+        type: string
+      id:
+        example: 613aab578a6ef50007e622be
+        type: string
+      neighborhood:
+        example: neighborhood
+        type: string
+      street:
+        example: street
+        type: string
+      user:
+        $ref: '#/definitions/presenter.BasicUser'
     type: object
   presenter.SuggestionPayload:
     properties:
@@ -446,6 +491,22 @@ paths:
       summary: Create contact.
       tags:
       - contacts
+  /departments:
+    get:
+      description: List departments.
+      operationId: list-departments
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.DepartmentList'
+      security:
+      - BearerJWT: []
+      summary: List departments.
+      tags:
+      - departments
   /suggestions:
     post:
       description: Create suggestion.

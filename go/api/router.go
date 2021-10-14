@@ -19,6 +19,7 @@ type Services struct {
 	UniversityService handler.UniversityService
 	SuggestionService handler.SuggestionService
 	ContactService    handler.ContactService
+	DepartmentService handler.DepartmentService
 	UserMoodService   handler.UserMoodService
 	AdviceService     handler.AdviceService
 	TokenService      handler.TokenService
@@ -62,6 +63,7 @@ func ListenAndServe(services Services) {
 	jwtController := handler.NewJWTController(services.UserService, services.TokenService)
 	adviceController := handler.NewAdviceController(services.AdviceService, jwtController.IsAuthorized())
 	contactController := handler.NewContactController(services.ContactService, jwtController.IsAuthorized())
+	departmentController := handler.NewDepartmentController(services.DepartmentService, jwtController.IsAuthorized())
 	suggestionController := handler.NewSuggestionController(services.SuggestionService, jwtController.IsAuthorized())
 	userController := handler.NewUserController(services.UserService, jwtController.IsAuthorized())
 	userMoodController := handler.NewUserMoodController(services.UserMoodService, jwtController.IsAuthorized())
@@ -73,6 +75,7 @@ func ListenAndServe(services Services) {
 	// Http handlers.
 	r.Mount("/advices", adviceController.Routes())
 	r.Mount("/contacts", contactController.Routes())
+	r.Mount("/departments", departmentController.Routes())
 	r.Mount("/suggestions", suggestionController.Routes())
 	r.Mount("/users", userController.Routes())
 	r.Mount("/users-mood", userMoodController.Routes())

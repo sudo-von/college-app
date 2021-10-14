@@ -12,6 +12,12 @@ var (
 	AdminRole   = "admin"
 )
 
+type BasicUser struct {
+	ID    string
+	Name  string
+	Email string
+}
+
 type TinyUser struct {
 	ID                 string
 	Name               string

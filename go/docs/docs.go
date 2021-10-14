@@ -365,6 +365,32 @@ var doc = `{
                 }
             }
         },
+        "/departments": {
+            "get": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "List departments.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "departments"
+                ],
+                "summary": "List departments.",
+                "operationId": "list-departments",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.DepartmentList"
+                        }
+                    }
+                }
+            }
+        },
         "/suggestions": {
             "post": {
                 "security": [
@@ -688,6 +714,23 @@ var doc = `{
                 }
             }
         },
+        "presenter.BasicUser": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "sudo.von.contact@gmail.com"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "613aab4d8a6ef50007e622bd"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Sudo Von"
+                }
+            }
+        },
         "presenter.ClassroomResponse": {
             "type": "object",
             "properties": {
@@ -740,6 +783,53 @@ var doc = `{
                 "user_id": {
                     "type": "string",
                     "example": "613aab578a6ef50007e622bd"
+                }
+            }
+        },
+        "presenter.DepartmentList": {
+            "type": "object",
+            "properties": {
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.DepartmentResponse"
+                    }
+                },
+                "total": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "presenter.DepartmentResponse": {
+            "type": "object",
+            "properties": {
+                "available": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "cost": {
+                    "type": "number",
+                    "example": 1000
+                },
+                "description": {
+                    "type": "string",
+                    "example": "description"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622be"
+                },
+                "neighborhood": {
+                    "type": "string",
+                    "example": "neighborhood"
+                },
+                "street": {
+                    "type": "string",
+                    "example": "street"
+                },
+                "user": {
+                    "$ref": "#/definitions/presenter.BasicUser"
                 }
             }
         },
