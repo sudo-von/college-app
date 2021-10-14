@@ -102,6 +102,21 @@ definitions:
         example: 1
         type: integer
     type: object
+  presenter.DepartmentPayload:
+    properties:
+      cost:
+        example: 1000
+        type: number
+      description:
+        example: description
+        type: string
+      neighborhood:
+        example: neighborhood
+        type: string
+      street:
+        example: street
+        type: string
+    type: object
   presenter.DepartmentResponse:
     properties:
       available:
@@ -505,6 +520,24 @@ paths:
       security:
       - BearerJWT: []
       summary: List departments.
+      tags:
+      - departments
+    post:
+      description: Create department.
+      operationId: create-department
+      parameters:
+      - description: Department that wants to be stored.
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/presenter.DepartmentPayload'
+      responses:
+        "201":
+          description: ""
+      security:
+      - BearerJWT: []
+      summary: Create department.
       tags:
       - departments
   /suggestions:

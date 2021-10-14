@@ -32,6 +32,7 @@ func (c *DepartmentController) Routes() chi.Router {
 	r := chi.NewRouter()
 	r.Use(c.AuthService)
 	r.Get("/", c.List)
+	r.Post("/", c.Create)
 	return r
 }
 

@@ -389,6 +389,35 @@ var doc = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Create department.",
+                "tags": [
+                    "departments"
+                ],
+                "summary": "Create department.",
+                "operationId": "create-department",
+                "parameters": [
+                    {
+                        "description": "Department that wants to be stored.",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.DepartmentPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
             }
         },
         "/suggestions": {
@@ -798,6 +827,27 @@ var doc = `{
                 "total": {
                     "type": "integer",
                     "example": 1
+                }
+            }
+        },
+        "presenter.DepartmentPayload": {
+            "type": "object",
+            "properties": {
+                "cost": {
+                    "type": "number",
+                    "example": 1000
+                },
+                "description": {
+                    "type": "string",
+                    "example": "description"
+                },
+                "neighborhood": {
+                    "type": "string",
+                    "example": "neighborhood"
+                },
+                "street": {
+                    "type": "string",
+                    "example": "street"
                 }
             }
         },
