@@ -13,7 +13,7 @@ const PanicButtonPage = () => {
     const { authState } = useAuth()
     const { user } = authState
     const { user_id } = user
-    
+
     /* Send the custom contact's message to the user's contact. */
     useEffect(() => {
         const sendMessage = async (userID) => {

@@ -22,6 +22,13 @@ const routes = [
         backgroundColor: '#e8f4fd'
     },
     {
+        url: '/departments',
+        title: 'Departamentos',
+        icon: 'home-city-outline',
+        color: '#49E286',
+        backgroundColor: '#e6ffe8'
+    },
+    {
         url: '/suggestions',
         title: 'Sugerencias',
         icon: 'email-outline',

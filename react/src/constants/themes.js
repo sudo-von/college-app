@@ -1,6 +1,6 @@
 import { DefaultTheme } from 'react-native-paper'
 
-const theme = {
+export const theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
@@ -10,8 +10,4 @@ const theme = {
     transparency: '#CAE2E8',
     placeholder: '#7D8286'
   },
-}
-
-export { 
-  theme 
 }

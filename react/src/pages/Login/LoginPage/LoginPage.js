@@ -7,7 +7,7 @@ const LoginPage = () =>
         <Center>
             <Logo 
                 source={require('assets/logo.png')}
-                size={160}
+                size={180}
             />
         </Center>
         <Header 
