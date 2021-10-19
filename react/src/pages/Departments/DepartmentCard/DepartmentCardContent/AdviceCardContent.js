@@ -9,13 +9,13 @@ const DepartmentCardContent = ({ available, cost, description, departmentUser, n
     const formatedCost = '$'+cost.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
     return (
-        <Card.Content style={styles({}).content}>
-            <View style={styles({}).view}>
+        <Card.Content style={styles().content}>
+            <View style={styles().view}>
                 <Small>{departmentUser.name} / {departmentUser.email}</Small>
-                <Badge size={20} style={styles({ available }).badge}>{ available ? 'Disponible' : 'No disponible' }</Badge>
+                <Badge size={20} style={styles(available).badge}>{ available ? 'Disponible' : 'No disponible' }</Badge>
             </View>
-                <Paragraph style={styles({}).paragraph}><Bold>{street} / {neighborhood}</Bold></Paragraph>
-            <Title style={styles({}).cost}><Bold>{formatedCost}</Bold></Title> 
+                <Paragraph style={styles().paragraph}><Bold>{street} / {neighborhood}</Bold></Paragraph>
+            <Title style={styles().cost}><Bold>{formatedCost}</Bold></Title> 
             <Small>{description}</Small>
         </Card.Content>
     )

@@ -15,6 +15,10 @@ const getHeaderTitle = (route) => {
             return 'Asesorías'
         case '/create-advice':
             return 'Agregar asesoría'
+        case '/departments':
+            return 'Departamentos'
+        case '/create-department':
+            return 'Agregar departamento'
         case '/update-advice':
             return 'Actualizar asesoría'
         case '/configuration-home':

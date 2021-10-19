@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { View } from 'react-native'
-import { Bold } from 'src/components'
+import Bold from 'src/components/Bold/Bold'
 import { Title, Caption } from 'react-native-paper'
 import { styles } from './Header.styles.js'
 

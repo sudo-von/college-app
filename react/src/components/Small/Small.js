@@ -11,7 +11,7 @@ const Small = ({ children, style={}, ...rest }) =>
         {children}
     </Caption>
 
-Small.PropTypes = {
+Small.propTypes = {
     children: PropTypes.any,
     styles: PropTypes.object
 }

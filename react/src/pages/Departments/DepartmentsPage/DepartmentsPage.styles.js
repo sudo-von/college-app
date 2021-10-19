@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-export const styles = ({ primary, background}) => StyleSheet.create({
+export const styles = ({ primary, background }) => StyleSheet.create({
     container: {
         padding: 0
     },
@@ -15,5 +15,9 @@ export const styles = ({ primary, background}) => StyleSheet.create({
     tabs: {
         backgroundColor: background,
         color: primary
+    },
+        bottomView: {
+        alignItems: 'center',
+        backgroundColor: background
     }
 })

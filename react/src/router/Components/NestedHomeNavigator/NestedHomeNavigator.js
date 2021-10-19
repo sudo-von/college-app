@@ -6,6 +6,7 @@ import HomePage from 'src/pages/Home/HomePage/HomePage'
 import PanicButtonPage from 'src/pages/PanicButton/PanicButtonPage/PanicButtonPage'
 import AdvicesPage from 'src/pages/Advices/AdvicesPage/AdvicesPage'
 import DepartmentsPage from 'src/pages/Departments/DepartmentsPage/DepartmentsPage'
+import CreateDepartmentPage from 'src/pages/Departments/CreateDepartmentPage/CreateDepartmentPage'
 import CreateAdvicePage from 'src/pages/Advices/CreateAdvicePage/CreateAdvicePage'
 import UpdateAdvicePage from 'src/pages/Advices/UpdateAdvicePage/UpdateAdvicePage'
 import CreateSuggestionPage from 'src/pages/Suggestions/CreateSuggestionPage/CreateSuggestionPage'
@@ -40,7 +41,7 @@ const routes = [
         }
     },
     {
-        title: 'Asesorías',
+        title: 'Agregar asesoría',
         name: '/create-advice',
         component: CreateAdvicePage,
         options: {
@@ -48,7 +49,7 @@ const routes = [
         }
     },
     {
-        title: 'Asesorías',
+        title: 'Actualizar asesoría',
         name: '/update-advice',
         component: UpdateAdvicePage,
         options: {
@@ -59,6 +60,14 @@ const routes = [
         title: 'Departamentos',
         name: '/departments',
         component: DepartmentsPage,
+        options: {
+            header: () => null
+        }
+    },
+    {
+        title: 'Agregar departamento',
+        name: '/create-department',
+        component: CreateDepartmentPage,
         options: {
             header: () => null
         }

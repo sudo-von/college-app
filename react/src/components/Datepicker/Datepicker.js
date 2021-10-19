@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View } from 'react-native'
-import { Input } from 'src/components'
+import Input from 'src/components/Input/Input'
 import { TextInput } from 'react-native-paper'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import moment from 'moment'

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { configuration } from './axios-helper'
+import { ERRORS } from 'src/constants/errors'
 
 const client = axios.create(configuration)
 

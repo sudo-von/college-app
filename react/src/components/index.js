@@ -1,41 +1,19 @@
-import Bold from './Bold/Bold'
-import Button from './Button/Button'
-import Center from './Center/Center'
-import Container from './Container/Container'
-import Datepicker from './Datepicker/Datepicker'
-import Fab from './Fab/Fab'
-import Header from './Header/Header'
-import Input from './Input/Input'
-import Link from './Link/Link'
-import Loader from './Loader/Loader'
-import Logo from './Logo/Logo'
-import NavigationBadge from './NavigationBadge/NavigationBadge'
-import Option from './Option/Option'
-import PasswordInput from './PasswordInput/PasswordInput'
-import SelectInput from './SelectInput/SelectInput'
-import SliderInput from './SliderInput/SliderInput'
-import Small from './Small/Small'
-import Tabs from './Tabs/Tabs'
-import Timepicker from './Timepicker/Timepicker'
-
-export {
-    Bold,
-    Button,
-    Center,
-    Container,
-    Datepicker,
-    Fab,
-    Header,
-    Input,
-    Link,
-    Loader,
-    Logo,
-    NavigationBadge,
-    Option,
-    PasswordInput,
-    SelectInput,
-    SliderInput,
-    Small,
-    Tabs,
-    Timepicker
-}
+export { default as Bold } from './Bold/Bold'
+export { default as Button } from './Button/Button'
+export { default as Center } from './Center/Center'
+export { default as Container } from './Container/Container'
+export { default as Datepicker } from './Datepicker/Datepicker'
+export { default as Fab } from './Fab/Fab'
+export { default as Header } from './Header/Header'
+export { default as Input } from './Input/Input'
+export { default as Link } from './Link/Link'
+export { default as Loader } from './Loader/Loader'
+export { default as Logo } from './Logo/Logo'
+export { default as NavigationBadge } from './NavigationBadge/NavigationBadge'
+export { default as Option } from './Option/Option'
+export { default as PasswordInput } from './PasswordInput/PasswordInput'
+export { default as SelectInput } from './SelectInput/SelectInput'
+export { default as SliderInput } from './SliderInput/SliderInput'
+export { default as Small } from './Small/Small'
+export { default as Tabs } from './Tabs/Tabs'
+export { default as Timepicker } from './Timepicker/Timepicker'

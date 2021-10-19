@@ -1,20 +1,17 @@
 import { StyleSheet } from 'react-native'
 
-export const styles = ({ primary, available }) => StyleSheet.create({
+export const styles = (available) => StyleSheet.create({
     badge: {
         backgroundColor: available ? 'green' : 'red'
     },
     content: {
-      padding: 10,
+      padding: 8,
     },
     cost: {
-        fontSize: 18
-    },
-    title:{
-        fontSize: 18,
+        fontSize: 20
     },
     paragraph: {
-        color: '#36454F'
+        color: 'gray'
     },
     small: {
         color: 'gray',

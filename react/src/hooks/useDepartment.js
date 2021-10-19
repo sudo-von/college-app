@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
+import { Alert } from 'react-native'
 import { getDepartments } from 'src/services/department.service'
 import { useNavigation } from '@react-navigation/native'
 
-export const useDepartments = () => {
+export const useDepartment = () => {
 
     const [loading, setLoading] = useState(false)
     const [departments, setDepartments] = useState([])

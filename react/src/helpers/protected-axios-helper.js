@@ -19,6 +19,7 @@ const handleHeader = async (config) => {
 }
 
 const handleError = async error => {
+    console.log(error.response.data)
     if (error?.response){
         if (error?.response){
             if (error.response?.status === 401){
