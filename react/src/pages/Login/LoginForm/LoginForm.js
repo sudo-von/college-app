@@ -1,27 +1,21 @@
-import React, { useState } from 'react'
-import { View, Alert } from 'react-native'
+import React from 'react'
+import { View } from 'react-native'
 import { Formik } from 'formik'
 import { Button, Input, PasswordInput } from 'src/components'
-import { useAuth } from 'src/providers/auth.provider'
-import { login } from 'src/services/auth.service'
 import { styles } from './LoginForm.styles'
+import { useUser } from 'src/hooks/useUser'
 
 const LoginForm = () => {
 
-    const [ loading, setLoading ] = useState(false)
-    const { authDispatch } = useAuth()
-    const initialValues = { email: 'martinez-angel@uadec.edu.mx', password: 'college-app' }
+    const { loading, handleLogin } = useUser()
+
+    const initialValues = { 
+        email: 'martinez-angel@uadec.edu.mx', 
+        password: 'college-app' 
+    }
 
     const onSubmit = async (form) => {
-        try{
-            setLoading(true)
-            const user = await login(form)
-            setLoading(false)
-            authDispatch({type: 'login', user})
-        }catch(error){
-            setLoading(false)
-            Alert.alert('', error.message)
-        }
+        await handleLogin(form)
     }
 
     const handleValidation = ({ email, password }) => {

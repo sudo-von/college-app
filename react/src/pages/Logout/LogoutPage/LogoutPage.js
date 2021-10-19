@@ -1,26 +1,14 @@
 import React, { useEffect } from 'react'
-import { deleteToken } from 'src/services/token.service'
-import { useAuth } from 'src/providers/auth.provider'
 import { ActivityIndicator } from 'react-native-paper'
 import { Container, Center, Small } from 'src/components'
-import { Alert } from 'react-native'
+import { useUser } from 'src/hooks/useUser'
 
 const LogoutPage = () => {
 
-    /* Deletes token from the storage and then deletes user from the context. */
-    const { authDispatch } = useAuth()
+    const { handleLogout } = useUser()
     useEffect(() => {
-        const doLogout = async () => {
-            try{
-                await deleteToken()
-                authDispatch({ type: 'logout' })
-            }catch(error){
-                Alert.alert('¡Ha ocurrido un error!', error.message)
-            }
-        }
-        doLogout()
     }, [])
-    
+
     return (
         <Container>
             <ActivityIndicator size={80}/>

@@ -48,7 +48,9 @@ const protectedRoutes = [
     component: LogoutPage,
     title: 'Cerrar sesión',
     icon: 'logout',
-    options: {}
+    options: {
+      header: () => null
+    }
   }
 ]
 
