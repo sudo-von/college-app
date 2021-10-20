@@ -1,21 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Button as PaperButton, useTheme } from 'react-native-paper'
+import { FAB, useTheme } from 'react-native-paper'
 import { styles } from './Button.styles'
 
-const Button = ({ loading=false, loadingMessage='', children, ...rest }) => {
+const Button = ({ loading=false, loadingMessage='', children, margin, style, ...rest }) => {
     const { colors } = useTheme()
     return(
-        <PaperButton 
-            style={styles(colors).button} 
-            mode='contained' 
+        <FAB 
+            style={{...styles(colors).button,...style}} 
+            label={loading ? loadingMessage : children}
             loading={loading} 
+            color='white'
             disabled={loading} 
-            labelStyle={styles(colors).label}
             {...rest}
-        >
-            { loading ? loadingMessage : children }
-        </PaperButton>
+        />
     )
 }
 

@@ -6,7 +6,9 @@ import { useUser } from 'src/hooks/useUser'
 const LogoutPage = () => {
 
     const { handleLogout } = useUser()
+    
     useEffect(() => {
+        handleLogout()
     }, [])
 
     return (

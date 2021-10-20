@@ -1,22 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import { View, Alert } from 'react-native'
+import React from 'react'
+import { View } from 'react-native'
 import { Formik, Field } from 'formik'
-import { Input, PasswordInput, SelectInput, Datepicker, Option, Button, Loader } from 'src/components'
-import { signup } from 'src/services/user.service'
-import { getUniversities } from 'src/services/university.service'
+import { Input, PasswordInput, SelectInput, Datepicker, Option, Button } from 'src/components'
 import { useNavigation } from '@react-navigation/native'
 import { styles } from './SignupForm.styles'
+import { useUser } from 'src/hooks/useUser'
+import { useUniversities } from 'src/hooks/useUniversities'
 
 const SignupForm = () => {
 
-    /* Handles form. */
-    const [ formLoading, setFormLoading ] = useState(false)
-    /* Handles universities. */
     const navigation = useNavigation()
-    const [ universities, setUniversities ] = useState([])
-    const [ loadingUniversities, setLoadingUniversities ] = useState(false)
+    const { loading, handleSignup } = useUser()
+    const { loadingUniversities, universities } = useUniversities()
 
-    /* Formik configuration. */
     const initialValues = { 
         name: 'VoN',
         birth_date: '1997-04-17',
@@ -50,42 +46,8 @@ const SignupForm = () => {
     }
 
     const onSubmit = async (form, { resetForm }) => {
-        try{
-            setFormLoading(true)
-            const response = await signup(form)
-            setFormLoading(false)
-            resetForm()
-            Alert.alert('¡Felicidades!', 'Ya puedes iniciar sesión.')
-            navigation.navigate('/login')
-        }catch(error){
-            Alert.alert('¡Ha ocurrido un error!', error.message)
-            setFormLoading(false)
-        }
+        await handleSignup(form, { resetForm }, navigation)
     }
-
-    /* Get universities for the select component. */
-    useEffect(() => {
-        const searchUniversities = async () => {
-            try{
-                setLoadingUniversities(true)
-                const response = await getUniversities()
-                /* Creates a new array with the special structure that the SelectInput needs. */
-                const universities = response.results.map((university) => (
-                    { 
-                        label : university.name, 
-                        value : university.id, 
-                        custom: <Option source={university.profile_picture} label={university.name}/>
-                    }
-                ))
-                setUniversities(universities)
-            }catch(error){
-                Alert.alert('¡Ha ocurrido un error!', error.message)
-            }finally{
-                setLoadingUniversities(false)
-            }
-        }
-        searchUniversities()
-    }, [])
 
     return (
         <Formik 
@@ -133,7 +95,13 @@ const SignupForm = () => {
                         {({ field, form, meta }) => (
                             <SelectInput
                                 label={loadingUniversities ? 'Cargando universidades...' : 'Selecciona tu universidad'}
-                                data={universities}
+                                data={universities.map(({ id, name, profile_picture }) => 
+                                    ({
+                                        label: name,
+                                        value: id,
+                                        custom: <Option source={profile_picture} label={name}/>
+                                    })
+                                )}
                                 field={field} 
                                 form={form} 
                                 meta={meta}
@@ -149,7 +117,7 @@ const SignupForm = () => {
                         error={errors.password}
                     />
                     <Button 
-                        loading={formLoading} 
+                        loading={loading} 
                         loadingMessage='Registrando usuario...' 
                         onPress={handleSubmit}
                         style={styles.button}

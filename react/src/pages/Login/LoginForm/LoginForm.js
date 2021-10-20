@@ -14,10 +14,6 @@ const LoginForm = () => {
         password: 'college-app' 
     }
 
-    const onSubmit = async (form) => {
-        await handleLogin(form)
-    }
-
     const handleValidation = ({ email, password }) => {
         let errors = {}
         if(!email){
@@ -35,7 +31,7 @@ const LoginForm = () => {
             validate={handleValidation}
             validateOnChange={false}
             validateOnBlur={false} 
-            onSubmit={onSubmit}
+            onSubmit={handleLogin}
         >
             {({ handleChange, handleBlur, handleSubmit, errors, values }) => (
                 <View style={styles.container}>

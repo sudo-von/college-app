@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import { Alert } from 'react-native'
 import { useAuth } from 'src/providers/auth.provider'
 import { login } from 'src/services/auth.service'
+import { signup } from 'src/services/user.service'
 import { deleteToken } from 'src/services/token.service'
 
 export const useUser = () => {
@@ -21,7 +22,6 @@ export const useUser = () => {
         }
     }, [])
 
-
     const handleLogout = useCallback(async () => {
         try{
             await deleteToken()
@@ -31,11 +31,26 @@ export const useUser = () => {
         }
     }, [])
 
+    const handleSignup = useCallback(async (form, { resetForm }, navigation) => {
+        try{
+            setLoading(true)
+            await signup(form)
+            setLoading(false)
+            resetForm()
+            Alert.alert('¡Felicidades!', 'Ya puedes iniciar sesión.')
+            navigation.navigate('/login')
+        }catch(error){
+            Alert.alert('¡Ha ocurrido un error!', error.message)
+            setLoading(false)
+        }
+    }, [])
+
     return {
         user,
         loading,
         handleLogin,
-        handleLogout
+        handleLogout,
+        handleSignup
     }
 } 
 

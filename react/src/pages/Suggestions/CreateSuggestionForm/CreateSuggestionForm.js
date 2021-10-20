@@ -1,16 +1,17 @@
-import React, { useState } from 'react'
-import { View, Alert } from 'react-native'
+import React from 'react'
+import { View } from 'react-native'
 import { Formik } from 'formik'
 import { Button, Input } from 'src/components'
-import { sendSuggestion } from 'src/services/suggestion.service'
+import { useSuggestion } from 'src/hooks/useSuggestion'
 import { styles } from './CreateSuggestionForm.style'
 
 const CreateSuggestionForm = () => {
 
-    const [ loading, setLoading ] = useState(false)
+    const { loading, handleSuggestion } = useSuggestion()
 
-    /* Formik configuration. */
-    const initialValues = { suggestion : '' }
+    const initialValues = { 
+        suggestion : '' 
+    }
 
     const handleValidation = ({ suggestion }) => {
         let errors = {}
@@ -19,19 +20,6 @@ const CreateSuggestionForm = () => {
         }
         return errors
     }
-
-    const onHandleSubmit = async (form, { resetForm }) => {
-        try{
-            setLoading(true)
-            const response = await sendSuggestion(form)
-            Alert.alert('¡Felicidades!', response)
-            resetForm()
-        }catch(error){
-            Alert.alert('¡Ha ocurrido un error!', error.message)
-        }finally{
-            setLoading(false)
-        }
-    }
         
     return (
         <Formik 
@@ -39,7 +27,7 @@ const CreateSuggestionForm = () => {
             validate={handleValidation}
             validateOnChange={false}
             validateOnBlur={false}
-            onSubmit={onHandleSubmit}
+            onSubmit={handleSuggestion}
         >
             {({ handleChange, handleBlur, handleSubmit, errors, values }) => (
                 <View style={styles.container}>
