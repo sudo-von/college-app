@@ -10,14 +10,15 @@ import (
 )
 
 type DepartmentModel struct {
-	ID           bson.ObjectId `bson:"_id"`
-	User         BasicUser     `bson:"user"`
-	Description  string        `bson:"description"`
-	Street       string        `bson:"street"`
-	Neighborhood string        `bson:"neighborhood"`
-	Cost         float32       `bson:"cost"`
-	Available    bool          `bson:"available"`
-	CreationDate time.Time     `bson:"creation_date"`
+	ID           bson.ObjectId   `bson:"_id"`
+	User         BasicUser       `bson:"user"`
+	University   UniversityModel `bson:"university"`
+	Description  string          `bson:"description"`
+	Street       string          `bson:"street"`
+	Neighborhood string          `bson:"neighborhood"`
+	Cost         float32         `bson:"cost"`
+	Available    bool            `bson:"available"`
+	CreationDate time.Time       `bson:"creation_date"`
 }
 
 func toEntityDepartment(department DepartmentModel) entity.Department {
@@ -31,6 +32,7 @@ func toEntityDepartment(department DepartmentModel) entity.Department {
 	return entity.Department{
 		ID:           department.ID.Hex(),
 		User:         user,
+		UniversityID: department.University.ID.Hex(),
 		Description:  department.Description,
 		Street:       department.Street,
 		Neighborhood: department.Neighborhood,
@@ -49,6 +51,7 @@ type DepartmentPayloadModel struct {
 	Neighborhood string        `bson:"neighborhood"`
 	Cost         float32       `bson:"cost"`
 	Available    bool          `bson:"available"`
+	Status       string        `bson:"status"`
 	CreationDate time.Time     `bson:"creation_date"`
 }
 
@@ -84,6 +87,7 @@ func toDepartmentPayloadModel(department entity.DepartmentPayload) DepartmentPay
 		Neighborhood: department.Neighborhood,
 		Cost:         department.Cost,
 		Available:    department.Available,
+		Status:       department.Status,
 		CreationDate: department.CreationDate,
 	}
 }
@@ -110,6 +114,7 @@ func (r *DepartmentRepository) GetDepartmentByID(departmentID string) (*entity.D
 		"_id":         bson.ObjectIdHex(departmentID),
 		"available":   true,
 		"user.status": entity.ActiveStatus,
+		"status":      entity.ActiveStatus,
 	}
 
 	pipes := []bson.M{
@@ -155,6 +160,7 @@ func (r *DepartmentRepository) GetDepartments(universityID string, departmentFil
 		"available":     true,
 		"user.status":   entity.ActiveStatus,
 		"university_id": bson.ObjectIdHex(universityID),
+		"status":        entity.ActiveStatus,
 	}
 
 	pipes := []bson.M{
