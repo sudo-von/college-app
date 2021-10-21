@@ -10,8 +10,9 @@ import { useUniversities } from 'src/hooks/useUniversities'
 const SignupForm = () => {
 
     const navigation = useNavigation()
-    const { loading, handleSignup } = useUser()
-    const { loadingUniversities, universities } = useUniversities()
+
+    const { loading: loadingSignup, handleSignup } = useUser()
+    const { loading: loadingUniversities, universities } = useUniversities()
 
     const initialValues = { 
         name: 'VoN',
@@ -117,7 +118,7 @@ const SignupForm = () => {
                         error={errors.password}
                     />
                     <Button 
-                        loading={loading} 
+                        loading={loadingSignup} 
                         loadingMessage='Registrando usuario...' 
                         onPress={handleSubmit}
                         style={styles.button}

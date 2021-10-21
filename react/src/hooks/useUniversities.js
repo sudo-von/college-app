@@ -25,7 +25,7 @@ export const useUniversities = () => {
 
     return {
         universities,
-        loadingUniversities: loading
+        loading
     }
 } 
 
