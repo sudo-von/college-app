@@ -4,7 +4,7 @@ import DepartmentCardActions from './DepartmentCardActions/DepartmentCardActions
 import { Card } from 'react-native-paper'
 import { styles } from './DepartmentCard.styles'
 
-const DepartmentCard = ({ id, available, cost, description, neighborhood, street, user, userID }) =>
+const DepartmentCard = ({ id, available, cost, description, neighborhood, street, user, userID, setDepartments }) =>
   <Card style={styles.card}>
     <DepartmentCardContent
       available={available}
@@ -17,6 +17,7 @@ const DepartmentCard = ({ id, available, cost, description, neighborhood, street
     <DepartmentCardActions 
       id={id}
       departmentUser={user}
+      setDepartments={setDepartments}
       userID={userID}
     />
   </Card>

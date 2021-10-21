@@ -1,15 +1,14 @@
-import React, { useState } from 'react'
-import { View, Alert } from 'react-native'
-import { Formik, Field } from 'formik'
-import { Input, SelectInput, Datepicker, Timepicker, Button } from 'src/components'
-import { createDepartment } from 'src/services/department.service'
+import React from 'react'
+import { View } from 'react-native'
+import { Formik } from 'formik'
+import { Input, Button } from 'src/components'
 import { styles } from './CreateDepartmentForm.styles'
+import { useDepartment } from 'src/hooks/useDepartment'
 
 const CreateDepartmentForm = () => {
 
-    const [ loading, setLoading ] = useState(false)
+    const { loading, handleCreateDepartment } = useDepartment()
 
-    /* Formik configuration. */
     const initialValues = { 
         cost: '',
         description: '',
@@ -37,26 +36,13 @@ const CreateDepartmentForm = () => {
         return errors
     }
 
-    const onHandleSubmit = async (form, { resetForm }) => {
-        try{
-            setLoading(true)
-            await createDepartment({ ...form, cost: parseFloat(form.cost) })
-            resetForm()
-            Alert.alert('¡Felicidades!', '¡Has registrado el departamento con éxito!')
-        }catch(error){
-            Alert.alert('¡Ha ocurrido un error!', error.message)
-        }finally{
-            setLoading(false)
-        }
-    }
-
     return (
         <Formik 
             initialValues={initialValues}
             validateOnChange={false}
             validateOnBlur={false}
             validate={handleValidation}
-            onSubmit={onHandleSubmit}
+            onSubmit={handleCreateDepartment}
         >
             {({ handleChange, handleBlur, handleSubmit, errors, values }) => (
                 <View>

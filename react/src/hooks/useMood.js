@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Alert } from 'react-native'
-import { getMood, sendMood } from 'src/services/mood.service'
+import { getMood, createMood } from 'src/services/mood.service'
 
 export const useMood = (initialMoodValue, userID) => {
 
@@ -17,7 +17,7 @@ export const useMood = (initialMoodValue, userID) => {
 
     const handleUpdateMood = async () => {
         try{
-            await sendMood(userID, { mood })
+            await createMood(userID, { mood })
         }catch(error){
             Alert.alert('¡Ha ocurrido un error!', error.message)
         }finally{

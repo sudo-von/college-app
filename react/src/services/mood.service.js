@@ -9,7 +9,7 @@ const getMood = async (userID) => {
     }
 }
 
-const sendMood = async (userID, mood) => {
+const createMood = async (userID, mood) => {
     try{
         await post(`/users-mood/users/${userID}`, mood)
     }catch(error){
@@ -19,5 +19,5 @@ const sendMood = async (userID, mood) => {
 
 export {
     getMood,
-    sendMood
+    createMood
 }

@@ -4,7 +4,9 @@ import { IconButton, Card } from 'react-native-paper'
 import { deleteDepartmentByID } from 'src/services/department.service'
 import { useNavigation } from '@react-navigation/native'
 
-const DepartmentCardActions = ({ id, departmentUser, userID }) => {
+const DepartmentCardActions = ({ id, departmentUser, userID, setDepartments }) => {
+
+    console.log(departmentUser, userID)
 
     const handleEdit = () => {
         navigation.navigate('/update-department', { id })
@@ -19,10 +21,11 @@ const DepartmentCardActions = ({ id, departmentUser, userID }) => {
                     text: 'Cancelar',
                 },
                 { 
-                    text: 'Eliminar departamento', 
+                    text: 'Eliminar', 
                     onPress: async () => {
                         try{
                             await deleteDepartmentByID(id)
+                            setDepartments(departments => departments.filter(department => department.id != id))
                         }catch(error){
                             Alert.alert('¡Ha ocurrido un error!', error.message)
                         }

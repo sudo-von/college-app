@@ -1,18 +1,20 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { View, ScrollView } from 'react-native'
 import { Loader, Container } from 'src/components'
 import { IconButton, useTheme } from 'react-native-paper'
 import { Tabs, TabScreen } from 'react-native-paper-tabs'
-import { useDepartment } from 'src/hooks/useDepartment'
+import { useUser } from 'src/hooks/useUser'
+import { useDepartments } from 'src/hooks/useDepartments'
 import { styles } from './DepartmentsPage.styles'
 import { useNavigation } from '@react-navigation/native'
 import DepartmentCard from '../DepartmentCard/DepartmentCard'
 
 const DepartmentsPage = () => {
 
-    const { colors } = useTheme()
-    const { loading, departments, setDepartment } = useDepartment()
     const navigation = useNavigation()
+    const { colors } = useTheme()
+    const { user: { user_id } } = useUser()
+    const { loading, departments, setDepartments } = useDepartments()
 
     return (
         <Container style={styles(colors).container}>
@@ -24,6 +26,9 @@ const DepartmentsPage = () => {
                             <ScrollView>
                                 { departments.map(data => 
                                     <DepartmentCard
+                                        key={data.id}
+                                        userID={user_id}
+                                        setDepartments={setDepartments}
                                         {...data}
                                     />    
                                 )}
@@ -33,6 +38,9 @@ const DepartmentsPage = () => {
                             <ScrollView>
                                 { departments.map(data => 
                                     <DepartmentCard
+                                        key={data.id}
+                                        userID={user_id}
+                                        setDepartments={setDepartments}
                                         {...data}
                                     />    
                                 )}
