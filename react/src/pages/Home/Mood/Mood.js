@@ -1,38 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import { Alert } from 'react-native'
+import React from 'react'
 import { Dialog, Portal } from 'react-native-paper'
 import { Small, Button, Fab, SliderInput } from 'src/components'
-import { getMood, sendMood } from 'src/services/mood.service'
+import { useMood } from 'src/hooks/useMood'
 import { styles } from './Mood.styles'
 
 const Mood = ({ initialMoodValue, minimumValue, maximumValue, minimumText, maximumText, userID }) => {
 
-  /* If user has not sent its mood today then the modal mood will be show. */
-  const [mood, setMood] = useState(initialMoodValue)
-  const [show, setShow] = useState(false)
-  
-  useEffect(() => {
-      const searchMood = async () => {
-        try{
-          await getMood(userID)
-        }catch(error){
-          setShow(true)
-        }
-      }
-      searchMood()
-  }, [])
-
-  const handleMood = async () => {
-    try{
-      await sendMood(userID, {mood})
-    }catch(error){
-      Alert.alert('¡Ha ocurrido un error!', error.message)
-    }finally{
-      setShow(false)
-    }
-  }
-
-  const handleShow = (show) => setShow(show) 
+  const { show, setMood, handleShow, handleUpdateMood } = useMood(initialMoodValue, userID) 
 
   return (
     <Portal>
@@ -55,7 +29,7 @@ const Mood = ({ initialMoodValue, minimumValue, maximumValue, minimumText, maxim
             maximumText={maximumText}
             style={styles.sliderInput}
           />
-          <Button onPress={() => handleMood()}>Guardar estado de ánimo</Button>
+          <Button onPress={() => handleUpdateMood()}>Guardar estado de ánimo</Button>
         </Dialog.Content>
       </Dialog>
     </Portal>

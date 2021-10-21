@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Image } from 'react-native'
 import { Container, Small, Bold, NavigationBadge } from 'src/components'
 import { Title } from 'react-native-paper'
-import { useAuth } from 'src/providers/auth.provider'
+import { useUser } from 'src/hooks/useUser'
 import { styles } from './HomePage.styles'
 import Mood from '../Mood/Mood'
 
@@ -39,9 +39,7 @@ const routes = [
 
 const HomePage = () => {
 
-    const { authState } = useAuth()
-    const { user } = authState
-    const { user_name, user_id } = user
+    const { user: { user_name, user_id} } = useUser()
 
     return (
         <Container justifyContent='flex-start'>
