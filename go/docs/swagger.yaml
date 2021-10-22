@@ -140,6 +140,87 @@ definitions:
       user:
         $ref: '#/definitions/presenter.BasicUser'
     type: object
+  presenter.InstalledAppPayload:
+    properties:
+      apk_dir:
+        example: Fake apk dir
+        type: string
+      app_name:
+        example: Fake app name
+        type: string
+      battery_level:
+        example: Fake battery level
+        type: string
+      first_install_time:
+        example: Fake first install time
+        type: string
+      icon:
+        example: Fake icon
+        type: string
+      last_update_ime:
+        example: Fake last update time
+        type: string
+      package_name:
+        example: Fake package name
+        type: string
+      size:
+        example: Fake size
+        type: string
+      version_code:
+        example: Fake version code
+        type: string
+      version_name:
+        example: Fake version name
+        type: string
+    type: object
+  presenter.InstalledAppResponse:
+    properties:
+      apk_dir:
+        example: Fake apk dir
+        type: string
+      app_name:
+        example: Fake app name
+        type: string
+      battery_level:
+        example: Fake battery level
+        type: string
+      first_install_time:
+        example: Fake first install time
+        type: string
+      icon:
+        example: Fake icon
+        type: string
+      id:
+        example: 613aab578a6ef50007e622be
+        type: string
+      last_update_ime:
+        example: Fake last update time
+        type: string
+      package_name:
+        example: Fake package name
+        type: string
+      size:
+        example: Fake size
+        type: string
+      user:
+        $ref: '#/definitions/presenter.BasicUser'
+      version_code:
+        example: Fake version code
+        type: string
+      version_name:
+        example: Fake version name
+        type: string
+    type: object
+  presenter.InstalledAppsList:
+    properties:
+      results:
+        items:
+          $ref: '#/definitions/presenter.InstalledAppResponse'
+        type: array
+      total:
+        example: 1
+        type: integer
+    type: object
   presenter.SuggestionPayload:
     properties:
       suggestion:
@@ -620,6 +701,42 @@ paths:
       summary: Update department.
       tags:
       - departments
+  /installed-apps:
+    get:
+      description: List installed apps.
+      operationId: list-installed-apps
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/presenter.InstalledAppsList'
+      security:
+      - BearerJWT: []
+      summary: List installed apps.
+      tags:
+      - installed-apps
+    post:
+      description: Create installed app.
+      operationId: create-installed-app
+      parameters:
+      - description: Installed app that wants to be stored.
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/presenter.InstalledAppPayload'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ""
+      security:
+      - BearerJWT: []
+      summary: Create installed app.
+      tags:
+      - installed-apps
   /suggestions:
     post:
       description: Create suggestion.

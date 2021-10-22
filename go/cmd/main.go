@@ -8,6 +8,7 @@ import (
 	"freelancer/college-app/go/usecase/advice"
 	"freelancer/college-app/go/usecase/contact"
 	"freelancer/college-app/go/usecase/department"
+	"freelancer/college-app/go/usecase/installed_app"
 	"freelancer/college-app/go/usecase/suggestion"
 	"freelancer/college-app/go/usecase/university"
 	"freelancer/college-app/go/usecase/user"
@@ -40,6 +41,7 @@ func main() {
 	departmentRepository := mongo.NewDepartmentRepository(db)
 	userMoodRepository := mongo.NewUserMoodRepository(db)
 	adviceRepository := mongo.NewAdviceRepository(db)
+	installedAppRepository := mongo.NewInstalledAppRepository(db)
 
 	// Services.
 	userService := user.NewService(userRepository, universityRepository)
@@ -49,16 +51,18 @@ func main() {
 	departmentService := department.NewService(departmentRepository, userRepository)
 	userMoodService := user_mood.NewService(userRepository, userMoodRepository)
 	adviceService := advice.NewService(adviceRepository, userRepository, universityRepository)
+	installedAppService := installed_app.NewService(installedAppRepository, userRepository)
 
 	services := api.Services{
-		UserService:       *userService,
-		UniversityService: *universityService,
-		SuggestionService: *suggestionService,
-		ContactService:    *contactService,
-		UserMoodService:   *userMoodService,
-		AdviceService:     *adviceService,
-		DepartmentService: *departmentService,
-		TokenService:      tokenService,
+		UserService:         *userService,
+		UniversityService:   *universityService,
+		SuggestionService:   *suggestionService,
+		ContactService:      *contactService,
+		UserMoodService:     *userMoodService,
+		AdviceService:       *adviceService,
+		DepartmentService:   *departmentService,
+		InstalledAppService: *installedAppService,
+		TokenService:        tokenService,
 	}
 
 	// Start http server.

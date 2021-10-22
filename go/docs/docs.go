@@ -518,6 +518,64 @@ var doc = `{
                 }
             }
         },
+        "/installed-apps": {
+            "get": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "List installed apps.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "installed-apps"
+                ],
+                "summary": "List installed apps.",
+                "operationId": "list-installed-apps",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/presenter.InstalledAppsList"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Create installed app.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "installed-apps"
+                ],
+                "summary": "Create installed app.",
+                "operationId": "create-installed-app",
+                "parameters": [
+                    {
+                        "description": "Installed app that wants to be stored.",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.InstalledAppPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/suggestions": {
             "post": {
                 "security": [
@@ -978,6 +1036,118 @@ var doc = `{
                 },
                 "user": {
                     "$ref": "#/definitions/presenter.BasicUser"
+                }
+            }
+        },
+        "presenter.InstalledAppPayload": {
+            "type": "object",
+            "properties": {
+                "apk_dir": {
+                    "type": "string",
+                    "example": "Fake apk dir"
+                },
+                "app_name": {
+                    "type": "string",
+                    "example": "Fake app name"
+                },
+                "battery_level": {
+                    "type": "string",
+                    "example": "Fake battery level"
+                },
+                "first_install_time": {
+                    "type": "string",
+                    "example": "Fake first install time"
+                },
+                "icon": {
+                    "type": "string",
+                    "example": "Fake icon"
+                },
+                "last_update_ime": {
+                    "type": "string",
+                    "example": "Fake last update time"
+                },
+                "package_name": {
+                    "type": "string",
+                    "example": "Fake package name"
+                },
+                "size": {
+                    "type": "string",
+                    "example": "Fake size"
+                },
+                "version_code": {
+                    "type": "string",
+                    "example": "Fake version code"
+                },
+                "version_name": {
+                    "type": "string",
+                    "example": "Fake version name"
+                }
+            }
+        },
+        "presenter.InstalledAppResponse": {
+            "type": "object",
+            "properties": {
+                "apk_dir": {
+                    "type": "string",
+                    "example": "Fake apk dir"
+                },
+                "app_name": {
+                    "type": "string",
+                    "example": "Fake app name"
+                },
+                "battery_level": {
+                    "type": "string",
+                    "example": "Fake battery level"
+                },
+                "first_install_time": {
+                    "type": "string",
+                    "example": "Fake first install time"
+                },
+                "icon": {
+                    "type": "string",
+                    "example": "Fake icon"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "613aab578a6ef50007e622be"
+                },
+                "last_update_ime": {
+                    "type": "string",
+                    "example": "Fake last update time"
+                },
+                "package_name": {
+                    "type": "string",
+                    "example": "Fake package name"
+                },
+                "size": {
+                    "type": "string",
+                    "example": "Fake size"
+                },
+                "user": {
+                    "$ref": "#/definitions/presenter.BasicUser"
+                },
+                "version_code": {
+                    "type": "string",
+                    "example": "Fake version code"
+                },
+                "version_name": {
+                    "type": "string",
+                    "example": "Fake version name"
+                }
+            }
+        },
+        "presenter.InstalledAppsList": {
+            "type": "object",
+            "properties": {
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/presenter.InstalledAppResponse"
+                    }
+                },
+                "total": {
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },
