@@ -1,12 +1,12 @@
 import React from 'react'
-import { Alert, StyleSheet, Linking } from 'react-native'
+import { Alert, Linking } from 'react-native'
 import { IconButton, Card } from 'react-native-paper'
 import { deleteDepartmentByID } from 'src/services/department.service'
 import { useNavigation } from '@react-navigation/native'
 
 const DepartmentCardActions = ({ id, departmentUser, userID, setDepartments }) => {
 
-    console.log(departmentUser, userID)
+    const navigation = useNavigation()
 
     const handleEdit = () => {
         navigation.navigate('/update-department', { id })

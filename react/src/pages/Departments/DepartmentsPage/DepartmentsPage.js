@@ -12,8 +12,10 @@ import DepartmentCard from '../DepartmentCard/DepartmentCard'
 const DepartmentsPage = () => {
 
     const navigation = useNavigation()
+    
     const { colors } = useTheme()
-    const { user: { user_id } } = useUser()
+    const { user } = useUser()
+    const { user_id } = user
     const { loading, departments, setDepartments } = useDepartments()
 
     return (

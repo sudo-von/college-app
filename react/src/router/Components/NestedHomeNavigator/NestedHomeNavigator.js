@@ -7,6 +7,7 @@ import PanicButtonPage from 'src/pages/PanicButton/PanicButtonPage/PanicButtonPa
 import AdvicesPage from 'src/pages/Advices/AdvicesPage/AdvicesPage'
 import DepartmentsPage from 'src/pages/Departments/DepartmentsPage/DepartmentsPage'
 import CreateDepartmentPage from 'src/pages/Departments/CreateDepartmentPage/CreateDepartmentPage'
+import UpdateDepartmentPage from 'src/pages/Departments/UpdateDepartmentPage/UpdateDepartmentPage'
 import CreateAdvicePage from 'src/pages/Advices/CreateAdvicePage/CreateAdvicePage'
 import UpdateAdvicePage from 'src/pages/Advices/UpdateAdvicePage/UpdateAdvicePage'
 import CreateSuggestionPage from 'src/pages/Suggestions/CreateSuggestionPage/CreateSuggestionPage'
@@ -68,6 +69,14 @@ const routes = [
         title: 'Agregar departamento',
         name: '/create-department',
         component: CreateDepartmentPage,
+        options: {
+            header: () => null
+        }
+    },
+    {
+        title: 'Actualizar departamento',
+        name: '/update-department',
+        component: UpdateDepartmentPage,
         options: {
             header: () => null
         }

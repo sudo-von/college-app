@@ -37,7 +37,7 @@ func (c *DepartmentController) Routes() chi.Router {
 	r.Get("/{id}", c.Show)
 	r.Get("/", c.List)
 	r.Post("/", c.Create)
-	r.Patch("/", c.Update)
+	r.Patch("/{id}", c.Update)
 	r.Delete("/{id}", c.Delete)
 	return r
 }

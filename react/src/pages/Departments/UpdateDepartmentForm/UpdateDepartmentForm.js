@@ -1,19 +1,20 @@
 import React from 'react'
 import { View } from 'react-native'
-import { Formik } from 'formik'
-import { Input, Button } from 'src/components'
-import { styles } from './CreateDepartmentForm.styles'
+import { Formik, Field } from 'formik'
+import { Input, Button, SelectInput } from 'src/components'
+import { styles } from './UpdateDepartmentForm.styles'
 import { useDepartment } from 'src/hooks/useDepartment'
 
-const CreateDepartmentForm = () => {
+const UpdateDepartmentForm = ({ id, available, cost, description, neighborhood, street }) => {
 
-    const { loading, handleCreateDepartment } = useDepartment()
+    const { loading, handleUpdateDepartment } = useDepartment()
 
     const initialValues = { 
-        cost: '',
-        description: '',
-        neighborhood: '',
-        street: ''
+        cost: cost && cost.toString(),
+        description,
+        neighborhood,
+        street,
+        available
     }
 
     const handleValidation = ({ cost, description, neighborhood, street }) => {
@@ -36,7 +37,7 @@ const CreateDepartmentForm = () => {
         return errors
     }
 
-    const handleSubmit = (form, { resetForm }) => handleCreateDepartment(form, resetForm)
+    const handleSubmit = (form, { resetForm }) => handleUpdateDepartment(id, form, resetForm)
 
     return (
         <Formik 
@@ -77,13 +78,35 @@ const CreateDepartmentForm = () => {
                         value={values.cost}
                         error={errors.cost}
                     />
+                    <Field name='available'>
+                        {({ field, form, meta }) => (
+                            <SelectInput
+                                label={'Selecciona el estatus del departamento'}
+                                data={[
+                                    {
+                                        label: 'Disponible',
+                                        value: true,
+                                    },
+                                    {
+                                        label: 'Rentado',
+                                        value: false,
+                                    }
+                                ]}
+                                value={available}
+                                field={field} 
+                                form={form} 
+                                meta={meta}
+                                error={errors.available}
+                            />
+                        )}
+                    </Field>
                     <Button 
                         loading={loading} 
-                        loadingMessage='Registrando departamento...' 
+                        loadingMessage='Actualizando departamento...' 
                         onPress={handleSubmit}
                         style={styles.button}
                     >
-                        Registrar departamento
+                        Actualizar departamento
                     </Button>
                 </View>
             )}
@@ -91,4 +114,4 @@ const CreateDepartmentForm = () => {
     )
 }
 
-export default CreateDepartmentForm
+export default UpdateDepartmentForm

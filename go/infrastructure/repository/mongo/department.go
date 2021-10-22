@@ -17,6 +17,7 @@ type DepartmentModel struct {
 	Street       string          `bson:"street"`
 	Neighborhood string          `bson:"neighborhood"`
 	Cost         float32         `bson:"cost"`
+	Status       string          `bson:"status"`
 	Available    bool            `bson:"available"`
 	CreationDate time.Time       `bson:"creation_date"`
 }
@@ -38,6 +39,7 @@ func toEntityDepartment(department DepartmentModel) entity.Department {
 		Neighborhood: department.Neighborhood,
 		Cost:         department.Cost,
 		Available:    department.Available,
+		Status:       department.Status,
 		CreationDate: department.CreationDate,
 	}
 }
