@@ -13,11 +13,11 @@ export const styles = ({ primary, background }) => StyleSheet.create({
         backgroundColor: primary
     },
     tabs: {
-        backgroundColor: background,
-        color: primary
+        backgroundColor: primary,
+        color: background
     },
         bottomView: {
         alignItems: 'center',
-        backgroundColor: background
+        backgroundColor: primary
     }
 })

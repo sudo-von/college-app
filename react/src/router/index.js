@@ -1,32 +1,28 @@
 import React from 'react'
-/* React navigation. */
+import DrawerContent from './Components/DrawerContent/DrawerContent'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { useNavigation } from '@react-navigation/native'
-/* Contexts. */
-import { useAuth } from 'src/providers/auth.provider'
-/* Custom components. */
-import DrawerContent from './Components/DrawerContent'
-/* React native paper. */
+import { useUser } from 'src/hooks/useUser'
 import { useTheme } from 'react-native-paper'
-/* Routes. */
 import { publicRoutes, protectedRoutes } from './routes'
-/* React native icons. */
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-/* Helpers. */
 import { getHeaderLeft, getHeaderTitle } from 'src/helpers/react-navigation-helper'
 
 const Drawer = createDrawerNavigator()
 
 const Router = () => {
 
-  const { authState } = useAuth()
+  const { isLoggedIn } = useUser()
   const { colors } = useTheme()
-  const routes = authState.isLoggedIn ? protectedRoutes : publicRoutes
+
+  const routes = isLoggedIn ? protectedRoutes : publicRoutes
   const navigation = useNavigation()
+
+  const handleDrawerContent = (props) => isLoggedIn && <DrawerContent {...props}/>
 
   return (
     <Drawer.Navigator 
-      drawerContent={(props) => authState.isLoggedIn && <DrawerContent {...props}/>}
+      drawerContent={handleDrawerContent}
       screenOptions={screenOptions(colors)}
     >
       { routes && routes.map(({ name, component, title, icon, options }, index) =>
@@ -60,11 +56,9 @@ const screenOptions = (colors) => ({
   drawerActiveBackgroundColor: colors.transparency,
   drawerActiveTintColor: colors.primary,
   drawerInactiveTintColor: colors.accent,
+  headerTintColor: colors.background,
   headerStyle:{
-    backgroundColor: 'transparent',
-    elevation: 0,
-    shadowOpacity: 0,
-    borderBottomWidth: 0
+    backgroundColor: colors.primary,
   }
 })
 

@@ -1,16 +1,13 @@
 import React from 'react'
-import { View, StyleSheet, Image } from 'react-native'
-/* React navigation. */
+import { View, Image } from 'react-native'
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
-/* Custom components. */
 import { Header } from 'src/components'
-/* Contexts. */
-import { useAuth } from 'src/providers/auth.provider'
+import { useUser } from 'src/hooks/useUser'
+import { styles } from './DrawerContent.styles'
 
 const DrawerContent = (props) => {
     
-    const { authState } = useAuth()
-    const { user } = authState
+    const { user } = useUser()
     const { university_name, university_profile_picture } = user
     
     return (
@@ -28,20 +25,5 @@ const DrawerContent = (props) => {
         </DrawerContentScrollView>
     ) 
 }
-
-const styles = StyleSheet.create({
-    drawerContent: {
-        margin: 10,
-        padding: 10
-    },
-    imageContainer: {
-        alignItems: 'center'
-    },
-    image: {
-        width: 150,
-        height: 150,
-        resizeMode: 'contain'
-    }
-})
 
 export default DrawerContent

@@ -39,7 +39,8 @@ const routes = [
 
 const HomePage = () => {
 
-    const { user: { user_name, user_id} } = useUser()
+    const { user } = useUser()
+    const { user_name, user_id } = user
 
     return (
         <Container justifyContent='flex-start'>

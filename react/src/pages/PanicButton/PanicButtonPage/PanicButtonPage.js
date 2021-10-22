@@ -6,7 +6,8 @@ import { useLocation } from 'src/hooks/useLocation'
 
 const PanicButtonPage = () => {
     
-    const { user: { user_id } } = useUser()
+    const { user } = useUser()
+    const { user_id } = user
     const { message } = useLocation(user_id)
 
     return (

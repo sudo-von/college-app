@@ -54,7 +54,7 @@ const DepartmentsPage = () => {
             <View style={styles(colors).bottomView}>
                 <IconButton
                     icon='plus'
-                    color='gray'
+                    color={colors.background}
                     onPress={() => navigation.navigate('/create-department')}
                 />
             </View>

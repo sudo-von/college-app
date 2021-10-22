@@ -1,41 +1,9 @@
 import React from 'react'
-/* React navigation. */
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-/* Routes. */
-import ConfigurationPage from 'src/pages/Configuration/ConfigurationPage/ConfigurationPage'
-import UpdateAccountConfigurationPage from 'src/pages/Configuration/UpdateAccountConfigurationPage/UpdateAccountConfigurationPage'
-import ContactConfigurationPage from 'src/pages/Configuration/ContactConfigurationPage/ContactConfigurationPage'
-/* React native paper. */
+import { nestedConfigurationRoutes } from 'src/router/routes' 
 import { useTheme } from 'react-native-paper'
 
 const Stack = createNativeStackNavigator()
-
-const routes = [
-    {
-        title: 'Configuración',
-        name: '/configuration-home',
-        component: ConfigurationPage,
-        options: {
-            header: () => null
-        }
-    },
-    {
-        title: 'Configuración de la cuenta',
-        name: '/account-configuration',
-        component: UpdateAccountConfigurationPage,
-        options: {
-            header: () => null
-        }
-    },
-    {
-        title: 'Configuración de contacto',
-        name: '/contact-configuration',
-        component: ContactConfigurationPage,
-        options: {
-            header: () => null
-        }
-    }
-]
 
 const NestedConfigurationNavigator = () => {
     const { colors } = useTheme()
@@ -51,7 +19,7 @@ const NestedConfigurationNavigator = () => {
                 headerShadowVisible: false
             }}
             >
-            { routes && routes.map(({ title, name, component, options }, index) =>
+            { nestedConfigurationRoutes && nestedConfigurationRoutes.map(({ title, name, component, options }, index) =>
                 <Stack.Screen 
                     key={`${name}-${index}`}
                     name={name}

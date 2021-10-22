@@ -37,8 +37,8 @@ const getHeaderTitle = (route) => {
 const getHeaderLeft = (navigation, route) => {
 
     const routeName = getFocusedRouteNameFromRoute(route) ?? '/'
-    const BackButton = () => <IconButton onPress={() => navigation.goBack()} icon='arrow-left' color='black'/>
-    const MenuButton = () => <IconButton onPress={() => navigation.dispatch(DrawerActions.openDrawer())} icon='menu' color='black'/>
+    const BackButton = () => <IconButton onPress={() => navigation.goBack()} icon='arrow-left' color='white'/>
+    const MenuButton = () => <IconButton onPress={() => navigation.dispatch(DrawerActions.openDrawer())} icon='menu' color='white'/>
     /* Home screens. */
     switch (routeName) {
         case '/':

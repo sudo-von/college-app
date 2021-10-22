@@ -7,7 +7,8 @@ import { deleteToken } from 'src/services/token.service'
 
 export const useUser = () => {
 
-    const { authState: { user }, authDispatch } = useAuth()
+    const { authState, authDispatch } = useAuth()
+    const { user, isLoggedIn } = authState
     const [ loading, setLoading] = useState(false)
 
     const handleLogin = useCallback(async ({ email, password }) => {
@@ -48,6 +49,7 @@ export const useUser = () => {
     return {
         user,
         loading,
+        isLoggedIn,
         handleLogin,
         handleLogout,
         handleSignup
