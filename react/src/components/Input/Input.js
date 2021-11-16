@@ -10,7 +10,7 @@ const Input = ({ error, ...rest }) => {
     return(
         <View>
             <TextInput
-                mode='flat'
+                mode='outlined'
                 style={styles.input}
                 theme={{ colors: { primary: colors.primary }}}
                 {...rest}

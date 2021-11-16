@@ -18,7 +18,7 @@ const DrawerContent = (props) => {
                 </View>
                 <Header
                     title={university_name}
-                    subtitle='Universidad Autónoma de Gojs'
+                    subtitle='Universidad Autónoma de Kyoto'
                 />
             </View>
             <DrawerItemList {...props}/>

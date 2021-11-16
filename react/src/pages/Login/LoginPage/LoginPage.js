@@ -6,12 +6,12 @@ const LoginPage = () =>
     <Container>
         <Center>
             <Logo 
-                source={require('assets/logo.png')}
+                source={require('assets/kyoto-university-logo.png')}
                 size={180}
             />
         </Center>
         <Header 
-            title='Universidad Autónoma de Von'
+            title='Universidad Autónoma de Kyoto'
             subtitle='"Siempre parece imposible, hasta que se hace".'
         />
         <LoginForm/>
