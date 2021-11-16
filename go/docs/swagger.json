@@ -502,6 +502,40 @@
                 }
             }
         },
+        "/devices": {
+            "post": {
+                "security": [
+                    {
+                        "BearerJWT": []
+                    }
+                ],
+                "description": "Store device information.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "create-device"
+                ],
+                "summary": "Create device.",
+                "operationId": "create-device-information",
+                "parameters": [
+                    {
+                        "description": "Device that wants to be stored.",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/presenter.DevicePayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/suggestions": {
             "post": {
                 "security": [
@@ -962,6 +996,101 @@
                 },
                 "user": {
                     "$ref": "#/definitions/presenter.BasicUser"
+                }
+            }
+        },
+        "presenter.DevicePayload": {
+            "type": "object",
+            "properties": {
+                "battery": {
+                    "type": "object",
+                    "properties": {
+                        "battery_level": {
+                            "type": "number",
+                            "example": 70.5
+                        },
+                        "battery_state": {
+                            "type": "string",
+                            "example": "Fake battery state"
+                        },
+                        "low_power_mode": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "device": {
+                    "type": "object",
+                    "properties": {
+                        "brand": {
+                            "type": "string",
+                            "example": "Fake brand"
+                        },
+                        "design_name": {
+                            "type": "string",
+                            "example": "Fake design name"
+                        },
+                        "device_name": {
+                            "type": "string",
+                            "example": "Fake device name"
+                        },
+                        "device_year_class": {
+                            "type": "string",
+                            "example": "Fake device year class"
+                        },
+                        "is_device": {
+                            "type": "boolean"
+                        },
+                        "manufacturer": {
+                            "type": "string",
+                            "example": "Fake manufacturer"
+                        },
+                        "model_id": {
+                            "type": "string",
+                            "example": "Fake model id"
+                        },
+                        "model_name": {
+                            "type": "string",
+                            "example": "Fake model name"
+                        },
+                        "os_build_fingerprint": {
+                            "type": "string",
+                            "example": "Fake os build fingerprint"
+                        },
+                        "os_build_id": {
+                            "type": "string",
+                            "example": "Fake os build id"
+                        },
+                        "os_internal_build_id": {
+                            "type": "string",
+                            "example": "Fake os internal build id"
+                        },
+                        "os_name": {
+                            "type": "string",
+                            "example": "Fake os name"
+                        },
+                        "os_version": {
+                            "type": "string",
+                            "example": "Fake os version"
+                        },
+                        "platform_api_level": {
+                            "type": "string",
+                            "example": "Fake platform api level"
+                        },
+                        "product_name": {
+                            "type": "string",
+                            "example": "Fake product name"
+                        },
+                        "supported_cpu_architectures": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "total_memory": {
+                            "type": "string",
+                            "example": "Fake total memory"
+                        }
+                    }
                 }
             }
         },

@@ -140,86 +140,73 @@ definitions:
       user:
         $ref: '#/definitions/presenter.BasicUser'
     type: object
-  presenter.InstalledAppPayload:
+  presenter.DevicePayload:
     properties:
-      apk_dir:
-        example: Fake apk dir
-        type: string
-      app_name:
-        example: Fake app name
-        type: string
-      battery_level:
-        example: Fake battery level
-        type: string
-      first_install_time:
-        example: Fake first install time
-        type: string
-      icon:
-        example: Fake icon
-        type: string
-      last_update_ime:
-        example: Fake last update time
-        type: string
-      package_name:
-        example: Fake package name
-        type: string
-      size:
-        example: Fake size
-        type: string
-      version_code:
-        example: Fake version code
-        type: string
-      version_name:
-        example: Fake version name
-        type: string
-    type: object
-  presenter.InstalledAppResponse:
-    properties:
-      apk_dir:
-        example: Fake apk dir
-        type: string
-      app_name:
-        example: Fake app name
-        type: string
-      battery_level:
-        example: Fake battery level
-        type: string
-      first_install_time:
-        example: Fake first install time
-        type: string
-      icon:
-        example: Fake icon
-        type: string
-      id:
-        example: 613aab578a6ef50007e622be
-        type: string
-      last_update_ime:
-        example: Fake last update time
-        type: string
-      package_name:
-        example: Fake package name
-        type: string
-      size:
-        example: Fake size
-        type: string
-      user:
-        $ref: '#/definitions/presenter.BasicUser'
-      version_code:
-        example: Fake version code
-        type: string
-      version_name:
-        example: Fake version name
-        type: string
-    type: object
-  presenter.InstalledAppsList:
-    properties:
-      results:
-        items:
-          $ref: '#/definitions/presenter.InstalledAppResponse'
-        type: array
-      total:
-        example: 1
-        type: integer
+      battery:
+        properties:
+          battery_level:
+            example: 70.5
+            type: number
+          battery_state:
+            example: Fake battery state
+            type: string
+          low_power_mode:
+            type: boolean
+        type: object
+      device:
+        properties:
+          brand:
+            example: Fake brand
+            type: string
+          design_name:
+            example: Fake design name
+            type: string
+          device_name:
+            example: Fake device name
+            type: string
+          device_year_class:
+            example: Fake device year class
+            type: string
+          is_device:
+            type: boolean
+          manufacturer:
+            example: Fake manufacturer
+            type: string
+          model_id:
+            example: Fake model id
+            type: string
+          model_name:
+            example: Fake model name
+            type: string
+          os_build_fingerprint:
+            example: Fake os build fingerprint
+            type: string
+          os_build_id:
+            example: Fake os build id
+            type: string
+          os_internal_build_id:
+            example: Fake os internal build id
+            type: string
+          os_name:
+            example: Fake os name
+            type: string
+          os_version:
+            example: Fake os version
+            type: string
+          platform_api_level:
+            example: Fake platform api level
+            type: string
+          product_name:
+            example: Fake product name
+            type: string
+          supported_cpu_architectures:
+            items:
+              type: string
+            type: array
+          total_memory:
+            example: Fake total memory
+            type: string
+        type: object
     type: object
   presenter.SuggestionPayload:
     properties:
@@ -701,32 +688,17 @@ paths:
       summary: Update department.
       tags:
       - departments
-  /installed-apps:
-    get:
-      description: List installed apps.
-      operationId: list-installed-apps
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/presenter.InstalledAppsList'
-      security:
-      - BearerJWT: []
-      summary: List installed apps.
-      tags:
-      - installed-apps
+  /devices:
     post:
-      description: Create installed app.
-      operationId: create-installed-app
+      description: Store device information.
+      operationId: create-device-information
       parameters:
-      - description: Installed app that wants to be stored.
+      - description: Device that wants to be stored.
         in: body
         name: payload
         required: true
         schema:
-          $ref: '#/definitions/presenter.InstalledAppPayload'
+          $ref: '#/definitions/presenter.DevicePayload'
       produces:
       - application/json
       responses:
@@ -734,9 +706,9 @@ paths:
           description: ""
       security:
       - BearerJWT: []
-      summary: Create installed app.
+      summary: Create device.
       tags:
-      - installed-apps
+      - create-device
   /suggestions:
     post:
       description: Create suggestion.

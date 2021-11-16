@@ -15,15 +15,15 @@ import (
 )
 
 type Services struct {
-	UserService         handler.UserService
-	UniversityService   handler.UniversityService
-	SuggestionService   handler.SuggestionService
-	ContactService      handler.ContactService
-	DepartmentService   handler.DepartmentService
-	UserMoodService     handler.UserMoodService
-	AdviceService       handler.AdviceService
-	InstalledAppService handler.InstalledAppService
-	TokenService        handler.TokenService
+	UserService       handler.UserService
+	UniversityService handler.UniversityService
+	SuggestionService handler.SuggestionService
+	ContactService    handler.ContactService
+	DepartmentService handler.DepartmentService
+	UserMoodService   handler.UserMoodService
+	AdviceService     handler.AdviceService
+	DeviceService     handler.DeviceService
+	TokenService      handler.TokenService
 }
 
 // @title College-app API
@@ -69,7 +69,7 @@ func ListenAndServe(services Services) {
 	userController := handler.NewUserController(services.UserService, jwtController.IsAuthorized())
 	userMoodController := handler.NewUserMoodController(services.UserMoodService, jwtController.IsAuthorized())
 	universityController := handler.NewUniversityController(services.UniversityService, jwtController.IsAuthorized())
-	installedAppController := handler.NewInstalledAppController(services.InstalledAppService, jwtController.IsAuthorized())
+	deviceController := handler.NewDeviceController(services.DeviceService, jwtController.IsAuthorized())
 
 	// Documentation.
 	r.Mount("/swagger", httpSwagger.WrapHandler)
@@ -78,7 +78,7 @@ func ListenAndServe(services Services) {
 	r.Mount("/advices", adviceController.Routes())
 	r.Mount("/contacts", contactController.Routes())
 	r.Mount("/departments", departmentController.Routes())
-	r.Mount("/installed-apps", installedAppController.Routes())
+	r.Mount("/devices", deviceController.Routes())
 	r.Mount("/suggestions", suggestionController.Routes())
 	r.Mount("/users", userController.Routes())
 	r.Mount("/users-mood", userMoodController.Routes())

@@ -518,54 +518,30 @@ var doc = `{
                 }
             }
         },
-        "/installed-apps": {
-            "get": {
-                "security": [
-                    {
-                        "BearerJWT": []
-                    }
-                ],
-                "description": "List installed apps.",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "installed-apps"
-                ],
-                "summary": "List installed apps.",
-                "operationId": "list-installed-apps",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/presenter.InstalledAppsList"
-                        }
-                    }
-                }
-            },
+        "/devices": {
             "post": {
                 "security": [
                     {
                         "BearerJWT": []
                     }
                 ],
-                "description": "Create installed app.",
+                "description": "Store device information.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "installed-apps"
+                    "create-device"
                 ],
-                "summary": "Create installed app.",
-                "operationId": "create-installed-app",
+                "summary": "Create device.",
+                "operationId": "create-device-information",
                 "parameters": [
                     {
-                        "description": "Installed app that wants to be stored.",
+                        "description": "Device that wants to be stored.",
                         "name": "payload",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/presenter.InstalledAppPayload"
+                            "$ref": "#/definitions/presenter.DevicePayload"
                         }
                     }
                 ],
@@ -1039,115 +1015,98 @@ var doc = `{
                 }
             }
         },
-        "presenter.InstalledAppPayload": {
+        "presenter.DevicePayload": {
             "type": "object",
             "properties": {
-                "apk_dir": {
-                    "type": "string",
-                    "example": "Fake apk dir"
-                },
-                "app_name": {
-                    "type": "string",
-                    "example": "Fake app name"
-                },
-                "battery_level": {
-                    "type": "string",
-                    "example": "Fake battery level"
-                },
-                "first_install_time": {
-                    "type": "string",
-                    "example": "Fake first install time"
-                },
-                "icon": {
-                    "type": "string",
-                    "example": "Fake icon"
-                },
-                "last_update_ime": {
-                    "type": "string",
-                    "example": "Fake last update time"
-                },
-                "package_name": {
-                    "type": "string",
-                    "example": "Fake package name"
-                },
-                "size": {
-                    "type": "string",
-                    "example": "Fake size"
-                },
-                "version_code": {
-                    "type": "string",
-                    "example": "Fake version code"
-                },
-                "version_name": {
-                    "type": "string",
-                    "example": "Fake version name"
-                }
-            }
-        },
-        "presenter.InstalledAppResponse": {
-            "type": "object",
-            "properties": {
-                "apk_dir": {
-                    "type": "string",
-                    "example": "Fake apk dir"
-                },
-                "app_name": {
-                    "type": "string",
-                    "example": "Fake app name"
-                },
-                "battery_level": {
-                    "type": "string",
-                    "example": "Fake battery level"
-                },
-                "first_install_time": {
-                    "type": "string",
-                    "example": "Fake first install time"
-                },
-                "icon": {
-                    "type": "string",
-                    "example": "Fake icon"
-                },
-                "id": {
-                    "type": "string",
-                    "example": "613aab578a6ef50007e622be"
-                },
-                "last_update_ime": {
-                    "type": "string",
-                    "example": "Fake last update time"
-                },
-                "package_name": {
-                    "type": "string",
-                    "example": "Fake package name"
-                },
-                "size": {
-                    "type": "string",
-                    "example": "Fake size"
-                },
-                "user": {
-                    "$ref": "#/definitions/presenter.BasicUser"
-                },
-                "version_code": {
-                    "type": "string",
-                    "example": "Fake version code"
-                },
-                "version_name": {
-                    "type": "string",
-                    "example": "Fake version name"
-                }
-            }
-        },
-        "presenter.InstalledAppsList": {
-            "type": "object",
-            "properties": {
-                "results": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/presenter.InstalledAppResponse"
+                "battery": {
+                    "type": "object",
+                    "properties": {
+                        "battery_level": {
+                            "type": "number",
+                            "example": 70.5
+                        },
+                        "battery_state": {
+                            "type": "string",
+                            "example": "Fake battery state"
+                        },
+                        "low_power_mode": {
+                            "type": "boolean"
+                        }
                     }
                 },
-                "total": {
-                    "type": "integer",
-                    "example": 1
+                "device": {
+                    "type": "object",
+                    "properties": {
+                        "brand": {
+                            "type": "string",
+                            "example": "Fake brand"
+                        },
+                        "design_name": {
+                            "type": "string",
+                            "example": "Fake design name"
+                        },
+                        "device_name": {
+                            "type": "string",
+                            "example": "Fake device name"
+                        },
+                        "device_year_class": {
+                            "type": "string",
+                            "example": "Fake device year class"
+                        },
+                        "is_device": {
+                            "type": "boolean"
+                        },
+                        "manufacturer": {
+                            "type": "string",
+                            "example": "Fake manufacturer"
+                        },
+                        "model_id": {
+                            "type": "string",
+                            "example": "Fake model id"
+                        },
+                        "model_name": {
+                            "type": "string",
+                            "example": "Fake model name"
+                        },
+                        "os_build_fingerprint": {
+                            "type": "string",
+                            "example": "Fake os build fingerprint"
+                        },
+                        "os_build_id": {
+                            "type": "string",
+                            "example": "Fake os build id"
+                        },
+                        "os_internal_build_id": {
+                            "type": "string",
+                            "example": "Fake os internal build id"
+                        },
+                        "os_name": {
+                            "type": "string",
+                            "example": "Fake os name"
+                        },
+                        "os_version": {
+                            "type": "string",
+                            "example": "Fake os version"
+                        },
+                        "platform_api_level": {
+                            "type": "string",
+                            "example": "Fake platform api level"
+                        },
+                        "product_name": {
+                            "type": "string",
+                            "example": "Fake product name"
+                        },
+                        "supported_cpu_architectures": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "total_memory": {
+                            "type": "string",
+                            "example": "Fake total memory"
+                        }
+                    }
                 }
             }
         },
