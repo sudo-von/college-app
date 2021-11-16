@@ -530,7 +530,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "create-device"
+                    "devices"
                 ],
                 "summary": "Create device.",
                 "operationId": "create-device-information",

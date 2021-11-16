@@ -708,7 +708,7 @@ paths:
       - BearerJWT: []
       summary: Create device.
       tags:
-      - create-device
+      - devices
   /suggestions:
     post:
       description: Create suggestion.

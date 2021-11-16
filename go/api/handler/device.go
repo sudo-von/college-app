@@ -34,7 +34,7 @@ func (c *DeviceController) Routes() chi.Router {
 	return r
 }
 
-// @tags create-device
+// @tags devices
 // @summary Create device.
 // @description Store device information.
 // @security BearerJWT
